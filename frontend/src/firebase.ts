@@ -4,7 +4,7 @@ import 'firebase/firestore';
 import 'firebase/storage';
 
 //ashwiniulhas.talele@gmail.com
-// A28shwini
+//Fall@2019
 const firebaseConfig = {
 	apiKey: "AIzaSyDmDxh0c8ZRkdVWEXy2o6OfCjz6HfhMk7A",
 	authDomain: "cmpe280-book-doc.firebaseapp.com",
