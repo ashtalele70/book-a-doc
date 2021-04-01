@@ -7,11 +7,11 @@ import {
   } from '@ionic/react';
   import React from 'react';
   
-  const HomePage: React.FC = () => {
+  const LoginSignUpPage: React.FC = () => {
 	return (
 	  <IonPage>
 		  <IonToolbar>
-		  	<IonTitle>Book-A-Doc</IonTitle>
+		  	<IonTitle color="warning">My account</IonTitle>
 		  </IonToolbar>
 		  
 		<IonContent className="ion-padding">
@@ -21,5 +21,5 @@ import {
 	);
   };
   
-  export default HomePage;
+  export default LoginSignUpPage;
   

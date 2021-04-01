@@ -5,16 +5,20 @@ import {
   import React from 'react';
   import { Redirect, Route, Switch } from 'react-router-dom';
   import AppTabs from './AppTabs';
-  import { AuthContext, useAuthInit } from './auth';
+  import { AuthContext, useAuthInit, useAuth } from './auth';
   import LoginPage from './pages/LoginPage';
   import NotFoundPage from './pages/NotFoundPage';
   import RegisterPage from './pages/RegisterPage';
   
   const App: React.FC = () => {
 	const { loading, auth } =  useAuthInit();
+	const { loggedIn } = useAuth();
 	if (loading) {
 	  return <IonLoading isOpen />;
 	}
+	// if (!loggedIn) {
+	// 	return <Redirect to="/home" />;
+	//   }
 	console.log(`rendering App with auth:`, auth);
 	return (
 	  <IonApp>
@@ -30,10 +34,10 @@ import {
 			  <Route path="/">
 				<AppTabs />
 			  </Route>
-			  <Redirect exact path="/" to="/home" />
-			  <Route>
+			  {/* <Redirect exact path="/" to="/home" /> */}
+			  {/* <Route>
 				<NotFoundPage />
-			  </Route>
+			  </Route> */}
 			</Switch>
 		  </IonReactRouter>
 		</AuthContext.Provider>
