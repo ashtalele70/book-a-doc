@@ -1,6 +1,7 @@
 import {
 	IonContent,
-	IonHeader,
+	IonItem,
+	IonList,
 	IonPage,
 	IonTitle,
 	IonToolbar,
@@ -11,11 +12,11 @@ import {
 	return (
 	  <IonPage>
 		  <IonToolbar>
-		  	<IonTitle>Book-A-Doc</IonTitle>
+		  	<IonTitle color="success">Book-A-Doc</IonTitle>
 		  </IonToolbar>
 		  
 		<IonContent className="ion-padding">
-		
+
 		</IonContent>
 	  </IonPage>
 	);

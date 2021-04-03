@@ -3,42 +3,23 @@ import {
   } from '@ionic/react';
   import { IonReactRouter } from '@ionic/react-router';
   import React from 'react';
-  import { Redirect, Route, Switch } from 'react-router-dom';
+  import { Route } from 'react-router-dom';
   import AppTabs from './AppTabs';
-  import { AuthContext, useAuthInit, useAuth } from './auth';
-  import LoginPage from './pages/LoginPage';
-  import NotFoundPage from './pages/NotFoundPage';
-  import RegisterPage from './pages/RegisterPage';
+  import { AuthContext, useAuthInit } from './auth';
   
   const App: React.FC = () => {
 	const { loading, auth } =  useAuthInit();
-	const { loggedIn } = useAuth();
 	if (loading) {
 	  return <IonLoading isOpen />;
 	}
-	// if (!loggedIn) {
-	// 	return <Redirect to="/home" />;
-	//   }
 	console.log(`rendering App with auth:`, auth);
 	return (
 	  <IonApp>
 		<AuthContext.Provider value={auth}>
 		  <IonReactRouter>
-			<Switch>
-			  <Route exact path="/login">
-				<LoginPage />
-			  </Route>
-			  <Route exact path="/register">
-				<RegisterPage />
-			  </Route>
 			  <Route path="/">
 				<AppTabs />
 			  </Route>
-			  {/* <Redirect exact path="/" to="/home" /> */}
-			  {/* <Route>
-				<NotFoundPage />
-			  </Route> */}
-			</Switch>
 		  </IonReactRouter>
 		</AuthContext.Provider>
 	  </IonApp>

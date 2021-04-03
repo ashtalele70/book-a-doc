@@ -19,6 +19,7 @@ import { logOut } from 'ionicons/icons';
 		auth.signOut();
 		history.push("/home");
 	}
+	
 	return (
 	  <IonPage>
 		<IonHeader>
