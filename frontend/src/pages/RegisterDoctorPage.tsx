@@ -15,9 +15,9 @@ import {
   import React, { useState } from 'react';
   import { Redirect } from 'react-router';
   import { useAuth } from '../auth';
-  import { auth, firestore } from '../firebase';
+  import { auth } from '../firebase';
   
-  const RegisterPage: React.FC = () => {
+  const RegisterDoctorPage: React.FC = () => {
 	const { loggedIn } = useAuth();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -29,11 +29,6 @@ import {
 		setStatus({ loading: true, error: false });
 		const credential = await auth.createUserWithEmailAndPassword(email, password);
 		console.log('credential:', credential);
-		const usersRef = firestore.collection('users');
-		const userData = { email };
-		const userRef = await usersRef.add(userData);
-		console.log('Saved:', userRef.id);
-
 	  } catch (error) {
 		setStatus({ loading: false, error: true });
 		setErrorMessage(error.message);
@@ -48,7 +43,7 @@ import {
 	  <IonPage>
 		<IonHeader>
 		  <IonToolbar>
-			<IonTitle color="warning">Create an account</IonTitle>
+			<IonTitle>Register</IonTitle>
 		  </IonToolbar>
 		</IonHeader>
 		<IonContent className="ion-padding">
@@ -72,7 +67,7 @@ import {
 		  <IonButton expand="block" onClick={handleRegister}>
 			Create Account
 		  </IonButton>
-		  <IonButton expand="block" fill="clear" routerLink="/login">
+		  <IonButton expand="block" fill="clear" routerLink="/loginDoctor">
 			Already have an account?
 		  </IonButton>
 		  <IonLoading isOpen={status.loading} />
@@ -81,5 +76,5 @@ import {
 	);
   };
   
-  export default RegisterPage;
+  export default RegisterDoctorPage;
   

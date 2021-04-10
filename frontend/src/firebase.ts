@@ -3,7 +3,8 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/storage';
 
-
+//ashwiniulhas.talele@gmail.com
+//Fall@2019
 const firebaseConfig = {
 	apiKey: "AIzaSyDmDxh0c8ZRkdVWEXy2o6OfCjz6HfhMk7A",
 	authDomain: "cmpe280-book-doc.firebaseapp.com",
@@ -14,6 +15,8 @@ const firebaseConfig = {
   };
   
 // uncomment when the 300 USD are used from 1st account
+//ashwiniulhas.talele@sjsu.edu
+// A28capillary@
 
 // const firebaseConfig = {
 // 	apiKey: "AIzaSyDbqB_NcBGaccL28L4vMbOWAoEgWG3J6c8",
