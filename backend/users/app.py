@@ -8,6 +8,10 @@ app = FlaskLambda(__name__)
 ddb = boto3.resource('dynamodb')
 table = ddb.Table('users')
 
+@app.route('/',methods=['GET','POST'])
+def dummy_route():
+    return json_response({"message": "Hello, world!"})
+
 
 @app.route('/users', methods=['GET', 'POST'])
 def put_list_users():

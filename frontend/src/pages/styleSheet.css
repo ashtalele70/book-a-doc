@@ -1,0 +1,58 @@
+* {
+  color: rgb(0, 35, 75);
+}
+IonGrid #doctor-state IonLabel {
+  font: 14px sharp-sans-semibold, Arial, sans-serif;
+  color: rgb(135, 135, 145);
+}
+
+#doctorDetails {
+  font: 8px;
+}
+
+#doctor-title {
+  font: 16px sharp-sans-semibold, Arial, sans-serif;
+  margin-block-start: 0.83em;
+  font-weight: 700;
+}
+#doctor-name {
+  font: 20px / 24px sharp-sans-bold, Arial, sans-serif;
+  font-weight: bold;
+  font-size: 2em;
+}
+
+#recent-reviews {
+  font: 16px sharp-sans-semibold, Arial, sans-serif;
+  margin-block-start: 0.83em;
+  font-weight: 700;
+}
+
+#overall-rating {
+  font: 16px sharp-sans-semibold, Arial, sans-serif;
+  margin-block-start: 0.83em;
+  font-weight: 700;
+}
+.grey-label.grey-label {
+  font: 14px sharp-sans-semibold, Arial, sans-serif;
+  color: rgb(135, 135, 145);
+  margin-block-start: 0em;
+}
+.EBinfor.EBinfor {
+  font: 14px sharp-sans-semibold, Arial, sans-serif;
+  margin-block-start: 0.2em;
+}
+.sub-heading.sub-heading {
+  font: 14px sharp-sans-semibold, Arial, sans-serif;
+  margin-block-start: 0.83em;
+  font-weight: 700;
+}
+
+.heading.heading {
+  font: 16px sharp-sans-semibold, Arial, sans-serif;
+  margin-block-start: 0.83em;
+  font-weight: 700;
+}
+
+#rating {
+  font-size: 60px;
+}
