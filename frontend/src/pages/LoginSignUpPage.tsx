@@ -37,7 +37,7 @@ import {
 		</IonContent>
 	  </IonPage>
 	);
-  };
+  }
   
   export default LoginSignUpPage;
   

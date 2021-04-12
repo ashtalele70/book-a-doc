@@ -76,7 +76,6 @@ import {
 		  <IonButton expand="block" fill="clear" routerLink="/login">
 			Already have an account?
 		  </IonButton>
-		  <IonLoading isOpen={status.loading} />
 		</IonContent>
 	  </IonPage>
 	);
