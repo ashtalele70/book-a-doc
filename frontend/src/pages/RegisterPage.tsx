@@ -13,16 +13,16 @@ import {
 	IonToolbar,
   } from '@ionic/react';
   import React, { useState } from 'react';
-  import { Redirect } from 'react-router';
+  import { useHistory } from 'react-router-dom'
   import { useAuth } from '../auth';
   import { auth, firestore } from '../firebase';
   
   const RegisterPage: React.FC = () => {
-	const { loggedIn } = useAuth();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [status, setStatus] = useState({ loading: false, error: false });
 	const [errorMessage, setErrorMessage] = useState('');
+	const history = useHistory()
   
 	const handleRegister = async () => {
 	  try {
@@ -30,9 +30,10 @@ import {
 		const credential = await auth.createUserWithEmailAndPassword(email, password);
 		console.log('credential:', credential);
 		const usersRef = firestore.collection('users');
-		const userData = { email };
-		const userRef = await usersRef.add(userData);
-		console.log('Saved:', userRef.id);
+		const userData = { email, isPatient: false};
+		await usersRef.doc(credential?.user?.uid).set(userData);
+		console.log('Saved:');
+		history.push('/patientProfile')
 
 	  } catch (error) {
 		setStatus({ loading: false, error: true });
@@ -41,9 +42,9 @@ import {
 	  }
 	};
   
-	if (loggedIn) {
-	  return <Redirect to="/home" />;
-	}
+	// if (loggedIn) {
+	//   return <Redirect to="/home" />;
+	// }
 	return (
 	  <IonPage>
 		<IonHeader>

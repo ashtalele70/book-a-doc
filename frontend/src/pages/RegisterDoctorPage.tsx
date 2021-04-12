@@ -13,22 +13,28 @@ import {
 	IonToolbar,
   } from '@ionic/react';
   import React, { useState } from 'react';
-  import { Redirect } from 'react-router';
+  import { useHistory } from 'react-router-dom'
   import { useAuth } from '../auth';
-  import { auth } from '../firebase';
+  import { auth, firestore } from '../firebase';
   
   const RegisterDoctorPage: React.FC = () => {
-	const { loggedIn } = useAuth();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [status, setStatus] = useState({ loading: false, error: false });
 	const [errorMessage, setErrorMessage] = useState('');
+	const history = useHistory()
   
 	const handleRegister = async () => {
 	  try {
 		setStatus({ loading: true, error: false });
 		const credential = await auth.createUserWithEmailAndPassword(email, password);
 		console.log('credential:', credential);
+		const usersRef = firestore.collection('users');
+		const userData = { email, isPatient: false};
+		await usersRef.doc(credential?.user?.uid).set(userData);
+		console.log('Saved:');
+		history.push('/doctorProfile')
+
 	  } catch (error) {
 		setStatus({ loading: false, error: true });
 		setErrorMessage(error.message);
@@ -36,14 +42,14 @@ import {
 	  }
 	};
   
-	if (loggedIn) {
-	  return <Redirect to="/home" />;
-	}
+	// if (loggedIn) {
+	//   return <Redirect to="/home" />;
+	// }
 	return (
 	  <IonPage>
 		<IonHeader>
 		  <IonToolbar>
-			<IonTitle>Register</IonTitle>
+			<IonTitle color="warning">Create an account</IonTitle>
 		  </IonToolbar>
 		</IonHeader>
 		<IonContent className="ion-padding">
@@ -67,14 +73,14 @@ import {
 		  <IonButton expand="block" onClick={handleRegister}>
 			Create Account
 		  </IonButton>
-		  <IonButton expand="block" fill="clear" routerLink="/loginDoctor">
+		  <IonButton expand="block" fill="clear" routerLink="/login">
 			Already have an account?
 		  </IonButton>
-		  <IonLoading isOpen={status.loading} />
 		</IonContent>
 	  </IonPage>
 	);
   };
+  
   
   export default RegisterDoctorPage;
   

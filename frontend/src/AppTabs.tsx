@@ -16,6 +16,7 @@ import {
   import LoginPage from './pages/LoginPage';
   import LoginSignUpPage from './pages/LoginSignUpPage';
   import PatientProfilePage from './pages/PatientProfilePage';
+  import DoctorProfilePage from './pages/DoctorProfilePage';
   import RegisterDoctorPage from './pages/RegisterDoctorPage';
   import RegisterPage from './pages/RegisterPage';
   import SettingsPage from './pages/SettingsPage';
@@ -55,6 +56,9 @@ import {
 	      </Route>
 		  <Route exact path="/patientProfile">
 			<PatientProfilePage />
+	      </Route>
+		  <Route exact path="/doctorProfile">
+			<DoctorProfilePage />
 	      </Route>
 		</IonRouterOutlet>
 		<IonTabBar slot="bottom">

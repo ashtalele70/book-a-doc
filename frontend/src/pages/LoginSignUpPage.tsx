@@ -9,7 +9,7 @@ import {
 	IonTitle,
 	IonToolbar,
   } from '@ionic/react';
-  import { pencilSharp } from 'ionicons/icons';
+  import { pencilSharp, personCircle } from 'ionicons/icons';
   import React from 'react';
   
   const LoginSignUpPage: React.FC = () => {
@@ -23,9 +23,15 @@ import {
 			<IonList>
 				<IonItem>
 					<IonIcon icon={pencilSharp} />
-					<IonLabel>Login/ Sign Up</IonLabel>
+					<IonLabel>Login</IonLabel>
 					<IonButton color="primary" className="ion-margin" routerLink="/login">Patients</IonButton>
     				<IonButton color="secondary" className="ion-margin" routerLink="/loginDoctor">Doctors</IonButton>
+				</IonItem>
+				<IonItem>
+					<IonIcon icon={personCircle} />
+					<IonLabel>SignUp</IonLabel>
+					<IonButton color="primary" className="ion-margin" routerLink="/register">Patients</IonButton>
+    				<IonButton color="secondary" className="ion-margin" routerLink="/registerDoctor">Doctors</IonButton>
 				</IonItem>
 			</IonList>		
 		</IonContent>

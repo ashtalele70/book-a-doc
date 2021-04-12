@@ -6,35 +6,47 @@ import {
 	IonItem,
 	IonLabel,
 	IonGrid,
-	IonLoading,
 	IonPage,
-	IonText,
 	IonTitle,
 	IonToolbar,
 	IonRow,
 	IonCol,
+	IonDatetime,
+	IonRadioGroup,
+	IonRadio,
   } from '@ionic/react';
   import React, { useEffect, useState } from 'react';
   import { useAuth } from '../auth';
   import { firestore } from '../firebase';
+  import { User, toUser } from '../models/user';
+  import { useHistory } from 'react-router-dom'
   
   const PatientProfilePage: React.FC = () => {
 	const { userId } = useAuth();
-	const [email, setEmail] = useState('');
 	const [firstName, setFirstName] = useState('');
 	const [lastName, setLastName] = useState('');
+	const [user, setUser] = useState<User>();
+	const [date, setDate] = useState('');
+	const [gender, setGender] = useState<string>('male');
+	const history = useHistory()
+
+	const handleSaveDetails = async () => {
+		  firestore.collection('patients').doc(userId).set({
+			firstname: firstName,
+			lastname: lastName,
+			dob: date,
+			gender: gender
+		  })
+		  .then(() =>
+		  	history.push('/home'))
+		  .catch((e) => console.log(e))
+	  };
 
 	useEffect(() => {
-        // async function getEmail() {
-		// 	console.log('userId', userId);
-        //     const userRef = firestore.collection('users').doc(userId);
+		
+		firestore.collection('users').doc(userId)
+		.get().then((doc) => setUser(toUser(doc)));
 
-		// 	setEmail("asc@gmail.com")
-        // }
-        // getEmail();
-
-		const userRef = firestore.collection('users').doc(userId);
-		return userRef.onSnapshot((doc) => console.log(doc))
     }, []);
 
 	return (
@@ -49,7 +61,7 @@ import {
 		    <IonRow>
 				<IonCol>
 					<IonLabel position="stacked">Email</IonLabel>
-						<IonInput type="email" value={email} readonly/>
+					<IonInput type="email" value={user?.email} readonly/>
 				</IonCol>
 			</IonRow>
 			<IonRow>
@@ -65,38 +77,44 @@ import {
 					<IonItem>
 						<IonLabel position="floating">Last Name</IonLabel>
 						<IonInput value={lastName}
-						onIonChange={(event) => setLastName(event.detail.value)}
-			  			/>
+						onIonChange={(event) => setLastName(event.detail.value)}/>
 					</IonItem>
 				</IonCol>
-				{/* <IonCol>ion-col</IonCol>
-				<IonCol>ion-col</IonCol>
-				<IonCol>ion-col</IonCol> */}
 			</IonRow>
-			
-			{/* <IonItem>
-			  <IonLabel position="stacked">Email</IonLabel>
-			  <IonInput type="email" value={email}
-				onIonChange={(event) => setEmail(event.detail.value)}
-			  />
-			</IonItem>
-			<IonItem>
-			  <IonLabel position="stacked">Password</IonLabel>
-			  <IonInput type="password" value={password}
-				onIonChange={(event) => setPassword(event.detail.value)}
-			  />
-			</IonItem> */}
+			<IonRow>
+				<IonCol>
+					<IonItem>
+						<IonLabel>
+							Date of Birth
+						</IonLabel>
+						<IonDatetime value={date} 
+						onIonChange={(event) => setDate(event.detail.value)}/>
+					</IonItem>
+				</IonCol>
+				<IonCol>
+					<IonCol>
+						<IonRadioGroup value={gender} onIonChange={e => setGender(e.detail.value)}>
+							<IonLabel>
+								Gender
+							</IonLabel>
+
+							<IonItem>
+								<IonLabel>Female</IonLabel>
+								<IonRadio value="female" />
+							</IonItem>
+
+							<IonItem>
+								<IonLabel>Male</IonLabel>
+								<IonRadio value="male" />
+							</IonItem>
+						</IonRadioGroup>
+					</IonCol>
+				</IonCol>
+			</IonRow>
 		  </IonGrid>
-		  {/* {status.error &&
-			<IonText color="danger">{errorMessage}</IonText>
-		  } */}
-		  {/* <IonButton expand="block" onClick={handleRegister}>
-			Create Account
+		  <IonButton expand="block" onClick={handleSaveDetails}>
+			Save Details
 		  </IonButton>
-		  <IonButton expand="block" fill="clear" routerLink="/login">
-			Already have an account?
-		  </IonButton> */}
-		  {/* <IonLoading isOpen={status.loading} /> */}
 		</IonContent>
 	  </IonPage>
 	);
