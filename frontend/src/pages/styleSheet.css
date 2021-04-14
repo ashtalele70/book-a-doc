@@ -56,3 +56,11 @@ IonGrid #doctor-state IonLabel {
 #rating {
   font-size: 60px;
 }
+
+.row {
+  float: left;
+  width: 50%;
+}
+table {
+  display: inline-table;
+}
