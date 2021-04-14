@@ -37,7 +37,7 @@ const Doctors: React.FC = () => {
   const [entry, setEntry] = useState([]);
   const [timeSlot, settimeSlot] = useState([]);
   const [showMore, setshowMore] = useState(false);
-  let startDate = new Date();
+
   useEffect(() => {
     firestore
       .collection("doctors")
@@ -80,11 +80,16 @@ const Doctors: React.FC = () => {
   }, []);
 
   function daysOfWeek() {
+    let startDate = new Date();
     let dates = [];
     let i;
+    console.log("today's date");
+    console.log(startDate);
     console.log(Object.values(timeSlot));
+
     for (i = 1; i <= 7; i++) {
-      startDate.setDate(startDate.getDate() + 1);
+      console.log(startDate.getDate());
+
       dates.push(
         startDate.toLocaleString("default", {
           weekday: "short",
@@ -92,6 +97,7 @@ const Doctors: React.FC = () => {
           day: "numeric",
         })
       );
+      startDate.setDate(startDate.getDate() + 1);
     }
 
     return dates;
@@ -178,28 +184,34 @@ const Doctors: React.FC = () => {
       <IonItem>
         <div className="row">25 Entries</div>
         <div className="row">
-          <IonGrid>
-            <IonCol>
+          {/**
               <IonCol>
                 <IonIcon icon={back}></IonIcon>
               </IonCol>
-              <table>
-                <tr>
-                  {daysOfWeek().map(function (name, index) {
-                    return (
-                      <td>
-                        <IonCol>{name.split(",")[0]}</IonCol>
-                      </td>
-                    );
-                  })}
-                </tr>
-              </table>
-
-              <IonCol>
+              */}
+          <table>
+            <tr>
+              {daysOfWeek().map(function (name, index) {
+                return (
+                  <th>
+                    <IonLabel>{name.split(",")[0]}</IonLabel>
+                  </th>
+                );
+              })}
+            </tr>
+            <tr>
+              {daysOfWeek().map(function (name, index) {
+                return (
+                  <th>
+                    <IonLabel>{name.split(",")[1]}</IonLabel>
+                  </th>
+                );
+              })}
+            </tr>
+          </table>
+          {/*<IonCol>
                 <IonIcon icon={front}></IonIcon>
-              </IonCol>
-            </IonCol>
-          </IonGrid>
+              </IonCol>*/}
         </div>
       </IonItem>
       {list}
