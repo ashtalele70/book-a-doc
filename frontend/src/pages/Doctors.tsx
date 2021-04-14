@@ -37,6 +37,7 @@ const Doctors: React.FC = () => {
   const [entry, setEntry] = useState([]);
   const [timeSlot, settimeSlot] = useState([]);
   const [showMore, setshowMore] = useState(false);
+  const [text, setText] = useState("Read More");
 
   useEffect(() => {
     firestore
@@ -105,7 +106,8 @@ const Doctors: React.FC = () => {
   function handleClick() {
     setshowMore(!showMore);
     var btnText = document.getElementById("myBtn");
-    btnText.innerHTML = showMore ? "Read More" : "Read Less";
+    let value = showMore ? "Read More" : "Read Less";
+    setText(value);
   }
   function getRows() {
     let table = [];
@@ -122,19 +124,23 @@ const Doctors: React.FC = () => {
           console.log(timeSlot[key][i]);
           for (j = 1; j <= 7; j++) {
             children.push(
-              <td>
+              <IonCol col-lg-6 col-md-6 col-12>
                 <IonButton color="warning">
                   {timeSlot[key][i].toLocaleTimeString([], {
                     timeStyle: "short",
                   })}
                 </IonButton>
-              </td>
+              </IonCol>
             );
           }
 
-          table.push(<tr>{children}</tr>);
-          <button onClick={() => handleClick()}>Show more</button>;
+          table.push(<IonRow>{children}</IonRow>);
         }
+        table.push(
+          <IonButton id="myBtn" onClick={() => handleClick()}>
+            {text}
+          </IonButton>
+        );
       });
     console.log(table);
     return table;
@@ -165,10 +171,8 @@ const Doctors: React.FC = () => {
         </div>
 
         <div className="row">
-          <table>{getRows()}</table>
-          <IonButton onClick={() => handleClick()} id="myBtn">
-            Read more
-          </IonButton>
+          {/*<table>{getRows()}</table>*/}
+          <IonGrid>{getRows()}</IonGrid>
         </div>
       </IonItem>
     );
@@ -191,26 +195,26 @@ const Doctors: React.FC = () => {
                 <IonIcon icon={back}></IonIcon>
               </IonCol>
               */}
-          <table>
-            <tr>
+          <IonGrid>
+            <IonRow col-lg-6 col-md-6 col-12>
               {daysOfWeek().map(function (name, index) {
                 return (
-                  <th>
+                  <IonCol>
                     <IonLabel>{name.split(",")[0]}</IonLabel>
-                  </th>
+                  </IonCol>
                 );
               })}
-            </tr>
-            <tr>
+            </IonRow>
+            <IonRow col-lg-6 col-md-6 col-12>
               {daysOfWeek().map(function (name, index) {
                 return (
-                  <th>
+                  <IonCol>
                     <IonLabel>{name.split(",")[1]}</IonLabel>
-                  </th>
+                  </IonCol>
                 );
               })}
-            </tr>
-          </table>
+            </IonRow>
+          </IonGrid>
           {/*<IonCol>
                 <IonIcon icon={front}></IonIcon>
               </IonCol>*/}
