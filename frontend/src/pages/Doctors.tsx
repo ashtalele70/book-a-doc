@@ -115,14 +115,16 @@ const Doctors: React.FC = () => {
       Object.keys(timeSlot).map((key, value) => {
         let i;
         const numberOfItems = showMore ? timeSlot[key].length : 5;
-        for (i = 1; i <= numberOfItems; i++) {
+        console.log(timeSlot[key]);
+        for (i = 1; i < numberOfItems; i++) {
           let j;
           let children = [];
+          console.log(timeSlot[key][i]);
           for (j = 1; j <= 7; j++) {
             children.push(
               <td>
                 <IonButton color="warning">
-                  {timeSlot[key][j].toLocaleTimeString([], {
+                  {timeSlot[key][i].toLocaleTimeString([], {
                     timeStyle: "short",
                   })}
                 </IonButton>
