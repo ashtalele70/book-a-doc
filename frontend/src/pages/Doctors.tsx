@@ -51,7 +51,7 @@ const Doctors: React.FC = () => {
             id: doc.id,
             info: doc.data(),
           };
-          console.log(typeof entry);
+          console.log(doctorInfo);
           setEntry((entry) => [...entry, doctorInfo]);
 
           let timeSlotInfo = [];
@@ -64,14 +64,14 @@ const Doctors: React.FC = () => {
                 //console.log(doc.id, " => ", timeslot.data());
                 let timehhmm = timeslot.data().time.split(":");
                 var d = new Date();
+
                 d.setHours(timehhmm[0], timehhmm[1], 0, 0);
-                console.log(d);
+
                 /*
                 if (d > new Date()) {
                  
                 }*/
                 timeSlotInfo.push(d);
-                console.log(timeSlotInfo);
               });
               timeSlotInfo.sort();
               settimeSlot((timeSlot) => [...timeSlot, timeSlotInfo]);
@@ -84,8 +84,6 @@ const Doctors: React.FC = () => {
     let startDate = new Date();
     let dates = [];
     let i;
-    console.log("today's date");
-    console.log(startDate);
     console.log(Object.values(timeSlot));
 
     for (i = 1; i <= 7; i++) {
@@ -109,6 +107,15 @@ const Doctors: React.FC = () => {
     let value = showMore ? "Read More" : "Read Less";
     setText(value);
   }
+
+  function scheduleAppointment(appointmentTime, noOfDays) {
+    console.log(appointmentTime);
+    console.log(noOfDays);
+    let newDate = new Date(appointmentTime.getTime());
+    newDate.setDate(newDate.getDate() + noOfDays);
+    alert(newDate);
+  }
+
   function getRows() {
     let table = [];
     console.log("called");
@@ -118,21 +125,44 @@ const Doctors: React.FC = () => {
         let i;
         const numberOfItems = showMore ? timeSlot[key].length : 5;
         console.log(timeSlot[key]);
-        for (i = 1; i < numberOfItems; i++) {
+
+        for (i = 0; i < numberOfItems; i++) {
           let j;
           let children = [];
-          console.log(timeSlot[key][i]);
-          for (j = 1; j <= 7; j++) {
-            children.push(
-              <IonCol size="0.9">
-                <IonButton size="small" color="warning">
-                  {timeSlot[key][i].toLocaleTimeString([], {
-                    timeStyle: "short",
-                  })}
-                </IonButton>
-              </IonCol>
-            );
-          }
+          let tempDate = timeSlot[key][i];
+          let arr = new Array(7).fill(tempDate);
+
+          children = arr.map((zero, index) => (
+            <IonCol size="0.9">
+              <IonButton
+                onClick={() => scheduleAppointment(zero, Number(index))}
+                size="small"
+                color="warning"
+              >
+                {timeSlot[key][i].toLocaleTimeString([], {
+                  timeStyle: "short",
+                })}
+              </IonButton>
+            </IonCol>
+          ));
+
+          // for (j = 0; j <= 6; j++) {
+          //   tempDate.setDate(tempDate.getDate() + 1);
+          //   console.log(tempDate);
+          //   children.push(
+          //     <IonCol size="0.9">
+          //       <IonButton
+          //         onClick={() => scheduleAppointment(tempDate, j)}
+          //         size="small"
+          //         color="warning"
+          //       >
+          //         {timeSlot[key][i].toLocaleTimeString([], {
+          //           timeStyle: "short",
+          //         })}
+          //       </IonButton>
+          //     </IonCol>
+          //   );
+          // }
 
           table.push(<IonRow>{children}</IonRow>);
         }
@@ -142,7 +172,7 @@ const Doctors: React.FC = () => {
           </IonButton>
         );
       });
-    console.log(table);
+
     return table;
   }
 
