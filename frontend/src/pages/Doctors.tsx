@@ -37,7 +37,8 @@ const Doctors: React.FC = () => {
   const [entry, setEntry] = useState([]);
   const [timeSlot, settimeSlot] = useState([]);
   const [showMore, setshowMore] = useState(false);
-  let startDate = new Date();
+  const [text, setText] = useState("Read More");
+
   useEffect(() => {
     firestore
       .collection("doctors")
@@ -80,11 +81,16 @@ const Doctors: React.FC = () => {
   }, []);
 
   function daysOfWeek() {
+    let startDate = new Date();
     let dates = [];
     let i;
+    console.log("today's date");
+    console.log(startDate);
     console.log(Object.values(timeSlot));
+
     for (i = 1; i <= 7; i++) {
-      startDate.setDate(startDate.getDate() + 1);
+      console.log(startDate.getDate());
+
       dates.push(
         startDate.toLocaleString("default", {
           weekday: "short",
@@ -92,6 +98,7 @@ const Doctors: React.FC = () => {
           day: "numeric",
         })
       );
+      startDate.setDate(startDate.getDate() + 1);
     }
 
     return dates;
@@ -99,7 +106,8 @@ const Doctors: React.FC = () => {
   function handleClick() {
     setshowMore(!showMore);
     var btnText = document.getElementById("myBtn");
-    btnText.innerHTML = showMore ? "Read More" : "Read Less";
+    let value = showMore ? "Read More" : "Read Less";
+    setText(value);
   }
   function getRows() {
     let table = [];
@@ -109,24 +117,30 @@ const Doctors: React.FC = () => {
       Object.keys(timeSlot).map((key, value) => {
         let i;
         const numberOfItems = showMore ? timeSlot[key].length : 5;
-        for (i = 1; i <= numberOfItems; i++) {
+        console.log(timeSlot[key]);
+        for (i = 1; i < numberOfItems; i++) {
           let j;
           let children = [];
+          console.log(timeSlot[key][i]);
           for (j = 1; j <= 7; j++) {
             children.push(
-              <td>
-                <IonButton color="warning">
-                  {timeSlot[key][j].toLocaleTimeString([], {
+              <IonCol size="0.9">
+                <IonButton size="small" color="warning">
+                  {timeSlot[key][i].toLocaleTimeString([], {
                     timeStyle: "short",
                   })}
                 </IonButton>
-              </td>
+              </IonCol>
             );
           }
 
-          table.push(<tr>{children}</tr>);
-          <button onClick={() => handleClick()}>Show more</button>;
+          table.push(<IonRow>{children}</IonRow>);
         }
+        table.push(
+          <IonButton id="myBtn" onClick={() => handleClick()}>
+            {text}
+          </IonButton>
+        );
       });
     console.log(table);
     return table;
@@ -151,17 +165,17 @@ const Doctors: React.FC = () => {
   const list = Object.keys(entry).map((key, value) => {
     return (
       <IonItem>
-        <div className="row">
-          Dr. {entry[key].info.firstname} {entry[key].info.lastname}
-          <IonButton color="warning">Talk now</IonButton>
-        </div>
+        <IonGrid>
+          <IonCol size="6">
+            Dr. {entry[key].info.firstname} {entry[key].info.lastname}
+            <IonButton color="warning">Talk now</IonButton>
+          </IonCol>
 
-        <div className="row">
-          <table>{getRows()}</table>
-          <IonButton onClick={() => handleClick()} id="myBtn">
-            Read more
-          </IonButton>
-        </div>
+          {/*<table>{getRows()}</table>*/}
+          <IonCol size="6">
+            <IonGrid id="scheduleTable">{getRows()}</IonGrid>
+          </IonCol>
+        </IonGrid>
       </IonItem>
     );
   });
@@ -176,30 +190,38 @@ const Doctors: React.FC = () => {
         <IonLabel></IonLabel>
       </IonItemDivider>
       <IonItem>
-        <div className="row">25 Entries</div>
+        <IonLabel>25 Entries</IonLabel>
+
         <div className="row">
-          <IonGrid>
-            <IonCol>
+          {/**
               <IonCol>
                 <IonIcon icon={back}></IonIcon>
               </IonCol>
-              <table>
-                <tr>
-                  {daysOfWeek().map(function (name, index) {
-                    return (
-                      <td>
-                        <IonCol>{name.split(",")[0]}</IonCol>
-                      </td>
-                    );
-                  })}
-                </tr>
-              </table>
-
-              <IonCol>
-                <IonIcon icon={front}></IonIcon>
-              </IonCol>
-            </IonCol>
+              */}
+          <IonGrid>
+            {" "}
+            <IonRow>
+              {daysOfWeek().map(function (name, index) {
+                return (
+                  <IonCol>
+                    <IonLabel>{name.split(",")[0]}</IonLabel>
+                  </IonCol>
+                );
+              })}
+            </IonRow>
+            <IonRow>
+              {daysOfWeek().map(function (name, index) {
+                return (
+                  <IonCol>
+                    <IonLabel>{name.split(",")[1]}</IonLabel>
+                  </IonCol>
+                );
+              })}
+            </IonRow>
           </IonGrid>
+          {/*<IonCol>
+                <IonIcon icon={front}></IonIcon>
+              </IonCol>*/}
         </div>
       </IonItem>
       {list}
