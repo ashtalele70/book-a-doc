@@ -1,111 +1,130 @@
 import {
-	IonContent,
-	IonItem,
-	IonList,
-	IonPage,
-	IonTitle,
-	IonToolbar,
-	IonSearchbar,
-	IonButton, 
-	IonGrid,
-	IonRow, 
-	IonCol
-  } from '@ionic/react';
-  import React, { useEffect, useState } from 'react';
-  import { firestore } from '../firebase';
-  import data from '../data/conditionSpecialtyMap'; 
-  import Doctors from './Doctors';
-  
-  const HomePage: React.FC = () => {
-	const [searchText, setSearchText] = useState('');
-	const [doctorInfo, setDoctorInfo] = useState([]);
-	// const [doctorSnapshot, setDoctorSnapshot] = useState({});
-	const [timeSlotInfo, setTimeslotInfo] = useState([]);
+  IonContent,
+  IonItem,
+  IonList,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonSearchbar,
+  IonButton,
+  IonGrid,
+  IonRow,
+  IonCol,
+} from "@ionic/react";
+import React, { useEffect, useState } from "react";
+import { firestore } from "../firebase";
+import data from "../data/conditionSpecialtyMap";
+import Doctors from "./Doctors";
 
-	// useEffect(() => {
+const HomePage: React.FC = () => {
+  const [searchText, setSearchText] = useState("");
+  const [doctorInfo, setDoctorInfo] = useState([]);
+  // const [doctorSnapshot, setDoctorSnapshot] = useState({});
+  const [timeSlotInfo, setTimeslotInfo] = useState([]);
 
-	// 	(async function getDoctors() {
-	// 		//const specialties = data[searchText];
-	// 		let arr = [];
-	// 		firestore.collection("doctors").get().then(snapshot => {
-	// 			snapshot.forEach((doc) => {
-	// 			  //if(doc.data().specialties.some(specialty => specialties.indexOf(specialty) >= 0)) {
-	// 				let doctor = {
-	// 					id: doc.id,
-	// 					info: doc.data(),
-	// 				};
-	// 				arr.push(doctor);
-	// 			 // }
-	// 			})
-	// 			setDoctorInfo(arr);
-	// 			setTimeslotInfo(timeSlotInfo);
-	// 		});
+  // useEffect(() => {
 
-	// 		// const doctorsRef = firestore.doc('doctors/1nOipQQaw5Zgd12zStb0dAxvR5x1');
-	// 		// doctorDocumentSnapshot = await doctorsRef.get();
-	// 	})();
-	// }, []);
-	
-	const onChangeHandler = (e) => {
-		setSearchText(e.detail.value);
-	}
+  // 	(async function getDoctors() {
+  // 		//const specialties = data[searchText];
+  // 		let arr = [];
+  // 		firestore.collection("doctors").get().then(snapshot => {
+  // 			snapshot.forEach((doc) => {
+  // 			  //if(doc.data().specialties.some(specialty => specialties.indexOf(specialty) >= 0)) {
+  // 				let doctor = {
+  // 					id: doc.id,
+  // 					info: doc.data(),
+  // 				};
+  // 				arr.push(doctor);
+  // 			 // }
+  // 			})
+  // 			setDoctorInfo(arr);
+  // 			setTimeslotInfo(timeSlotInfo);
+  // 		});
 
-	const onClickHandler = async () => {
-		const specialties = data[searchText];
-		let arr = [], times = [];
-		firestore.collection("doctors").get().then(snapshot => {
-			snapshot.forEach((doc) => {
-				if(doc.data().specialties.some(specialty => specialties.indexOf(specialty) >= 0)) {
-					let doctor = {
-						id: doc.id,
-						info: doc.data(),
-					};
-					arr.push(doctor);
+  // 		// const doctorsRef = firestore.doc('doctors/1nOipQQaw5Zgd12zStb0dAxvR5x1');
+  // 		// doctorDocumentSnapshot = await doctorsRef.get();
+  // 	})();
+  // }, []);
 
-					doc.ref
-					.collection("timeslots")
-					.get()
-					.then((innerQuerySnapshot) => {
-					innerQuerySnapshot.forEach((timeslot) => {
-						let timehhmm = timeslot.data().time.split(":");
-						var d = new Date();
-						d.setHours(timehhmm[0], timehhmm[1], 0, 0);
-						console.log(d);
-						times.push(d);
-					});
-					times.sort();
-					setTimeslotInfo(times);
-				 });
-				}
-			})
-			setDoctorInfo(arr);
-			
-		});		
-		// let docs = [];
-		// docs.push(doctorDocumentSnapshot.data());
-		// doctorInfo = docs.filter(doctor => doctor.specialties.some(specialty => specialties.indexOf(specialty) >= 0));
-	}
-	
-	return (
-	  <IonPage>
-		  <IonToolbar>
-		  	<IonTitle color="success">Book-A-Doc</IonTitle>
-		  </IonToolbar>
-		  
-		<IonContent>
-		<IonGrid>
-			<IonRow>
-			<IonCol size="6"><IonSearchbar value={searchText} onIonChange={e => onChangeHandler(e)}></IonSearchbar></IonCol>
-			<IonCol size="3" className="ion-align-self-end"><IonButton color="primary" onClick={onClickHandler}>Search</IonButton></IonCol>
-			</IonRow>
-			<IonRow>
-				<Doctors timeSlotInfo = {timeSlotInfo} doctorInfo = {doctorInfo} />
-			</IonRow>
-		</IonGrid>
-		</IonContent>
-	  </IonPage>
-	);
+  const onChangeHandler = (e) => {
+    setSearchText(e.detail.value);
   };
-  
-  export default HomePage;
-  
+
+  const onClickHandler = async () => {
+    const specialties = data[searchText];
+    let arr = [],
+      times = [];
+    firestore
+      .collection("doctors")
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          if (
+            doc
+              .data()
+              .specialties.some(
+                (specialty) => specialties.indexOf(specialty) >= 0
+              )
+          ) {
+            let doctor = {
+              id: doc.id,
+              info: doc.data(),
+            };
+            arr.push(doctor);
+
+            doc.ref
+              .collection("timeslots")
+              .get()
+              .then((innerQuerySnapshot) => {
+                innerQuerySnapshot.forEach((timeslot) => {
+                  let timehhmm = timeslot.data().time.split(":");
+                  var d = new Date();
+                  d.setHours(timehhmm[0], timehhmm[1], 0, 0);
+                  console.log(d);
+                  times.push(d);
+                });
+                times.sort();
+                setTimeslotInfo(times);
+              });
+          }
+        });
+        setDoctorInfo(arr);
+      });
+    // let docs = [];
+    // docs.push(doctorDocumentSnapshot.data());
+    // doctorInfo = docs.filter(doctor => doctor.specialties.some(specialty => specialties.indexOf(specialty) >= 0));
+  };
+
+  return (
+    <IonPage>
+      <IonToolbar>
+        <IonTitle color="success">Book-A-Doc</IonTitle>
+      </IonToolbar>
+
+      <IonContent>
+        <IonGrid>
+          <IonRow>
+            <IonCol size="6">
+              <IonSearchbar
+                value={searchText}
+                onIonChange={(e) => onChangeHandler(e)}
+              ></IonSearchbar>
+            </IonCol>
+            <IonCol size="3" className="ion-align-self-end">
+              <IonButton color="primary" onClick={onClickHandler}>
+                Search
+              </IonButton>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            {timeSlotInfo.length > 0 && doctorInfo.length > 0 && (
+              <Doctors timeSlotInfo={timeSlotInfo} doctorInfo={doctorInfo} />
+            )}
+          </IonRow>
+        </IonGrid>
+      </IonContent>
+    </IonPage>
+  );
+};
+
+export default HomePage;

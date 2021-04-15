@@ -32,14 +32,22 @@ import {
   IonText,
 } from "@ionic/react";
 import "./styleSheet.css";
-
-const Doctors: React.FC = () => {
+type props = {
+  doctorInfo: any[];
+  timeSlotInfo: any[];
+};
+const Doctors: React.FC<props> = (props: props): any => {
+  // const {doctorInfo, timeSlotInfo} = props;
   const [entry, setEntry] = useState([]);
   const [timeSlot, settimeSlot] = useState([]);
   const [showMore, setshowMore] = useState(false);
   const [text, setText] = useState("Read More");
 
   useEffect(() => {
+    setEntry(props.doctorInfo);
+    settimeSlot(props.timeSlotInfo);
+
+    /*
     firestore
       .collection("doctors")
       .get()
@@ -67,17 +75,17 @@ const Doctors: React.FC = () => {
 
                 d.setHours(timehhmm[0], timehhmm[1], 0, 0);
 
-                /*
+               
                 if (d > new Date()) {
                  
-                }*/
+                }
                 timeSlotInfo.push(d);
               });
               timeSlotInfo.sort();
               settimeSlot((timeSlot) => [...timeSlot, timeSlotInfo]);
             });
         });
-      });
+      });*/
   }, []);
 
   function daysOfWeek() {
@@ -139,9 +147,14 @@ const Doctors: React.FC = () => {
                 size="small"
                 color="warning"
               >
+                {timeSlot[key][i] &&
+                  timeSlot[key][i].toLocaleTimeString([], {
+                    timeStyle: "short",
+                  })}
+                {/*                 
                 {timeSlot[key][i].toLocaleTimeString([], {
                   timeStyle: "short",
-                })}
+                })} */}
               </IonButton>
             </IonCol>
           ));
@@ -197,7 +210,8 @@ const Doctors: React.FC = () => {
       <IonItem>
         <IonGrid>
           <IonCol size="6">
-            Dr. {entry[key].info.firstname} {entry[key].info.lastname}
+            Dr. {entry[key].info && entry[key].info.firstname}{" "}
+            {entry[key].info && entry[key].info.lastname}
             <IonButton color="warning">Talk now</IonButton>
           </IonCol>
 
@@ -210,12 +224,7 @@ const Doctors: React.FC = () => {
     );
   });
   return (
-    <IonContent
-      scrollEvents={true}
-      onIonScrollStart={() => {}}
-      onIonScroll={() => {}}
-      onIonScrollEnd={() => {}}
-    >
+    <IonCol>
       <IonItemDivider color="primary">
         <IonLabel></IonLabel>
       </IonItemDivider>
@@ -255,7 +264,7 @@ const Doctors: React.FC = () => {
         </div>
       </IonItem>
       {list}
-    </IonContent>
+    </IonCol>
   );
 };
 

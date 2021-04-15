@@ -66,9 +66,9 @@ const AppTabs: React.FC = () => {
         <Route exact path="/doctorProfile">
           <DoctorProfilePage />
         </Route>
-        <Route exact path="/doctors">
+        {/* <Route exact path="/doctors">
           <Doctors timeSlotInfo = {[]} doctorInfo = {[]} />
-        </Route>
+        </Route> */}
       </IonRouterOutlet>
       <IonTabBar slot="bottom">
         <IonTabButton tab="home" href="/home">
