@@ -124,8 +124,8 @@ const Doctors: React.FC = () => {
           console.log(timeSlot[key][i]);
           for (j = 1; j <= 7; j++) {
             children.push(
-              <IonCol col-lg-6 col-md-6 col-12>
-                <IonButton color="warning">
+              <IonCol size="0.9">
+                <IonButton size="small" color="warning">
                   {timeSlot[key][i].toLocaleTimeString([], {
                     timeStyle: "short",
                   })}
@@ -165,15 +165,17 @@ const Doctors: React.FC = () => {
   const list = Object.keys(entry).map((key, value) => {
     return (
       <IonItem>
-        <div className="row">
-          Dr. {entry[key].info.firstname} {entry[key].info.lastname}
-          <IonButton color="warning">Talk now</IonButton>
-        </div>
+        <IonGrid>
+          <IonCol size="6">
+            Dr. {entry[key].info.firstname} {entry[key].info.lastname}
+            <IonButton color="warning">Talk now</IonButton>
+          </IonCol>
 
-        <div className="row">
           {/*<table>{getRows()}</table>*/}
-          <IonGrid>{getRows()}</IonGrid>
-        </div>
+          <IonCol size="6">
+            <IonGrid id="scheduleTable">{getRows()}</IonGrid>
+          </IonCol>
+        </IonGrid>
       </IonItem>
     );
   });
@@ -188,7 +190,8 @@ const Doctors: React.FC = () => {
         <IonLabel></IonLabel>
       </IonItemDivider>
       <IonItem>
-        <div className="row">25 Entries</div>
+        <IonLabel>25 Entries</IonLabel>
+
         <div className="row">
           {/**
               <IonCol>
@@ -196,7 +199,8 @@ const Doctors: React.FC = () => {
               </IonCol>
               */}
           <IonGrid>
-            <IonRow col-lg-6 col-md-6 col-12>
+            {" "}
+            <IonRow>
               {daysOfWeek().map(function (name, index) {
                 return (
                   <IonCol>
@@ -205,7 +209,7 @@ const Doctors: React.FC = () => {
                 );
               })}
             </IonRow>
-            <IonRow col-lg-6 col-md-6 col-12>
+            <IonRow>
               {daysOfWeek().map(function (name, index) {
                 return (
                   <IonCol>
