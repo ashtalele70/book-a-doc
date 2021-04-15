@@ -52,8 +52,7 @@ const HomePage: React.FC = () => {
 
   const onClickHandler = async () => {
     const specialties = data[searchText];
-    let arr = [],
-      times = [];
+    let arr = [];
     firestore
       .collection("doctors")
       .get()
@@ -68,10 +67,10 @@ const HomePage: React.FC = () => {
           ) {
             let doctor = {
               id: doc.id,
-              info: doc.data(),
+              info: doc.data()
             };
-            arr.push(doctor);
-
+            
+			let timeslots = [];
             doc.ref
               .collection("timeslots")
               .get()
@@ -81,14 +80,15 @@ const HomePage: React.FC = () => {
                   var d = new Date();
                   d.setHours(timehhmm[0], timehhmm[1], 0, 0);
                   console.log(d);
-                  times.push(d);
+                  timeslots.push(d);
                 });
-                times.sort();
-                setTimeslotInfo(times);
+                timeslots.sort();
+                setTimeslotInfo(state => [...state, timeslots]);
               });
+			  arr.push(doctor);
+			  setDoctorInfo(arr);
           }
         });
-        setDoctorInfo(arr);
       });
     // let docs = [];
     // docs.push(doctorDocumentSnapshot.data());
@@ -102,7 +102,7 @@ const HomePage: React.FC = () => {
       </IonToolbar>
 
       <IonContent>
-        <IonGrid>
+        {/* <IonGrid> */}
           <IonRow>
             <IonCol size="6">
               <IonSearchbar
@@ -116,12 +116,12 @@ const HomePage: React.FC = () => {
               </IonButton>
             </IonCol>
           </IonRow>
-          <IonRow>
+          {/* <IonRow> */}
             {timeSlotInfo.length > 0 && doctorInfo.length > 0 && (
               <Doctors timeSlotInfo={timeSlotInfo} doctorInfo={doctorInfo} />
             )}
-          </IonRow>
-        </IonGrid>
+          {/* </IonRow> */}
+        {/* </IonGrid> */}
       </IonContent>
     </IonPage>
   );

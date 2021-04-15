@@ -224,7 +224,7 @@ const Doctors: React.FC<props> = (props: props): any => {
     );
   });
   return (
-    <IonCol>
+    <React.Fragment>
       <IonItemDivider color="primary">
         <IonLabel></IonLabel>
       </IonItemDivider>
@@ -264,7 +264,7 @@ const Doctors: React.FC<props> = (props: props): any => {
         </div>
       </IonItem>
       {list}
-    </IonCol>
+    </React.Fragment>
   );
 };
 
