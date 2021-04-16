@@ -86,7 +86,7 @@ const Doctors: React.FC<props> = (props: props): any => {
             });
         });
       });*/
-  }, []);
+  });
 
   function daysOfWeek() {
     let startDate = new Date();
@@ -109,9 +109,10 @@ const Doctors: React.FC<props> = (props: props): any => {
 
     return dates;
   }
-  function handleClick() {
+  
+  function handleClick(index) {
     setshowMore(!showMore);
-    var btnText = document.getElementById("myBtn");
+    var btnText = document.getElementById("myBtn"+index);
     let value = showMore ? "Read More" : "Read Less";
     setText(value);
   }
@@ -124,31 +125,31 @@ const Doctors: React.FC<props> = (props: props): any => {
     alert(newDate);
   }
 
-  function getRows() {
+  function getRows(timeslots, index) {
     let table = [];
     console.log("called");
 
-    timeSlot &&
-      Object.keys(timeSlot).map((key, value) => {
+    // timeslots &&
+    //   Object.keys(timeslots).map((key, value) => {
         let i;
-        const numberOfItems = showMore ? timeSlot[key].length : 5;
-        console.log(timeSlot[key]);
+        const numberOfItems = showMore ? timeslots.length : 5;
+        // console.log(timeslotArray);
 
         for (i = 0; i < numberOfItems; i++) {
           let j;
           let children = [];
-          let tempDate = timeSlot[key][i];
+          let tempDate = timeslots[i];
           let arr = new Array(7).fill(tempDate);
 
-          children = arr.map((zero, index) => (
+          children = arr.map((child, childIndex) => (
             <IonCol size="0.9">
               <IonButton
-                onClick={() => scheduleAppointment(zero, Number(index))}
+                onClick={() => scheduleAppointment(child, Number(childIndex))}
                 size="small"
                 color="warning"
               >
-                {timeSlot[key][i] &&
-                  timeSlot[key][i].toLocaleTimeString([], {
+                {timeslots[i] &&
+                  timeslots[i].toLocaleTimeString([], {
                     timeStyle: "short",
                   })}
                 {/*                 
@@ -180,11 +181,11 @@ const Doctors: React.FC<props> = (props: props): any => {
           table.push(<IonRow>{children}</IonRow>);
         }
         table.push(
-          <IonButton id="myBtn" onClick={() => handleClick()}>
+          <IonButton id={"myBtn"+index} onClick={() => handleClick(index)}>
             {text}
           </IonButton>
         );
-      });
+      // });
 
     return table;
   }
@@ -217,7 +218,7 @@ const Doctors: React.FC<props> = (props: props): any => {
 
           {/*<table>{getRows()}</table>*/}
           <IonCol size="6">
-            <IonGrid id="scheduleTable">{getRows()}</IonGrid>
+            <IonGrid id="scheduleTable">{getRows(timeSlot[value], value)}</IonGrid>
           </IonCol>
         </IonGrid>
       </IonItem>
