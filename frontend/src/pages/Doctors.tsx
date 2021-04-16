@@ -147,7 +147,28 @@ const Doctors: React.FC<props> = (props: props): any => {
       ? 5
       : timeslots.length; //timeslots.length > 5 ? 5 : timeslots.length;
     // console.log(timeslotArray);
-
+    table.push(
+      <IonRow>
+        {daysOfWeek().map(function (name, index) {
+          return (
+            <IonCol size="0.9">
+              <IonLabel>{name.split(",")[0]}</IonLabel>
+            </IonCol>
+          );
+        })}
+      </IonRow>
+    );
+    table.push(
+      <IonRow>
+        {daysOfWeek().map(function (name, index) {
+          return (
+            <IonCol size="0.9">
+              <IonLabel>{name.split(",")[1]}</IonLabel>
+            </IonCol>
+          );
+        })}
+      </IonRow>
+    );
     for (i = 0; i < numberOfItems; i++) {
       let j;
       let children = [];
@@ -246,7 +267,7 @@ const Doctors: React.FC<props> = (props: props): any => {
         <IonLabel></IonLabel>
       </IonItemDivider>
       <IonItem>
-        <IonLabel>25 Entries</IonLabel>
+        <IonLabel>{entry && entry.length} results</IonLabel>
 
         <div className="row">
           {/**
@@ -254,8 +275,9 @@ const Doctors: React.FC<props> = (props: props): any => {
                 <IonIcon icon={back}></IonIcon>
               </IonCol>
               */}
-          <IonGrid>
-            {" "}
+          {/* <IonGrid>
+         
+            
             <IonRow>
               {daysOfWeek().map(function (name, index) {
                 return (
@@ -274,7 +296,7 @@ const Doctors: React.FC<props> = (props: props): any => {
                 );
               })}
             </IonRow>
-          </IonGrid>
+          </IonGrid> */}
           {/*<IonCol>
                 <IonIcon icon={front}></IonIcon>
               </IonCol>*/}
