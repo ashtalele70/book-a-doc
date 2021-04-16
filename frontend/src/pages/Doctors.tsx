@@ -40,12 +40,13 @@ const Doctors: React.FC<props> = (props: props): any => {
   // const {doctorInfo, timeSlotInfo} = props;
   const [entry, setEntry] = useState([]);
   const [timeSlot, settimeSlot] = useState([]);
-  const [showMore, setshowMore] = useState(false);
+  const [showMore, setShowMore] = useState([]);
   const [text, setText] = useState("Read More");
 
   useEffect(() => {
     setEntry(props.doctorInfo);
     settimeSlot(props.timeSlotInfo);
+    setShowMore(Array.from({ length: entry.length }, (i) => (i = false)));
 
     /*
     firestore
@@ -86,7 +87,7 @@ const Doctors: React.FC<props> = (props: props): any => {
             });
         });
       });*/
-  });
+  }, [entry]);
 
   function daysOfWeek() {
     let startDate = new Date();
@@ -109,12 +110,19 @@ const Doctors: React.FC<props> = (props: props): any => {
 
     return dates;
   }
-  
+
   function handleClick(index) {
-    setshowMore(!showMore);
-    var btnText = document.getElementById("myBtn"+index);
-    let value = showMore ? "Read More" : "Read Less";
-    setText(value);
+    let newArr = [...showMore];
+    newArr[index] = !showMore[index];
+    setShowMore(newArr);
+
+    let id = "myBtn" + index;
+    var btnText = document.getElementById(id).innerText;
+    console.log(btnText);
+
+    let value = showMore[index] ? "READ MORE" : "READ LESS";
+    document.getElementById(id).innerText = value;
+    //setText(value);
   }
 
   function scheduleAppointment(appointmentTime, noOfDays) {
@@ -131,61 +139,57 @@ const Doctors: React.FC<props> = (props: props): any => {
 
     // timeslots &&
     //   Object.keys(timeslots).map((key, value) => {
-        let i;
-        const numberOfItems = showMore ? timeslots.length : 5;
-        // console.log(timeslotArray);
+    let i;
+    const numberOfItems = showMore[index] ? timeslots.length : 5;
+    // console.log(timeslotArray);
 
-        for (i = 0; i < numberOfItems; i++) {
-          let j;
-          let children = [];
-          let tempDate = timeslots[i];
-          let arr = new Array(7).fill(tempDate);
+    for (i = 0; i < numberOfItems; i++) {
+      let j;
+      let children = [];
+      let tempDate = timeslots[i];
+      let arr = new Array(7).fill(tempDate);
 
-          children = arr.map((child, childIndex) => (
-            <IonCol size="0.9">
-              <IonButton
-                onClick={() => scheduleAppointment(child, Number(childIndex))}
-                size="small"
-                color="warning"
-              >
-                {timeslots[i] &&
-                  timeslots[i].toLocaleTimeString([], {
-                    timeStyle: "short",
-                  })}
-                {/*                 
+      children = arr.map((child, childIndex) => (
+        <IonCol size="0.9">
+          <IonButton
+            onClick={() => scheduleAppointment(child, Number(childIndex))}
+            size="small"
+            color="warning"
+          >
+            {timeslots[i] &&
+              timeslots[i].toLocaleTimeString([], {
+                timeStyle: "short",
+              })}
+            {/*                 
                 {timeSlot[key][i].toLocaleTimeString([], {
                   timeStyle: "short",
                 })} */}
-              </IonButton>
-            </IonCol>
-          ));
-
-          // for (j = 0; j <= 6; j++) {
-          //   tempDate.setDate(tempDate.getDate() + 1);
-          //   console.log(tempDate);
-          //   children.push(
-          //     <IonCol size="0.9">
-          //       <IonButton
-          //         onClick={() => scheduleAppointment(tempDate, j)}
-          //         size="small"
-          //         color="warning"
-          //       >
-          //         {timeSlot[key][i].toLocaleTimeString([], {
-          //           timeStyle: "short",
-          //         })}
-          //       </IonButton>
-          //     </IonCol>
-          //   );
-          // }
-
-          table.push(<IonRow>{children}</IonRow>);
-        }
-        table.push(
-          <IonButton id={"myBtn"+index} onClick={() => handleClick(index)}>
-            {text}
           </IonButton>
-        );
-      // });
+        </IonCol>
+      ));
+
+      // for (j = 0; j <= 6; j++) {
+      //   tempDate.setDate(tempDate.getDate() + 1);
+      //   console.log(tempDate);
+      //   children.push(
+      //     <IonCol size="0.9">
+      //       <IonButton
+      //         onClick={() => scheduleAppointment(tempDate, j)}
+      //         size="small"
+      //         color="warning"
+      //       >
+      //         {timeSlot[key][i].toLocaleTimeString([], {
+      //           timeStyle: "short",
+      //         })}
+      //       </IonButton>
+      //     </IonCol>
+      //   );
+      // }
+
+      table.push(<IonRow>{children}</IonRow>);
+    }
+    //table.push();
+    // });
 
     return table;
   }
@@ -218,7 +222,12 @@ const Doctors: React.FC<props> = (props: props): any => {
 
           {/*<table>{getRows()}</table>*/}
           <IonCol size="6">
-            <IonGrid id="scheduleTable">{getRows(timeSlot[value], value)}</IonGrid>
+            <IonGrid id="scheduleTable">
+              {getRows(timeSlot[value], value)}
+            </IonGrid>
+            <IonButton id={"myBtn" + key} onClick={() => handleClick(key)}>
+              Read More
+            </IonButton>
           </IonCol>
         </IonGrid>
       </IonItem>
