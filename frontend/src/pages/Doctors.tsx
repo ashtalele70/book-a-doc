@@ -136,11 +136,16 @@ const Doctors: React.FC<props> = (props: props): any => {
   function getRows(timeslots, index) {
     let table = [];
     console.log("called");
+    console.log(timeslots.length);
 
     // timeslots &&
     //   Object.keys(timeslots).map((key, value) => {
     let i;
-    const numberOfItems = showMore[index] ? timeslots.length : 5;
+    let numberOfItems = showMore[index]
+      ? timeslots.length
+      : timeslots.length > 5
+      ? 5
+      : timeslots.length; //timeslots.length > 5 ? 5 : timeslots.length;
     // console.log(timeslotArray);
 
     for (i = 0; i < numberOfItems; i++) {
@@ -225,9 +230,11 @@ const Doctors: React.FC<props> = (props: props): any => {
             <IonGrid id="scheduleTable">
               {getRows(timeSlot[value], value)}
             </IonGrid>
-            <IonButton id={"myBtn" + key} onClick={() => handleClick(key)}>
-              Read More
-            </IonButton>
+            {timeSlot[value].length > 5 && (
+              <IonButton id={"myBtn" + key} onClick={() => handleClick(key)}>
+                Read More
+              </IonButton>
+            )}
           </IonCol>
         </IonGrid>
       </IonItem>
