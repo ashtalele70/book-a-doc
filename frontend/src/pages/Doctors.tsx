@@ -11,8 +11,11 @@ import {
   chevronForwardOutline as front,
 } from "ionicons/icons";
 import {
+  IonAlert,
   IonButton,
+  useIonAlert,
   IonIcon,
+  IonSplitPane,
   IonContent,
   IonSegment,
   IonSegmentButton,
@@ -36,18 +39,20 @@ type props = {
   doctorInfo: any[];
   timeSlotInfo: any[];
 };
+
 const Doctors: React.FC<props> = (props: props): any => {
   // const {doctorInfo, timeSlotInfo} = props;
   const [entry, setEntry] = useState([]);
   const [timeSlot, settimeSlot] = useState([]);
   const [showMore, setShowMore] = useState([]);
   const [text, setText] = useState("Read More");
+  const [present] = useIonAlert();
 
   useEffect(() => {
     setEntry(props.doctorInfo);
     settimeSlot(props.timeSlotInfo);
     setShowMore(Array.from({ length: entry.length }, (i) => (i = false)));
-
+    console.log(props.doctorInfo);
     /*
     firestore
       .collection("doctors")
@@ -130,7 +135,6 @@ const Doctors: React.FC<props> = (props: props): any => {
     console.log(noOfDays);
     let newDate = new Date(appointmentTime.getTime());
     newDate.setDate(newDate.getDate() + noOfDays);
-    alert(newDate);
   }
 
   function getRows(timeslots, index) {
@@ -146,12 +150,12 @@ const Doctors: React.FC<props> = (props: props): any => {
       : timeslots.length > 5
       ? 5
       : timeslots.length; //timeslots.length > 5 ? 5 : timeslots.length;
-    // console.log(timeslotArray);
+    // console.log(timeslotArray); 2.3 for iphone .9 for web
     table.push(
       <IonRow>
         {daysOfWeek().map(function (name, index) {
           return (
-            <IonCol size="0.9">
+            <IonCol size="0.9" col-12 col-xl-2 col-lg-3 col-md-4>
               <IonLabel>{name.split(",")[0]}</IonLabel>
             </IonCol>
           );
@@ -162,7 +166,7 @@ const Doctors: React.FC<props> = (props: props): any => {
       <IonRow>
         {daysOfWeek().map(function (name, index) {
           return (
-            <IonCol size="0.9">
+            <IonCol size="0.9" col-12 col-xl-2 col-lg-3 col-md-4>
               <IonLabel>{name.split(",")[1]}</IonLabel>
             </IonCol>
           );
@@ -176,20 +180,31 @@ const Doctors: React.FC<props> = (props: props): any => {
       let arr = new Array(7).fill(tempDate);
 
       children = arr.map((child, childIndex) => (
-        <IonCol size="0.9">
+        <IonCol size="0.9" col-12 col-xl-2 col-lg-3 col-md-4>
           <IonButton
-            onClick={() => scheduleAppointment(child, Number(childIndex))}
-            size="small"
+            expand="block"
             color="warning"
+            onClick={() =>
+              present({
+                cssClass: "my-css",
+                header: "Confirm Appointment",
+                message: "Are you sure about" + child,
+                buttons: [
+                  "Cancel",
+                  {
+                    text: "Ok",
+                    handler: (d) =>
+                      scheduleAppointment(child, Number(childIndex)),
+                  },
+                ],
+                onDidDismiss: (e) => console.log("did dismiss"),
+              })
+            }
           >
             {timeslots[i] &&
               timeslots[i].toLocaleTimeString([], {
                 timeStyle: "short",
               })}
-            {/*                 
-                {timeSlot[key][i].toLocaleTimeString([], {
-                  timeStyle: "short",
-                })} */}
           </IonButton>
         </IonCol>
       ));
@@ -241,8 +256,21 @@ const Doctors: React.FC<props> = (props: props): any => {
       <IonItem>
         <IonGrid>
           <IonCol size="6">
-            Dr. {entry[key].info && entry[key].info.firstname}{" "}
-            {entry[key].info && entry[key].info.lastname}
+            <IonRow>
+              <IonAvatar>
+                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
+              </IonAvatar>
+              <h2>
+                Dr. {entry[key].info && entry[key].info.firstname}{" "}
+                {entry[key].info && entry[key].info.lastname}
+              </h2>
+            </IonRow>
+
+            {entry[key].info &&
+              entry[key].info.specialties.map((row, index) => (
+                <IonLabel class="EBinfor">{row}</IonLabel>
+              ))}
+
             <IonButton color="warning">Talk now</IonButton>
           </IonCol>
 
@@ -266,6 +294,7 @@ const Doctors: React.FC<props> = (props: props): any => {
       <IonItemDivider color="primary">
         <IonLabel></IonLabel>
       </IonItemDivider>
+
       <IonItem>
         <IonLabel>{entry && entry.length} results</IonLabel>
 
