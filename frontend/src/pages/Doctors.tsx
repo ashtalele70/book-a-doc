@@ -4,7 +4,9 @@ import Rating from "react-rating";
 import starempty from "./images/star-empty.png";
 import starfull from "./images/star-full.png";
 import { firestore } from "../firebase";
+import { useAuth } from "../auth";
 import moment from "moment";
+import { useHistory } from "react-router-dom";
 import {
   heart,
   chevronBackOutline as back,
@@ -47,6 +49,8 @@ const Doctors: React.FC<props> = (props: props): any => {
   const [showMore, setShowMore] = useState([]);
   const [text, setText] = useState("Read More");
   const [present] = useIonAlert();
+  const { userId } = useAuth();
+  const history = useHistory();
 
   useEffect(() => {
     setEntry(props.doctorInfo);
@@ -93,12 +97,12 @@ const Doctors: React.FC<props> = (props: props): any => {
         });
       });*/
   }, [entry]);
-
+  useEffect(() => {});
   function daysOfWeek() {
     let startDate = new Date();
     let dates = [];
     let i;
-    console.log(Object.values(timeSlot));
+    //console.log(Object.values(timeSlot));
 
     for (i = 1; i <= 7; i++) {
       console.log(startDate.getDate());
@@ -123,25 +127,40 @@ const Doctors: React.FC<props> = (props: props): any => {
 
     let id = "myBtn" + index;
     var btnText = document.getElementById(id).innerText;
-    console.log(btnText);
+    //console.log(btnText);
 
     let value = showMore[index] ? "READ MORE" : "READ LESS";
     document.getElementById(id).innerText = value;
     //setText(value);
   }
 
-  function scheduleAppointment(appointmentTime, noOfDays) {
+  function scheduleAppointment(appointmentTime, noOfDays, doctorID) {
     console.log(appointmentTime);
-    console.log(noOfDays);
+    console.log(userId);
     let newDate = new Date(appointmentTime.getTime());
     newDate.setDate(newDate.getDate() + noOfDays);
+
+    firestore
+      .collection("doctors")
+      .doc(doctorID)
+      .collection("appointments")
+      .add({
+        date: newDate,
+        patientID: userId,
+      })
+      .then(() => {
+        console.log("Document successfully written!");
+      })
+      .catch((error) => {
+        console.error("Error writing document: ", error);
+      });
   }
 
-  function getRows(timeslots, index) {
+  function getRows(timeslots, index, doctorID) {
     let table = [];
-    console.log("called");
-    console.log(timeslots.length);
-
+    //console.log("called");
+    //console.log(timeslots.length);
+    //console.log(timeSlot);
     // timeslots &&
     //   Object.keys(timeslots).map((key, value) => {
     let i;
@@ -176,12 +195,23 @@ const Doctors: React.FC<props> = (props: props): any => {
     for (i = 0; i < numberOfItems; i++) {
       let j;
       let children = [];
+      let currentTime = new Date();
       let tempDate = timeslots[i];
       let arr = new Array(7).fill(tempDate);
-
+      //data to be added
+      let grey = [1618849800000, 1619037000000];
       children = arr.map((child, childIndex) => (
         <IonCol size="0.9" col-12 col-xl-2 col-lg-3 col-md-4>
           <IonButton
+            disabled={
+              grey.includes(
+                child.getTime() + childIndex * 24 * 60 * 60 * 1000
+              ) ||
+              child.getTime() + childIndex * 24 * 60 * 60 * 1000 <
+                currentTime.getTime()
+                ? true
+                : false
+            }
             expand="block"
             color="warning"
             onClick={() =>
@@ -194,7 +224,7 @@ const Doctors: React.FC<props> = (props: props): any => {
                   {
                     text: "Ok",
                     handler: (d) =>
-                      scheduleAppointment(child, Number(childIndex)),
+                      scheduleAppointment(child, Number(childIndex), doctorID),
                   },
                 ],
                 onDidDismiss: (e) => console.log("did dismiss"),
@@ -251,6 +281,10 @@ const Doctors: React.FC<props> = (props: props): any => {
     }
   }
 
+  function zoomMeeting() {
+    history.push("/zoom");
+  }
+
   const list = Object.keys(entry).map((key, value) => {
     return (
       <IonItem>
@@ -265,19 +299,22 @@ const Doctors: React.FC<props> = (props: props): any => {
                 {entry[key].info && entry[key].info.lastname}
               </h2>
             </IonRow>
-
             {entry[key].info &&
               entry[key].info.specialties.map((row, index) => (
                 <IonLabel class="EBinfor">{row}</IonLabel>
               ))}
 
-            <IonButton color="warning">Talk now</IonButton>
+            {2 > 1 && (
+              <IonButton color="warning" onClick={() => history.push("/zoom")}>
+                Talk now
+              </IonButton>
+            )}
           </IonCol>
 
           {/*<table>{getRows()}</table>*/}
           <IonCol size="6">
             <IonGrid id="scheduleTable">
-              {getRows(timeSlot[value], value)}
+              {getRows(timeSlot[value], value, entry[key].id)}
             </IonGrid>
             {timeSlot[value].length > 5 && (
               <IonButton id={"myBtn" + key} onClick={() => handleClick(key)}>
