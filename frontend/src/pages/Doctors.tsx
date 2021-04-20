@@ -11,8 +11,11 @@ import {
   chevronForwardOutline as front,
 } from "ionicons/icons";
 import {
+  IonAlert,
   IonButton,
+  useIonAlert,
   IonIcon,
+  IonSplitPane,
   IonContent,
   IonSegment,
   IonSegmentButton,
@@ -36,17 +39,20 @@ type props = {
   doctorInfo: any[];
   timeSlotInfo: any[];
 };
+
 const Doctors: React.FC<props> = (props: props): any => {
   // const {doctorInfo, timeSlotInfo} = props;
   const [entry, setEntry] = useState([]);
   const [timeSlot, settimeSlot] = useState([]);
-  const [showMore, setshowMore] = useState(false);
+  const [showMore, setShowMore] = useState([]);
   const [text, setText] = useState("Read More");
+  const [present] = useIonAlert();
 
   useEffect(() => {
     setEntry(props.doctorInfo);
     settimeSlot(props.timeSlotInfo);
-
+    setShowMore(Array.from({ length: entry.length }, (i) => (i = false)));
+    console.log(props.doctorInfo);
     /*
     firestore
       .collection("doctors")
@@ -86,7 +92,7 @@ const Doctors: React.FC<props> = (props: props): any => {
             });
         });
       });*/
-  });
+  }, [entry]);
 
   function daysOfWeek() {
     let startDate = new Date();
@@ -109,12 +115,19 @@ const Doctors: React.FC<props> = (props: props): any => {
 
     return dates;
   }
-  
+
   function handleClick(index) {
-    setshowMore(!showMore);
-    var btnText = document.getElementById("myBtn"+index);
-    let value = showMore ? "Read More" : "Read Less";
-    setText(value);
+    let newArr = [...showMore];
+    newArr[index] = !showMore[index];
+    setShowMore(newArr);
+
+    let id = "myBtn" + index;
+    var btnText = document.getElementById(id).innerText;
+    console.log(btnText);
+
+    let value = showMore[index] ? "READ MORE" : "READ LESS";
+    document.getElementById(id).innerText = value;
+    //setText(value);
   }
 
   function scheduleAppointment(appointmentTime, noOfDays) {
@@ -122,70 +135,102 @@ const Doctors: React.FC<props> = (props: props): any => {
     console.log(noOfDays);
     let newDate = new Date(appointmentTime.getTime());
     newDate.setDate(newDate.getDate() + noOfDays);
-    alert(newDate);
   }
 
   function getRows(timeslots, index) {
     let table = [];
     console.log("called");
+    console.log(timeslots.length);
 
     // timeslots &&
     //   Object.keys(timeslots).map((key, value) => {
-        let i;
-        const numberOfItems = showMore ? timeslots.length : 5;
-        // console.log(timeslotArray);
-
-        for (i = 0; i < numberOfItems; i++) {
-          let j;
-          let children = [];
-          let tempDate = timeslots[i];
-          let arr = new Array(7).fill(tempDate);
-
-          children = arr.map((child, childIndex) => (
-            <IonCol size="0.9">
-              <IonButton
-                onClick={() => scheduleAppointment(child, Number(childIndex))}
-                size="small"
-                color="warning"
-              >
-                {timeslots[i] &&
-                  timeslots[i].toLocaleTimeString([], {
-                    timeStyle: "short",
-                  })}
-                {/*                 
-                {timeSlot[key][i].toLocaleTimeString([], {
-                  timeStyle: "short",
-                })} */}
-              </IonButton>
+    let i;
+    let numberOfItems = showMore[index]
+      ? timeslots.length
+      : timeslots.length > 5
+      ? 5
+      : timeslots.length; //timeslots.length > 5 ? 5 : timeslots.length;
+    // console.log(timeslotArray); 2.3 for iphone .9 for web
+    table.push(
+      <IonRow>
+        {daysOfWeek().map(function (name, index) {
+          return (
+            <IonCol size="0.9" col-12 col-xl-2 col-lg-3 col-md-4>
+              <IonLabel>{name.split(",")[0]}</IonLabel>
             </IonCol>
-          ));
+          );
+        })}
+      </IonRow>
+    );
+    table.push(
+      <IonRow>
+        {daysOfWeek().map(function (name, index) {
+          return (
+            <IonCol size="0.9" col-12 col-xl-2 col-lg-3 col-md-4>
+              <IonLabel>{name.split(",")[1]}</IonLabel>
+            </IonCol>
+          );
+        })}
+      </IonRow>
+    );
+    for (i = 0; i < numberOfItems; i++) {
+      let j;
+      let children = [];
+      let tempDate = timeslots[i];
+      let arr = new Array(7).fill(tempDate);
 
-          // for (j = 0; j <= 6; j++) {
-          //   tempDate.setDate(tempDate.getDate() + 1);
-          //   console.log(tempDate);
-          //   children.push(
-          //     <IonCol size="0.9">
-          //       <IonButton
-          //         onClick={() => scheduleAppointment(tempDate, j)}
-          //         size="small"
-          //         color="warning"
-          //       >
-          //         {timeSlot[key][i].toLocaleTimeString([], {
-          //           timeStyle: "short",
-          //         })}
-          //       </IonButton>
-          //     </IonCol>
-          //   );
-          // }
-
-          table.push(<IonRow>{children}</IonRow>);
-        }
-        table.push(
-          <IonButton id={"myBtn"+index} onClick={() => handleClick(index)}>
-            {text}
+      children = arr.map((child, childIndex) => (
+        <IonCol size="0.9" col-12 col-xl-2 col-lg-3 col-md-4>
+          <IonButton
+            expand="block"
+            color="warning"
+            onClick={() =>
+              present({
+                cssClass: "my-css",
+                header: "Confirm Appointment",
+                message: "Are you sure about" + child,
+                buttons: [
+                  "Cancel",
+                  {
+                    text: "Ok",
+                    handler: (d) =>
+                      scheduleAppointment(child, Number(childIndex)),
+                  },
+                ],
+                onDidDismiss: (e) => console.log("did dismiss"),
+              })
+            }
+          >
+            {timeslots[i] &&
+              timeslots[i].toLocaleTimeString([], {
+                timeStyle: "short",
+              })}
           </IonButton>
-        );
-      // });
+        </IonCol>
+      ));
+
+      // for (j = 0; j <= 6; j++) {
+      //   tempDate.setDate(tempDate.getDate() + 1);
+      //   console.log(tempDate);
+      //   children.push(
+      //     <IonCol size="0.9">
+      //       <IonButton
+      //         onClick={() => scheduleAppointment(tempDate, j)}
+      //         size="small"
+      //         color="warning"
+      //       >
+      //         {timeSlot[key][i].toLocaleTimeString([], {
+      //           timeStyle: "short",
+      //         })}
+      //       </IonButton>
+      //     </IonCol>
+      //   );
+      // }
+
+      table.push(<IonRow>{children}</IonRow>);
+    }
+    //table.push();
+    // });
 
     return table;
   }
@@ -211,14 +256,34 @@ const Doctors: React.FC<props> = (props: props): any => {
       <IonItem>
         <IonGrid>
           <IonCol size="6">
-            Dr. {entry[key].info && entry[key].info.firstname}{" "}
-            {entry[key].info && entry[key].info.lastname}
+            <IonRow>
+              <IonAvatar>
+                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
+              </IonAvatar>
+              <h2>
+                Dr. {entry[key].info && entry[key].info.firstname}{" "}
+                {entry[key].info && entry[key].info.lastname}
+              </h2>
+            </IonRow>
+
+            {entry[key].info &&
+              entry[key].info.specialties.map((row, index) => (
+                <IonLabel class="EBinfor">{row}</IonLabel>
+              ))}
+
             <IonButton color="warning">Talk now</IonButton>
           </IonCol>
 
           {/*<table>{getRows()}</table>*/}
           <IonCol size="6">
-            <IonGrid id="scheduleTable">{getRows(timeSlot[value], value)}</IonGrid>
+            <IonGrid id="scheduleTable">
+              {getRows(timeSlot[value], value)}
+            </IonGrid>
+            {timeSlot[value].length > 5 && (
+              <IonButton id={"myBtn" + key} onClick={() => handleClick(key)}>
+                Read More
+              </IonButton>
+            )}
           </IonCol>
         </IonGrid>
       </IonItem>
@@ -229,8 +294,9 @@ const Doctors: React.FC<props> = (props: props): any => {
       <IonItemDivider color="primary">
         <IonLabel></IonLabel>
       </IonItemDivider>
+
       <IonItem>
-        <IonLabel>25 Entries</IonLabel>
+        <IonLabel>{entry && entry.length} results</IonLabel>
 
         <div className="row">
           {/**
@@ -238,8 +304,9 @@ const Doctors: React.FC<props> = (props: props): any => {
                 <IonIcon icon={back}></IonIcon>
               </IonCol>
               */}
-          <IonGrid>
-            {" "}
+          {/* <IonGrid>
+         
+            
             <IonRow>
               {daysOfWeek().map(function (name, index) {
                 return (
@@ -258,7 +325,7 @@ const Doctors: React.FC<props> = (props: props): any => {
                 );
               })}
             </IonRow>
-          </IonGrid>
+          </IonGrid> */}
           {/*<IonCol>
                 <IonIcon icon={front}></IonIcon>
               </IonCol>*/}
