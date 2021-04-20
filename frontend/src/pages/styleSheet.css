@@ -71,3 +71,7 @@ table {
   font-size: 12px;
   font-weight: bold;
 }
+
+.paymentAlert {
+  --background: #d85656;
+}
