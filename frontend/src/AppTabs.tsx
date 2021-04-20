@@ -26,6 +26,7 @@ import RegisterDoctorPage from "./pages/RegisterDoctorPage";
 import RegisterPage from "./pages/RegisterPage";
 import SettingsPage from "./pages/SettingsPage";
 import Doctors from "./pages/Doctors";
+import Wallet from "./pages/wallet/Wallet";
 
 const AppTabs: React.FC = () => {
   const { loggedIn } = useAuth();
@@ -65,6 +66,9 @@ const AppTabs: React.FC = () => {
         </Route>
         <Route exact path="/doctorProfile">
           <DoctorProfilePage />
+        </Route>
+        <Route exact path="/payment">
+          <Wallet />
         </Route>
         {/* <Route exact path="/doctors">
           <Doctors timeSlotInfo = {[]} doctorInfo = {[]} />

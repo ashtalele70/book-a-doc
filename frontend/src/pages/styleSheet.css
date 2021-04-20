@@ -70,3 +70,7 @@ table {
 #scheduleTable {
   font-size: 8px;
 }
+
+.paymentAlert {
+  --background: #d85656;
+}
