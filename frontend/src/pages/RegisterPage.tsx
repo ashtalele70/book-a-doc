@@ -30,7 +30,7 @@ import {
 		const credential = await auth.createUserWithEmailAndPassword(email, password);
 		console.log('credential:', credential);
 		const usersRef = firestore.collection('users');
-		const userData = { email, isPatient: false};
+		const userData = { email, isPatient: true};
 		await usersRef.doc(credential?.user?.uid).set(userData);
 		console.log('Saved:');
 		history.push('/patientProfile')
