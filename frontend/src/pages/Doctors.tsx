@@ -40,6 +40,7 @@ import "./styleSheet.css";
 type props = {
   doctorInfo: any[];
   timeSlotInfo: any[];
+  appointmentInfo: any[];
 };
 
 const Doctors: React.FC<props> = (props: props): any => {
