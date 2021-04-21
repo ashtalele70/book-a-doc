@@ -27,21 +27,23 @@ import {
 } from "@ionic/react";
 import "./styleSheet.css";
 
-const DoctorProfile: React.FC = () => {
+const DoctorProfile: React.FC = (props): any => {
   const [entry, setEntry] = useState<any>();
+
   useEffect(() => {
-    firestore
-      .collection("doctors")
-      .where("doctorId", "==", "1")
-      .get()
-      .then((snapshot) => {
-        const entry = snapshot.docs[0].data();
-        //const entry = 1;
-        console.log(entry);
-        setEntry(entry);
-        console.log(entry.doctorName);
-        // doc.data() is never undefined for query doc snapshots
-      });
+    //setEntry();
+    // // firestore
+    // //   .collection("doctors")
+    // //   .where("doctorId", "==", "1")
+    // //   .get()
+    // //   .then((snapshot) => {
+    // //     const entry = snapshot.docs[0].data();
+    // //     //const entry = 1;
+    // //     console.log(entry);
+    // //     setEntry(entry);
+    // //     console.log(entry.doctorName);
+    // //     // doc.data() is never undefined for query doc snapshots
+    //   });
   }, []);
 
   return (

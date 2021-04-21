@@ -314,11 +314,23 @@ const Doctors: React.FC<props> = (props: props): any => {
                 {entry[key].info && entry[key].info.lastname}
               </h2>
             </IonRow>
+
+            <IonRow>
+              <IonButton
+                onClick={() =>
+                  history.push({
+                    pathname: "/doctorProfile",
+                    state: entry[key],
+                  })
+                }
+              >
+                View Profile
+              </IonButton>
+            </IonRow>
             {entry[key].info &&
               entry[key].info.specialties.map((row, index) => (
                 <IonLabel class="EBinfor">{row}</IonLabel>
               ))}
-
             {2 > 1 && (
               <IonButton color="warning" onClick={() => history.push("/zoom")}>
                 Talk now
