@@ -20,6 +20,7 @@ const HomePage: React.FC = () => {
   const [searchText, setSearchText] = useState("");
   const [doctorInfo, setDoctorInfo] = useState([]);
   const [timeSlotInfo, setTimeslotInfo] = useState([]);
+  const [appointmentInfo, setAppointmentInfo] = useState([]);
 
   const onChangeHandler = (e) => {
     setSearchText(e.detail.value);
@@ -27,7 +28,7 @@ const HomePage: React.FC = () => {
 
   const onClickHandler = async () => {
     const specialties = data[searchText];
-    let doctors = [], times = [];
+    let doctors = [], times = [], appointments = [];
 
 	const doctorRef = await firestore.collection("doctors").get();
 	doctorRef.forEach(doc => {
@@ -47,16 +48,23 @@ const HomePage: React.FC = () => {
 			let timehhmm = doc.data().time.split(":");
 			var d = new Date();
 			d.setHours(timehhmm[0], timehhmm[1], 0, 0);
-			console.log(d);
 			timeslots.push(d);
 		});
 		timeslots.sort();
 		times.push(timeslots);
+
+		const appointmentRef = await firestore.collection("doctors/" + doctor.id + "/appointments").get();
+		let apts = [];
+		appointmentRef.forEach(doc => {
+			apts.push(doc.data().date.seconds);
+		});
+		appointments.push(apts);
 	}
 
 	setDoctorInfo(doctors);
 	setTimeslotInfo(times);
-	
+	setAppointmentInfo(appointments);
+
   };
 
   return (
@@ -81,7 +89,7 @@ const HomePage: React.FC = () => {
             </IonCol>
           </IonRow>
             {timeSlotInfo.length > 0 && doctorInfo.length > 0 && (
-              <Doctors timeSlotInfo={timeSlotInfo} doctorInfo={doctorInfo} />
+              <Doctors timeSlotInfo={timeSlotInfo} doctorInfo={doctorInfo} appointmentInfo={appointmentInfo} />
             )}
         </IonGrid>
       </IonContent>
