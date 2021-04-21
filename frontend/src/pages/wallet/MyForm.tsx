@@ -4,48 +4,42 @@ import {
   useElements,
   CardElement
 } from "@stripe/react-stripe-js";
-import {IonLabel, IonButton, IonGrid, IonRow, IonContent, IonCol, IonAlert } from '@ionic/react';
+import {IonLabel, IonButton, IonGrid, IonRow, IonContent, IonCol, IonToast, IonText } from '@ionic/react';
 
 const MyForm = () => {
     const stripe = useStripe();
     const elements = useElements();
     const [showAlert, setShowAlert] = useState(false);
-    const [alertMessage, setAlertMesage] = useState("");
+    const [alertMessage, setAlertMessage] = useState("");
   
     const handleSubmit = async (event) => {
-      // Block native form submission.
       event.preventDefault();
   
       if (!stripe || !elements) {
-        // Stripe.js has not loaded yet. Make sure to disable
-        // form submission until Stripe.js has loaded.
         return;
       }
   
-      // Get a reference to a mounted CardElement. Elements knows how
-      // to find your CardElement because there can only ever be one of
-      // each type of element.
       const cardElement = elements.getElement(CardElement);
   
-      // Use your card Element with other Stripe.js APIs
       const {error, paymentMethod} = await stripe.createPaymentMethod({
         type: 'card',
         card: cardElement,
       });
   
       if (error) {
-        //console.log('[error]', error);
-        //setAlertMesage(error);
+        setAlertMessage(error.message);
       } else {
-        setAlertMesage("Payment Successful!");
-        //console.log('[PaymentMethod]', paymentMethod);
+        setAlertMessage("Payment Successful.");
       }
       setShowAlert(true);
     };
   
     return (
       <IonContent>
-          <IonGrid >
+          <IonGrid className='paymentForm'>
+            <IonText color="secondary" className="ion-text-center">
+                <h3>Complete Payment</h3>
+            </IonText>
               <IonRow className="ion-justify-content-center ion-padding-top">
                 <IonCol size="5">
                     <CardElement
@@ -71,14 +65,12 @@ const MyForm = () => {
                     <IonButton type="submit" disabled={!stripe} onClick={handleSubmit}>
                     Pay
                     </IonButton>
-                    <IonAlert
+                    <IonToast
                         isOpen={showAlert}
                         onDidDismiss={() => setShowAlert(false)}
-                        cssClass='paymentAlert'
-                        header={alertMessage == 'Payment Successful!' ? 'Thank you!' : 'Oops'}
-                        subHeader={''}
                         message={alertMessage}
-                        buttons={['OK']}
+                        color={alertMessage == 'Payment Successful.' ? 'success' : 'danger'}
+                        duration={1000}
                     />
                     </IonCol>
               </IonRow>
