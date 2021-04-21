@@ -154,6 +154,21 @@ const Doctors: React.FC<props> = (props: props): any => {
       .catch((error) => {
         console.error("Error writing document: ", error);
       });
+
+    firestore
+      .collection("patients")
+      .doc(userId)
+      .collection("appointments")
+      .add({
+        date: newDate,
+        patientID: doctorID,
+      })
+      .then(() => {
+        console.log("Document successfully written!");
+      })
+      .catch((error) => {
+        console.error("Error writing document: ", error);
+      });
   }
 
   function getRows(timeslots, index, doctorID) {

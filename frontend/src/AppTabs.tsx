@@ -26,7 +26,7 @@ import RegisterDoctorPage from "./pages/RegisterDoctorPage";
 import RegisterPage from "./pages/RegisterPage";
 import SettingsPage from "./pages/SettingsPage";
 import Doctors from "./pages/Doctors";
-import ZoomComponent from "./pages/Zoom";
+import ZoomComponent from "./pages/ZoomMeeting";
 import Wallet from "./pages/wallet/Wallet";
 
 const AppTabs: React.FC = () => {
