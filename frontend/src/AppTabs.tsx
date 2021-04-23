@@ -75,7 +75,7 @@ const AppTabs: React.FC = () => {
         <Route exact path="/payment">
           <Wallet />
         </Route>
-        <Route exact path="/DoctorProfile">
+        <Route exact path="/viewProfile">
           <DoctorProfile />
         </Route>
         {/* <Route exact path="/doctors">

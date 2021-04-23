@@ -43,6 +43,7 @@ type props = {
   appointmentInfo: any[];
 };
 
+
 const Doctors: React.FC<props> = (props: props): any => {
   // const {doctorInfo, timeSlotInfo} = props;
   const [entry, setEntry] = useState([]);
@@ -301,6 +302,14 @@ const Doctors: React.FC<props> = (props: props): any => {
     history.push("/zoom");
   }
 
+  function viewProfile(key) {
+    history.replace({
+      pathname: "/viewProfile",
+      state: { info: entry[key].info },
+    });
+    // history.push("/viewProfile")
+  }
+
   const list = Object.keys(entry).map((key, value) => {
     return (
       <IonItem>
@@ -317,14 +326,7 @@ const Doctors: React.FC<props> = (props: props): any => {
             </IonRow>
 
             <IonRow>
-              <IonButton
-                onClick={() =>
-                  history.push({
-                    pathname: "/doctorProfile",
-                    state: entry[key],
-                  })
-                }
-              >
+              <IonButton onClick={() => viewProfile(key)}>
                 View Profile
               </IonButton>
             </IonRow>
