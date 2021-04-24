@@ -39,7 +39,9 @@ const DoctorProfile: React.FC = (): any => {
     console.log("kk");
     console.log("jj");
     console.log(location.state.info);
+
     setEntry(location.state.info);
+    console.log(location.state.info);
     // // firestore
     // //   .collection("doctors")
     // //   .where("doctorId", "==", "1")
@@ -52,7 +54,7 @@ const DoctorProfile: React.FC = (): any => {
     // //     console.log(entry.doctorName);
     // //     // doc.data() is never undefined for query doc snapshots
     //   });
-  }, []);
+  });
 
   return (
     <IonContent
@@ -77,7 +79,7 @@ const DoctorProfile: React.FC = (): any => {
 
           <IonRow>
             <IonLabel id="doctor-name">
-              Dr. {entry && entry["doctorName"]}, MD
+              Dr. {entry && entry["firstname"]} {entry && entry["lastname"]}, MD
             </IonLabel>
           </IonRow>
           <IonRow>

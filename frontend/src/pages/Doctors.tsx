@@ -43,7 +43,6 @@ type props = {
   appointmentInfo: any[];
 };
 
-
 const Doctors: React.FC<props> = (props: props): any => {
   // const {doctorInfo, timeSlotInfo} = props;
   const [entry, setEntry] = useState([]);
@@ -303,10 +302,8 @@ const Doctors: React.FC<props> = (props: props): any => {
   }
 
   function viewProfile(key) {
-    history.replace({
-      pathname: "/viewProfile",
-      state: { info: entry[key].info },
-    });
+    history.push("/viewProfile", { info: entry[key].info });
+    //history.push('/search-results', { entry[key].id });
     // history.push("/viewProfile")
   }
 
