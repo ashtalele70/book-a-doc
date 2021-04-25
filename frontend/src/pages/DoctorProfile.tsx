@@ -172,8 +172,8 @@ const DoctorProfile: React.FC = (): any => {
             <IonLabel class="sub-heading">Education and training</IonLabel>
           </IonRow>
           {entry &&
-            entry["education"] &&
-            entry["education"].map((row, index) => (
+            entry["educations"] &&
+            entry["educations"].map((row, index) => (
               <IonRow class="EBinfor">{row}</IonRow>
             ))}
 
@@ -181,8 +181,8 @@ const DoctorProfile: React.FC = (): any => {
             <IonLabel class="sub-heading">Languages Spoken</IonLabel>
           </IonRow>
           {entry &&
-            entry["languagesSpoken"] &&
-            entry["languagesSpoken"].map((row, index) => (
+            entry["languages"] &&
+            entry["languages"].map((row, index) => (
               <IonRow class="EBinfor">{row}</IonRow>
             ))}
 

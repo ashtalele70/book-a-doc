@@ -16,11 +16,6 @@ import {
   IonAlert,
   IonButton,
   useIonAlert,
-  IonIcon,
-  IonSplitPane,
-  IonContent,
-  IonSegment,
-  IonSegmentButton,
   IonLabel,
   IonToolbar,
   IonTitle,
@@ -32,9 +27,6 @@ import {
   IonRow,
   IonGrid,
   IonCol,
-  IonCard,
-  IonCardContent,
-  IonText,
 } from "@ionic/react";
 import "./styleSheet.css";
 type props = {
@@ -162,7 +154,7 @@ const Doctors: React.FC<props> = (props: props): any => {
       .collection("appointments")
       .add({
         date: newDate,
-        patientID: doctorID,
+        doctorID: doctorID,
       })
       .then(() => {
         console.log("Document successfully written!");
@@ -355,13 +347,10 @@ const Doctors: React.FC<props> = (props: props): any => {
   });
   return (
     <React.Fragment>
-      <IonItemDivider color="primary">
-        <IonLabel></IonLabel>
-      </IonItemDivider>
-
       <IonItem>
-        <IonLabel>{entry && entry.length} results</IonLabel>
-
+        <IonToolbar>
+          <IonTitle color="primary">{entry && entry.length} results</IonTitle>
+        </IonToolbar>
         <div className="row">
           {/**
               <IonCol>

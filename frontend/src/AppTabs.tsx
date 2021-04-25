@@ -29,6 +29,7 @@ import Doctors from "./pages/Doctors";
 import ZoomComponent from "./pages/ZoomMeeting";
 import Wallet from "./pages/wallet/Wallet";
 import DoctorProfile from "./pages/DoctorProfile";
+import PatientFeedback from "./pages/PatientFeedback";
 
 const AppTabs: React.FC = () => {
   const { loggedIn } = useAuth();
@@ -78,6 +79,9 @@ const AppTabs: React.FC = () => {
           </Route>
           <Route exact path="/viewProfile">
             <DoctorProfile />
+          </Route>
+          <Route exact path="/visitfeedback">
+            <PatientFeedback />
           </Route>
 
           {/* <Route exact path="/doctors">
