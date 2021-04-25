@@ -80,7 +80,7 @@ const AppTabs: React.FC = () => {
           <Route exact path="/viewProfile">
             <DoctorProfile />
           </Route>
-          <Route exact path="/visitfeedback">
+          <Route exact path="/patientFeedback">
             <PatientFeedback />
           </Route>
 

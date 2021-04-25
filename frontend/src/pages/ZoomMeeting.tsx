@@ -1,30 +1,45 @@
-import {
-  IonButton,
-  IonContent,
-  IonHeader,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonGrid,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonRow,
-  IonCol,
-  IonDatetime,
-  IonRadioGroup,
-  IonRadio,
-} from "@ionic/react";
+import { IonPage } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../auth";
 import { firestore } from "../firebase";
 import { User, toUser } from "../models/user";
 import { useHistory } from "react-router-dom";
+
 import { ZoomMtg } from "@zoomus/websdk";
 
 const crypto = require("crypto");
 
 const ZoomMeeting: React.FC = () => {
+  const { userId } = useAuth();
+  //const [isPatient, setIsPatient] = useState(false);
+  const [leaveUrl, setLeaveUrl] = useState("http://localhost:3000/feedback");
+
+  useEffect(() => {
+    firestore
+      .collection("users")
+      .doc(userId)
+      .get()
+      .then((doc) => {
+        //setIsPatient(doc.data()["isPatient"]);
+
+        doc.data()["isPatient"]
+          ? setLeaveUrl("http://localhost:3000/patientFeedback")
+          : setLeaveUrl("http://localhost:3000/feedback");
+
+        console.log(leaveUrl);
+        showZoomDIv();
+        ZoomMtg.setZoomJSLib("https://source.zoom.us/1.9.0/lib", "/av");
+        ZoomMtg.preLoadWasm();
+        ZoomMtg.prepareJssdk();
+        initiateMeeting(leaveUrl);
+      })
+      .catch((e) => console.log(e));
+    //console.log(isPatient);
+    console.log("pp");
+    // console.log(isPatient === true);
+    console.log(leaveUrl);
+  }, [leaveUrl]);
+
   const showZoomDIv = () => {
     document.getElementById("zmmtg-root").style.display = "block";
   };
@@ -50,7 +65,7 @@ const ZoomMeeting: React.FC = () => {
   var apiKey = "S9-p4L87SFWDpFkpsUj9fg";
   var apiSecret = "v3CPKnBmKcReC5GJEaSwapLRNzquN3a7H2H1";
   var meetingNumber = 8085861668;
-  var leaveUrl = "http://localhost:3000/payment"; // our redirect url
+
   var userName = "WebSDK";
   var userEmail = "terrylinda13@gmail.com";
   var passWord = "hH6BwE";
@@ -59,7 +74,7 @@ const ZoomMeeting: React.FC = () => {
   generateSignature(apiKey, apiSecret, meetingNumber, 0).then((res: string) => {
     signature = res;
   }); // need to generate based on meeting id - using - role by default 0 = javascript
-  const initiateMeeting = () => {
+  const initiateMeeting = (leaveUrl) => {
     ZoomMtg.init({
       leaveUrl: leaveUrl,
       isSupportAV: true,
@@ -87,18 +102,9 @@ const ZoomMeeting: React.FC = () => {
     });
   };
 
-  useEffect(() => {
-    console.log("Yay");
-    showZoomDIv();
-    ZoomMtg.setZoomJSLib("https://source.zoom.us/1.9.0/lib", "/av");
-    ZoomMtg.preLoadWasm();
-    ZoomMtg.prepareJssdk();
-    initiateMeeting();
-  }, []);
-
   return (
     <IonPage>
-      <div>Zoom</div>
+      <div></div>
     </IonPage>
   );
 };

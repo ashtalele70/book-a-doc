@@ -71,7 +71,7 @@ const PatientFeedback: React.FC = (): any => {
           <IonCol>
             <IonLabel>Comments:</IonLabel>
             <IonTextarea
-              rows={6}
+              rows={8}
               cols={40}
               clearOnEdit={true}
               value={comments}
