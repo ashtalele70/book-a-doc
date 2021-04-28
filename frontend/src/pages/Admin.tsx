@@ -60,6 +60,9 @@ const Admin: React.FC = (): any => {
         isVerified: "2",
       })
       .then(() => {
+        var entryData = [...entry];
+        entryData.splice(key, 1);
+        setEntry(entryData);
         var templateParams = {
           to_email: "testbeta442@gmail.com",
           to_name:
@@ -95,6 +98,9 @@ const Admin: React.FC = (): any => {
         isVerified: "3",
       })
       .then(() => {
+        var entryData = [...entry];
+        entryData.splice(key, 1);
+        setEntry(entryData);
         var templateParams = {
           to_email: "testbeta442@gmail.com",
           to_name:
@@ -121,10 +127,6 @@ const Admin: React.FC = (): any => {
           );
       })
       .catch((e) => console.log(e));
-
-    var entryData = [...entry];
-    entryData.splice(key, 1);
-    setEntry(entryData);
   }
 
   const list = Object.keys(entry).map((key, value) => {
