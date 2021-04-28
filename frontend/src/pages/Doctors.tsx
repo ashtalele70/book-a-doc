@@ -90,7 +90,7 @@ const Doctors: React.FC<props> = (props: props): any => {
         });
       });*/
   }, [entry]);
-  useEffect(() => {});
+
   function daysOfWeek() {
     let startDate = new Date();
     let dates = [];
