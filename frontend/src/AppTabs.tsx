@@ -13,7 +13,7 @@ import {
   timeOutline,
 } from "ionicons/icons";
 import React from "react";
-import { Redirect, Route } from "react-router-dom";
+import { Switch, Redirect, Route } from "react-router-dom";
 import { useAuth } from "./auth";
 import AppointmentsPage from "./pages/AppointmentsPage";
 import HomePage from "./pages/HomePage";
@@ -29,6 +29,7 @@ import Doctors from "./pages/Doctors";
 import ZoomComponent from "./pages/ZoomMeeting";
 import Wallet from "./pages/wallet/Wallet";
 import DoctorProfile from "./pages/DoctorProfile";
+import PatientFeedback from "./pages/PatientFeedback";
 
 const AppTabs: React.FC = () => {
   const { loggedIn } = useAuth();
@@ -38,49 +39,55 @@ const AppTabs: React.FC = () => {
   return (
     <IonTabs>
       <IonRouterOutlet>
-        <Redirect exact path="/" to="/home" />
-        <Route exact path="/home">
-          <HomePage />
-        </Route>
-        <Route exact path="/settings">
-          <SettingsPage />
-        </Route>
-        <Route exact path="/login-signup">
-          <LoginSignUpPage />
-        </Route>
-        <Route exact path="/appointments">
-          <AppointmentsPage />
-        </Route>
-        <Route exact path="/login">
-          <LoginPage />
-        </Route>
-        <Route exact path="/register">
-          <RegisterPage />
-        </Route>
-        <Route exact path="/loginDoctor">
-          <LoginDoctorPage />
-        </Route>
-        <Route exact path="/registerDoctor">
-          <RegisterDoctorPage />
-        </Route>
-        <Route exact path="/patientProfile">
-          <PatientProfilePage />
-        </Route>
-        <Route exact path="/doctorProfile">
-          <DoctorProfilePage />
-        </Route>
-        <Route exact path="/zoom">
-          <ZoomComponent />
-        </Route>
-        <Route exact path="/payment">
-          <Wallet />
-        </Route>
-        <Route exact path="/DoctorProfile">
-          <DoctorProfile />
-        </Route>
-        {/* <Route exact path="/doctors">
+        <Switch>
+          <Redirect exact path="/" to="/home" />
+          <Route exact path="/home">
+            <HomePage />
+          </Route>
+          <Route exact path="/settings">
+            <SettingsPage />
+          </Route>
+          <Route exact path="/login-signup">
+            <LoginSignUpPage />
+          </Route>
+          <Route exact path="/appointments">
+            <AppointmentsPage />
+          </Route>
+          <Route exact path="/login">
+            <LoginPage />
+          </Route>
+          <Route exact path="/register">
+            <RegisterPage />
+          </Route>
+          <Route exact path="/loginDoctor">
+            <LoginDoctorPage />
+          </Route>
+          <Route exact path="/registerDoctor">
+            <RegisterDoctorPage />
+          </Route>
+          <Route exact path="/patientProfile">
+            <PatientProfilePage />
+          </Route>
+          <Route exact path="/doctorProfile">
+            <DoctorProfilePage />
+          </Route>
+          <Route exact path="/zoom">
+            <ZoomComponent />
+          </Route>
+          <Route exact path="/payment">
+            <Wallet />
+          </Route>
+          <Route exact path="/viewProfile">
+            <DoctorProfile />
+          </Route>
+          <Route exact path="/patientFeedback">
+            <PatientFeedback />
+          </Route>
+
+          {/* <Route exact path="/doctors">
           <Doctors timeSlotInfo = {[]} doctorInfo = {[]} />
         </Route> */}
+        </Switch>
       </IonRouterOutlet>
       <IonTabBar slot="bottom">
         <IonTabButton tab="home" href="/home">

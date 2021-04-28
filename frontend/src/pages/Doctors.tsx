@@ -16,11 +16,6 @@ import {
   IonAlert,
   IonButton,
   useIonAlert,
-  IonIcon,
-  IonSplitPane,
-  IonContent,
-  IonSegment,
-  IonSegmentButton,
   IonLabel,
   IonToolbar,
   IonTitle,
@@ -32,9 +27,6 @@ import {
   IonRow,
   IonGrid,
   IonCol,
-  IonCard,
-  IonCardContent,
-  IonText,
 } from "@ionic/react";
 import "./styleSheet.css";
 type props = {
@@ -162,7 +154,7 @@ const Doctors: React.FC<props> = (props: props): any => {
       .collection("appointments")
       .add({
         date: newDate,
-        patientID: doctorID,
+        doctorID: doctorID,
       })
       .then(() => {
         console.log("Document successfully written!");
@@ -301,6 +293,12 @@ const Doctors: React.FC<props> = (props: props): any => {
     history.push("/zoom");
   }
 
+  function viewProfile(key) {
+    history.push("/viewProfile", { info: entry[key].info });
+    //history.push('/search-results', { entry[key].id });
+    // history.push("/viewProfile")
+  }
+
   const list = Object.keys(entry).map((key, value) => {
     return (
       <IonItem>
@@ -317,14 +315,7 @@ const Doctors: React.FC<props> = (props: props): any => {
             </IonRow>
 
             <IonRow>
-              <IonButton
-                onClick={() =>
-                  history.push({
-                    pathname: "/doctorProfile",
-                    state: entry[key],
-                  })
-                }
-              >
+              <IonButton onClick={() => viewProfile(key)}>
                 View Profile
               </IonButton>
             </IonRow>
@@ -356,13 +347,10 @@ const Doctors: React.FC<props> = (props: props): any => {
   });
   return (
     <React.Fragment>
-      <IonItemDivider color="primary">
-        <IonLabel></IonLabel>
-      </IonItemDivider>
-
       <IonItem>
-        <IonLabel>{entry && entry.length} results</IonLabel>
-
+        <IonToolbar>
+          <IonTitle color="primary">{entry && entry.length} results</IonTitle>
+        </IonToolbar>
         <div className="row">
           {/**
               <IonCol>

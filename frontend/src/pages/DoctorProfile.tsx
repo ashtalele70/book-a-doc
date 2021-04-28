@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Redirect } from "react-router";
+import { useLocation } from "react-router-dom";
 import Rating from "react-rating";
 import starempty from "./images/star-empty.png";
 import starfull from "./images/star-full.png";
@@ -26,12 +26,22 @@ import {
   IonText,
 } from "@ionic/react";
 import "./styleSheet.css";
+interface IState {
+  info?: any[];
+}
 
-const DoctorProfile: React.FC = (props): any => {
-  const [entry, setEntry] = useState<any>();
+const DoctorProfile: React.FC = (): any => {
+  const [entry, setEntry] = useState([]);
+  const location = useLocation<IState>();
 
   useEffect(() => {
-    //setEntry();
+    console.log("here");
+    console.log("kk");
+    console.log("jj");
+    console.log(location.state.info);
+
+    setEntry(location.state.info);
+    console.log(location.state.info);
     // // firestore
     // //   .collection("doctors")
     // //   .where("doctorId", "==", "1")
@@ -44,7 +54,7 @@ const DoctorProfile: React.FC = (props): any => {
     // //     console.log(entry.doctorName);
     // //     // doc.data() is never undefined for query doc snapshots
     //   });
-  }, []);
+  });
 
   return (
     <IonContent
@@ -69,7 +79,7 @@ const DoctorProfile: React.FC = (props): any => {
 
           <IonRow>
             <IonLabel id="doctor-name">
-              Dr. {entry && entry.doctorName}, MD
+              Dr. {entry && entry["firstname"]} {entry && entry["lastname"]}, MD
             </IonLabel>
           </IonRow>
           <IonRow>
@@ -79,7 +89,9 @@ const DoctorProfile: React.FC = (props): any => {
           </IonRow>
           <IonRow>
             <IonLabel class="grey-label">
-              {entry && entry.doctorAddress && entry.doctorAddress["state"]}
+              {entry &&
+                entry["doctorAddress"] &&
+                entry["doctorAddress"]["state"]}
             </IonLabel>
           </IonRow>
         </IonGrid>
@@ -108,20 +120,20 @@ const DoctorProfile: React.FC = (props): any => {
           <IonRow>
             <p>
               {entry &&
-                entry.doctorRating &&
-                entry.doctorRating[0]["reviewComment"]}
+                entry["doctorRating"] &&
+                entry["doctorRating"][0]["reviewComment"]}
             </p>
           </IonRow>
           <IonRow>
             <IonLabel class="grey-label">
               {entry &&
-                entry.doctorRating &&
-                entry.doctorRating[0]["patientName"]}
+                entry["doctorRating"] &&
+                entry["doctorRating"][0]["patientName"]}
               &nbsp;&nbsp;{" "}
               {entry &&
-                entry.doctorRating &&
+                entry["doctorRating"] &&
                 new Date(
-                  entry.doctorRating[0]["date"].seconds * 1000
+                  entry["doctorRating"][0]["date"].seconds * 1000
                 ).toLocaleDateString("en-US")}
             </IonLabel>
           </IonRow>
@@ -138,7 +150,7 @@ const DoctorProfile: React.FC = (props): any => {
             <IonLabel class="heading">About Dr. Ramandeep Kaur</IonLabel>
           </IonRow>
           <IonRow>
-            <p>{entry && entry.about}</p>
+            <p>{entry && entry["about"]}</p>
           </IonRow>
         </IonGrid>
       </IonItem>
@@ -151,7 +163,8 @@ const DoctorProfile: React.FC = (props): any => {
             <IonLabel class="sub-heading">Specialities</IonLabel>
           </IonRow>
           {entry &&
-            entry.specialties.map((row, index) => (
+            entry["specialties"] &&
+            entry["specialties"].map((row, index) => (
               <IonRow class="EBinfor">{row}</IonRow>
             ))}
 
@@ -159,7 +172,8 @@ const DoctorProfile: React.FC = (props): any => {
             <IonLabel class="sub-heading">Education and training</IonLabel>
           </IonRow>
           {entry &&
-            entry.education.map((row, index) => (
+            entry["educations"] &&
+            entry["educations"].map((row, index) => (
               <IonRow class="EBinfor">{row}</IonRow>
             ))}
 
@@ -167,18 +181,19 @@ const DoctorProfile: React.FC = (props): any => {
             <IonLabel class="sub-heading">Languages Spoken</IonLabel>
           </IonRow>
           {entry &&
-            entry.languagesSpoken.map((row, index) => (
+            entry["languages"] &&
+            entry["languages"].map((row, index) => (
               <IonRow class="EBinfor">{row}</IonRow>
             ))}
 
           <IonRow>
             <IonLabel class="sub-heading">Provider's gender</IonLabel>
           </IonRow>
-          <IonRow class="EBinfor">{entry && entry.Gender}</IonRow>
+          <IonRow class="EBinfor">{entry && entry["gender"]}</IonRow>
           <IonRow>
             <IonLabel class="sub-heading">NPI number</IonLabel>
           </IonRow>
-          <IonRow class="EBinfor">{entry && entry.npiNumber}</IonRow>
+          <IonRow class="EBinfor">{entry && entry["npiNumber"]}</IonRow>
         </IonGrid>
       </IonItem>
       <IonItem>
@@ -186,7 +201,8 @@ const DoctorProfile: React.FC = (props): any => {
           <IonLabel class="heading">Patient Reviews</IonLabel>
 
           {entry &&
-            entry.doctorRating.map((row, index) => (
+            entry["doctorRating"] &&
+            entry["doctorRating"].map((row, index) => (
               <IonRow>
                 <p>{row.reviewComment}</p>
               </IonRow>

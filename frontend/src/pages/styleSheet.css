@@ -70,6 +70,11 @@ table {
   width: 100%;
 }
 
+#feedback #textArea  {
+  border-radius: 25px;
+  border: 1.2px solid #080808;
+}
+
 #scheduleTable {
   font-size: 12px;
   font-weight: bold;
