@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router";
-import Rating from "react-rating";
-import starempty from "./images/star-empty.png";
-import starfull from "./images/star-full.png";
 import { firestore } from "../firebase";
-import { useAuth } from "../auth";
-import moment from "moment";
 import emailjs from "emailjs-com";
 import { useHistory } from "react-router-dom";
 import {
@@ -22,6 +17,9 @@ import {
   IonRow,
   IonGrid,
   IonCol,
+  IonPage,
+  IonHeader,
+  IonContent,
 } from "@ionic/react";
 import "./styleSheet.css";
 type props = {
@@ -131,13 +129,17 @@ const Admin: React.FC = (): any => {
 
   const list = Object.keys(entry).map((key, value) => {
     return (
+		<IonItem>
       <IonRow>
-        <IonCol size="2">
-          Dr. {entry[key].info && entry[key].info.firstname}{" "}
+        <IonCol >
+			
+			Dr. {entry[key].info && entry[key].info.firstname}{" "}
           {entry[key].info && entry[key].info.lastname}
+			
+          
         </IonCol>
-        <IonCol size="2">
-          <details>
+        <IonCol >
+			<details>
             <summary>show</summary>
 
             <ul>
@@ -147,9 +149,10 @@ const Admin: React.FC = (): any => {
                 ))}
             </ul>
           </details>
+          
         </IonCol>
-        <IonCol size="2">
-          <details>
+        <IonCol >
+			<details>
             <summary>show</summary>
 
             <ul>
@@ -157,46 +160,55 @@ const Admin: React.FC = (): any => {
                 entry[key].info.educations.map((row, index) => <li>{row} </li>)}
             </ul>
           </details>
+         
         </IonCol>
-        <IonCol size="1">
-          <mark>{entry[key].info && entry[key].info.npiNumber}</mark>
+        <IonCol >
+			<mark>{entry[key].info && entry[key].info.npiNumber}</mark>
+			
+          
         </IonCol>
-        <IonCol size="1.5">
-          <IonButton id={entry[key].id} onClick={() => handleApprove(key)}>
+        <IonCol >
+			<IonButton id={entry[key].id} onClick={() => handleApprove(key)}>
             Approve
           </IonButton>
+         
         </IonCol>
-        <IonCol size="1.5">
-          <IonButton id={entry[key].id} onClick={() => handleReject(key)}>
+        <IonCol >
+			
+			<IonButton id={entry[key].id} onClick={() => handleReject(key)}>
             Reject
           </IonButton>
+        
         </IonCol>
       </IonRow>
+	  </IonItem>
     );
   });
   return (
-    <React.Fragment>
-      <header>
+    <IonPage>
+      <IonHeader>
         <h3 style={{ color: "#2dd36f", fontWeight: 600 }}>Book-a-Doc</h3>
-      </header>
+      </IonHeader>
+	  <IonContent>
       <IonItem>
         <IonToolbar>
           <IonTitle color="primary">{entry && entry.length} results</IonTitle>
         </IonToolbar>
       </IonItem>
       <IonGrid>
+		  
         <strong>
           <IonRow>
-            <IonCol size="2">
+            <IonCol >
               <IonLabel>Doctor's Name</IonLabel>
             </IonCol>
-            <IonCol size="2">
+            <IonCol >
               <IonLabel>Specialities</IonLabel>
             </IonCol>
-            <IonCol size="2">
+            <IonCol >
               <IonLabel>Education</IonLabel>
             </IonCol>
-            <IonCol size="1">
+            <IonCol >
               <IonLabel>Npi number</IonLabel>
             </IonCol>
           </IonRow>
@@ -204,7 +216,8 @@ const Admin: React.FC = (): any => {
 
         {list}
       </IonGrid>
-    </React.Fragment>
+	  </IonContent>
+	</IonPage>
   );
 };
 
