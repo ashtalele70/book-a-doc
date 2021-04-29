@@ -40,16 +40,21 @@ const Doctors: React.FC<props> = (props: props): any => {
   const [entry, setEntry] = useState([]);
   const [timeSlot, settimeSlot] = useState([]);
   const [showMore, setShowMore] = useState([]);
+  //const [grey, setGrey] = useState([]);
+  const [appointments, setAppointments] = useState([]);
   const [text, setText] = useState("Read More");
   const [present] = useIonAlert();
   const { userId } = useAuth();
   const history = useHistory();
-
+  let grey;
   useEffect(() => {
     setEntry(props.doctorInfo);
     settimeSlot(props.timeSlotInfo);
     setShowMore(Array.from({ length: entry.length }, (i) => (i = false)));
-    console.log(props.doctorInfo);
+    setAppointments(props.appointmentInfo);
+    //setGrey(appointments);
+    console.log(props.appointmentInfo);
+    console.log(props.appointmentInfo && props.appointmentInfo[0]);
     /*
     firestore
       .collection("doctors")
@@ -127,12 +132,17 @@ const Doctors: React.FC<props> = (props: props): any => {
     //setText(value);
   }
 
-  function scheduleAppointment(appointmentTime, noOfDays, doctorID) {
+  function scheduleAppointment(appointmentTime, noOfDays, doctorID, index) {
     console.log(appointmentTime);
     console.log(userId);
     let newDate = new Date(appointmentTime.getTime());
-    newDate.setDate(newDate.getDate() + noOfDays);
+    let id = (
+      appointmentTime.getTime() / 1000 +
+      noOfDays * 24 * 60 * 60
+    ).toString();
 
+    newDate.setDate(newDate.getDate() + noOfDays);
+    document.getElementById(id).setAttribute("disabled", "disabled");
     firestore
       .collection("doctors")
       .doc(doctorID)
@@ -166,6 +176,7 @@ const Doctors: React.FC<props> = (props: props): any => {
 
   function getRows(timeslots, index, doctorID) {
     let table = [];
+    grey = appointments.length === 0 ? [] : appointments[index];
     //console.log("called");
     //console.log(timeslots.length);
     //console.log(timeSlot);
@@ -207,13 +218,25 @@ const Doctors: React.FC<props> = (props: props): any => {
       let tempDate = timeslots[i];
       let arr = new Array(7).fill(tempDate);
       //data to be added
-      let grey = [1618849800000, 1619037000000];
+
+      console.log("grey");
+      console.log(grey);
+
+      children = arr.map((child, childIndex) => {
+        console.log("date");
+        console.log(child);
+        console.log(child.getTime() / 1000 + childIndex * 24 * 60 * 60);
+        console.log(child.getTime() + childIndex * 24 * 60 * 60 * 1000);
+        console.log(currentTime.getTime());
+      });
+
       children = arr.map((child, childIndex) => (
         <IonCol size="0.9" col-12 col-xl-2 col-lg-3 col-md-4>
           <IonButton
+            id={(child.getTime() / 1000 + childIndex * 24 * 60 * 60).toString()}
             disabled={
               grey.includes(
-                child.getTime() + childIndex * 24 * 60 * 60 * 1000
+                child.getTime() / 1000 + childIndex * 24 * 60 * 60
               ) ||
               child.getTime() + childIndex * 24 * 60 * 60 * 1000 <
                 currentTime.getTime()
@@ -224,15 +247,26 @@ const Doctors: React.FC<props> = (props: props): any => {
             color="warning"
             onClick={() =>
               present({
-                cssClass: "my-css",
-                header: "Confirm Appointment",
-                message: "Are you sure about" + child,
+                cssClass: "my-custom-class",
+                header: "Appointment Details",
+                message:
+                  child.toLocaleDateString("en-US", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  }) + child.toLocaleTimeString("en-US"),
                 buttons: [
                   "Cancel",
                   {
-                    text: "Ok",
+                    text: "Confirm",
                     handler: (d) =>
-                      scheduleAppointment(child, Number(childIndex), doctorID),
+                      scheduleAppointment(
+                        child,
+                        Number(childIndex),
+                        doctorID,
+                        index
+                      ),
                   },
                 ],
                 onDidDismiss: (e) => console.log("did dismiss"),

@@ -28,43 +28,54 @@ const HomePage: React.FC = () => {
 
   const onClickHandler = async () => {
     const specialties = data[searchText];
-    let doctors = [], times = [], appointments = [];
+    let doctors = [],
+      times = [],
+      appointments = [];
 
-	const doctorRef = await firestore.collection("doctors").get();
-	doctorRef.forEach(doc => {
-		if(doc.data().specialties.some(specialty => specialties.indexOf(specialty) >= 0)) {
-			let doctor = {
-				id: doc.id,
-				info: doc.data()
-			};
-			doctors.push(doctor);
-		}
-	});
+    const doctorRef = await firestore.collection("doctors").get();
+    doctorRef.forEach((doc) => {
+      if (
+        doc
+          .data()
+          .specialties.some((specialty) => specialties.indexOf(specialty) >= 0)
+      ) {
+        let doctor = {
+          id: doc.id,
+          info: doc.data(),
+        };
+        doctors.push(doctor);
+      }
+    });
 
-	for(let doctor of doctors) {
-		const timeslotRef = await firestore.collection("doctors/" + doctor.id + "/timeslots").get();
-		let timeslots = [];
-		timeslotRef.forEach(doc => {
-			let timehhmm = doc.data().time.split(":");
-			var d = new Date();
-			d.setHours(timehhmm[0], timehhmm[1], 0, 0);
-			timeslots.push(d);
-		});
-		timeslots.sort();
-		times.push(timeslots);
+    for (let doctor of doctors) {
+      const timeslotRef = await firestore
+        .collection("doctors/" + doctor.id + "/timeslots")
+        .get();
+      let timeslots = [];
+      timeslotRef.forEach((doc) => {
+        let timehhmm = doc.data().time.split(":");
+        var d = new Date();
+        d.setHours(timehhmm[0], timehhmm[1], 0, 0);
+        timeslots.push(d);
+      });
+      timeslots.sort();
+      times.push(timeslots);
 
-		const appointmentRef = await firestore.collection("doctors/" + doctor.id + "/appointments").get();
-		let apts = [];
-		appointmentRef.forEach(doc => {
-			apts.push(doc.data().date.seconds);
-		});
-		appointments.push(apts);
-	}
+      const appointmentRef = await firestore
+        .collection("doctors/" + doctor.id + "/appointments")
+        .get();
+      let apts = [];
+      appointmentRef.forEach((doc) => {
+        apts.push(doc.data().date.seconds);
+        console.log(doc.data().date.seconds);
+        console.log(doc.data().date);
+      });
+      appointments.push(apts);
+    }
 
-	setDoctorInfo(doctors);
-	setTimeslotInfo(times);
-	setAppointmentInfo(appointments);
-
+    setDoctorInfo(doctors);
+    setTimeslotInfo(times);
+    setAppointmentInfo(appointments);
   };
 
   return (
@@ -88,9 +99,13 @@ const HomePage: React.FC = () => {
               </IonButton>
             </IonCol>
           </IonRow>
-            {timeSlotInfo.length > 0 && doctorInfo.length > 0 && (
-              <Doctors timeSlotInfo={timeSlotInfo} doctorInfo={doctorInfo} appointmentInfo={appointmentInfo} />
-            )}
+          {timeSlotInfo.length > 0 && doctorInfo.length > 0 && (
+            <Doctors
+              timeSlotInfo={timeSlotInfo}
+              doctorInfo={doctorInfo}
+              appointmentInfo={appointmentInfo}
+            />
+          )}
         </IonGrid>
       </IonContent>
     </IonPage>
