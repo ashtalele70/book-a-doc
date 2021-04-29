@@ -138,7 +138,8 @@ const Doctors: React.FC<props> = (props: props): any => {
     let newDate = new Date(appointmentTime.getTime());
     let id = (
       appointmentTime.getTime() / 1000 +
-      noOfDays * 24 * 60 * 60
+      noOfDays * 24 * 60 * 60 +
+      index
     ).toString();
 
     newDate.setDate(newDate.getDate() + noOfDays);
@@ -233,7 +234,11 @@ const Doctors: React.FC<props> = (props: props): any => {
       children = arr.map((child, childIndex) => (
         <IonCol size="0.9" col-12 col-xl-2 col-lg-3 col-md-4>
           <IonButton
-            id={(child.getTime() / 1000 + childIndex * 24 * 60 * 60).toString()}
+            id={(
+              child.getTime() / 1000 +
+              childIndex * 24 * 60 * 60 +
+              index
+            ).toString()}
             disabled={
               grey.includes(
                 child.getTime() / 1000 + childIndex * 24 * 60 * 60
