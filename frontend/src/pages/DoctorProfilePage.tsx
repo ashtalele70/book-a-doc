@@ -25,7 +25,9 @@ import {
   import { firestore } from '../firebase';
   import { User, toUser } from '../models/user';
   import { useHistory } from 'react-router-dom'
-  import { addCircle, language } from 'ionicons/icons';
+  import { addCircle } from 'ionicons/icons';
+import axios from 'axios';
+import { rooturl } from '../config';
   
   const DoctorProfilePage: React.FC = () => {
 	const { userId } = useAuth();
@@ -50,7 +52,9 @@ import {
 	const [gender, setGender] = useState<string>('male');
 
 	const handleSaveDetails = async () => {
-		  firestore.collection('doctors').doc(userId).set({
+
+		  const userData = {
+			userId: userId,
 			firstname: firstName,
 			lastname: lastName,
 			gender: gender,
@@ -59,10 +63,14 @@ import {
 			specialties: specialties,
 			educations: educations,
 			languages: languages
-		  })
-		  .then(() =>
-		  	history.push('/doctorHome'))
-		  .catch((e) => console.log(e))
+		  }
+		  axios.post(rooturl + '/doctorDetails', userData)
+			.then(res => {
+				if(res.status === 200) {
+					console.log('Saved:');
+					history.push('/doctorHome');
+				}
+			})
 
 		  if(slots.length > 0) {
 			  slots.map((slot) => {
@@ -102,8 +110,7 @@ import {
 
 				times_ara.forEach(timeSlot => {
 					firestore.collection('doctors').doc(userId).collection('timeslots').add({
-						time: timeSlot,
-						booked: false
+						time: timeSlot
 					})
 				})
 				
@@ -129,10 +136,18 @@ import {
 
 	useEffect(() => {
 		
-		firestore.collection('users').doc(userId)
-		.get().then((doc) => setUser(toUser(doc)));
+		let userData = new URLSearchParams();
+		userData.set('id', userId);
 
-    }, [userId]);
+		axios.get(rooturl + '/getUser?'+ userData.toString())
+		.then(res => {
+			if(res.status === 200) {
+				// console.log(res);
+				setUser(toUser(res.data))
+			}
+		})
+
+    }, []);
 
 	return (
 	  <IonPage>

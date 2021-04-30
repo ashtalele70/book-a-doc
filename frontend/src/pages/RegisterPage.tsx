@@ -6,7 +6,6 @@ import {
 	IonItem,
 	IonLabel,
 	IonList,
-	IonLoading,
 	IonPage,
 	IonText,
 	IonTitle,
@@ -14,8 +13,9 @@ import {
   } from '@ionic/react';
   import React, { useState } from 'react';
   import { useHistory } from 'react-router-dom'
-  import { useAuth } from '../auth';
   import { auth, firestore } from '../firebase';
+  import axios from 'axios';
+  import {rooturl} from '../config';
   
   const RegisterPage: React.FC = () => {
 	const [email, setEmail] = useState('');
@@ -29,12 +29,14 @@ import {
 		setStatus({ loading: true, error: false });
 		const credential = await auth.createUserWithEmailAndPassword(email, password);
 		console.log('credential:', credential);
-		const usersRef = firestore.collection('users');
-		const userData = { email, isPatient: true};
-		await usersRef.doc(credential?.user?.uid).set(userData);
-		console.log('Saved:');
-		history.push('/patientProfile')
-
+		const userData = { email, isPatient: true, credential};
+		axios.post(rooturl + '/registerPatient', userData)
+		.then(res => {
+			if(res.status === 200) {
+				console.log('Saved:');
+				history.push('/patientProfile')
+			}
+		})
 	  } catch (error) {
 		setStatus({ loading: false, error: true });
 		setErrorMessage(error.message);
@@ -42,9 +44,6 @@ import {
 	  }
 	};
   
-	// if (loggedIn) {
-	//   return <Redirect to="/home" />;
-	// }
 	return (
 	  <IonPage>
 		<IonHeader>

@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Redirect } from "react-router";
-import { firestore } from "../firebase";
 import emailjs from "emailjs-com";
-import { useHistory } from "react-router-dom";
-import {
-  heart,
-  chevronBackOutline as back,
-  chevronForwardOutline as front,
-} from "ionicons/icons";
 import {
   IonButton,
   IonLabel,
@@ -22,109 +14,92 @@ import {
   IonContent,
 } from "@ionic/react";
 import "./styleSheet.css";
-type props = {
-  doctorInfo: any[];
-  timeSlotInfo: any[];
-  appointmentInfo: any[];
-};
+import axios from "axios";
+import { rooturl } from "../config";
 
 const Admin: React.FC = (): any => {
   // const {doctorInfo, timeSlotInfo} = props;
-  const [entry, setEntry] = useState([]);
+  const [entry, setEntry] = useState<any>([]);
 
   useEffect(() => {
-    firestore
-      .collection("doctors")
-      //.where("isVerified", "==","1" )
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          console.log(doc.id, " => ", doc.data());
-          let doctorInfo = {
-            id: doc.id,
-            info: doc.data(),
-          };
-          setEntry((entry) => [...entry, doctorInfo]);
-        });
-      });
+
+	axios.get(rooturl + '/getEntries')
+		.then(res => {
+			if(res.status === 200) {
+				setEntry(res.data)
+			}
+		})
   }, []);
 
   function handleApprove(key) {
-    firestore
-      .collection("doctors")
-      .doc(entry[key].id)
-      .update({
-        isVerified: "2",
-      })
-      .then(() => {
-        var entryData = [...entry];
-        entryData.splice(key, 1);
-        setEntry(entryData);
-        var templateParams = {
-          to_email: "testbeta442@gmail.com",
-          to_name:
-            "Dr." +
-            entry[key].info["firstname"] +
-            " " +
-            entry[key].info["lastname"],
-          message: "Email verified.",
-        };
-        emailjs
-          .send(
-            "service_iwbj3qf",
-            "template_clfu2qq",
-            templateParams,
-            "user_OmceiOldqPYmh6SrleowV"
-          )
-          .then(
-            (result) => {
-              console.log(result.text);
-            },
-            (error) => {
-              console.log(error.text);
-            }
-          );
-      })
-      .catch((e) => console.log(e));
+	axios.post(rooturl + '/approve', {id: entry[key].id})
+	.then(res => {
+		if(res.status === 200) {
+			var templateParams = {
+				to_email: "testbeta442@gmail.com",
+				to_name:
+				  "Dr." +
+				  entry[key].info["firstname"] +
+				  " " +
+				  entry[key].info["lastname"],
+				message: "Your application as doctor is verified.",
+			  };
+			  emailjs
+				.send(
+				  "service_iwbj3qf",
+				  "template_clfu2qq",
+				  templateParams,
+				  "user_OmceiOldqPYmh6SrleowV"
+				)
+				.then(
+				  (result) => {
+					console.log(result.text);
+				  },
+				  (error) => {
+					console.log(error.text);
+				  }
+				);
+	  
+				var entryData = [...entry];
+				entryData.splice(key, 1);
+				setEntry(entryData);
+		}
+	})
   }
   function handleReject(key) {
-    firestore
-      .collection("doctors")
-      .doc(entry[key].id)
-      .update({
-        isVerified: "3",
-      })
-      .then(() => {
-        var entryData = [...entry];
-        entryData.splice(key, 1);
-        setEntry(entryData);
-        var templateParams = {
-          to_email: "testbeta442@gmail.com",
-          to_name:
-            "Dr." +
-            entry[key].info["firstname"] +
-            " " +
-            entry[key].info["lastname"],
-          message: "You are rejected.",
-        };
-        emailjs
-          .send(
-            "service_iwbj3qf",
-            "template_clfu2qq",
-            templateParams,
-            "user_OmceiOldqPYmh6SrleowV"
-          )
-          .then(
-            (result) => {
-              console.log(result.text);
-            },
-            (error) => {
-              console.log(error.text);
-            }
-          );
-      })
-      .catch((e) => console.log(e));
+
+	axios.post(rooturl + '/reject', {id: entry[key].id})
+	.then(res => {
+		if(res.status === 200) {
+			var templateParams = {
+			to_email: "testbeta442@gmail.com",
+			to_name:
+				"Dr." +
+				entry[key].info["firstname"] +
+				" " +
+				entry[key].info["lastname"],
+			message: "You application as doctor is rejected.",
+			};
+			emailjs
+			.send(
+				"service_iwbj3qf",
+				"template_clfu2qq",
+				templateParams,
+				"user_OmceiOldqPYmh6SrleowV"
+			)
+			.then(
+				(result) => {
+				console.log(result.text);
+				},
+				(error) => {
+				console.log(error.text);
+				}
+			);
+			var entryData = [...entry];
+			entryData.splice(key, 1);
+			setEntry(entryData);
+		}
+	})
   }
 
   const list = Object.keys(entry).map((key, value) => {

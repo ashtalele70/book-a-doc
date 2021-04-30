@@ -3,26 +3,16 @@ import { useLocation } from "react-router-dom";
 import Rating from "react-rating";
 import starempty from "./images/star-empty.png";
 import starfull from "./images/star-full.png";
-import { firestore } from "../firebase";
 import {
   IonButton,
-  IonIcon,
   IonContent,
-  IonSegment,
-  IonSegmentButton,
   IonLabel,
-  IonToolbar,
-  IonTitle,
-  IonList,
   IonItem,
-  IonPage,
   IonItemDivider,
   IonAvatar,
   IonRow,
   IonGrid,
   IonCol,
-  IonCard,
-  IonCardContent,
   IonText,
 } from "@ionic/react";
 import "./styleSheet.css";
@@ -35,25 +25,7 @@ const DoctorProfile: React.FC = (): any => {
   const location = useLocation<IState>();
 
   useEffect(() => {
-    console.log("here");
-    console.log("kk");
-    console.log("jj");
-    console.log(location.state.info);
-
     setEntry(location.state.info);
-    console.log(location.state.info);
-    // // firestore
-    // //   .collection("doctors")
-    // //   .where("doctorId", "==", "1")
-    // //   .get()
-    // //   .then((snapshot) => {
-    // //     const entry = snapshot.docs[0].data();
-    // //     //const entry = 1;
-    // //     console.log(entry);
-    // //     setEntry(entry);
-    // //     console.log(entry.doctorName);
-    // //     // doc.data() is never undefined for query doc snapshots
-    //   });
   });
 
   return (

@@ -19,6 +19,8 @@ import {
   IonCol,
 } from "@ionic/react";
 import "./styleSheet.css";
+import axios from "axios";
+import { rooturl } from "../config";
 
 const PatientFeedback: React.FC = (): any => {
   const { userId } = useAuth();
@@ -27,18 +29,18 @@ const PatientFeedback: React.FC = (): any => {
   const history = useHistory();
 
   function handleSaveDetails() {
-    firestore
-      .collection("doctors")
-      .doc(userId)
-      .collection("reviews")
-      .add({
-        date: new Date(),
+	const userData = { userId: userId,  
+		date: new Date(),
         patientID: userId,
         review: comments,
-        rating: rating,
-      })
-      .then(() => history.push("/payment"))
-      .catch((e) => console.log(e));
+        rating: rating};
+	axios.post(rooturl + '/addFeedback', userData)
+	.then(res => {
+		if(res.status === 200) {
+			console.log('Saved:');
+			history.push("/payment")
+		}
+	})
   }
   return (
     <IonPage>

@@ -12,9 +12,11 @@ import {
 	IonTitle,
 	IonToolbar,
   } from '@ionic/react';
+import axios from 'axios';
   import React, { useState } from 'react';
   import { useHistory } from 'react-router-dom'
   import { useAuth } from '../auth';
+import { rooturl } from '../config';
   import { auth, firestore } from '../firebase';
   
   const RegisterDoctorPage: React.FC = () => {
@@ -29,11 +31,15 @@ import {
 		setStatus({ loading: true, error: false });
 		const credential = await auth.createUserWithEmailAndPassword(email, password);
 		console.log('credential:', credential);
-		const usersRef = firestore.collection('users');
-		const userData = { email, isPatient: false, isVerified: "1"};
-		await usersRef.doc(credential?.user?.uid).set(userData);
-		console.log('Saved:');
-		history.push('/doctorProfile')
+
+		const userData = { email, isPatient: false, credential, isVerified: "1"};
+		axios.post(rooturl + '/registerDoctor', userData)
+		.then(res => {
+			if(res.status === 200) {
+				console.log('Saved:');
+				history.push('/doctorProfile')
+			}
+		})
 
 	  } catch (error) {
 		setStatus({ loading: false, error: true });

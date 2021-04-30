@@ -1,7 +1,6 @@
 import {
 	IonButton,
 	IonContent,
-	IonHeader,
 	IonItem,
 	IonLabel,
 	IonList,
@@ -16,6 +15,8 @@ import { firestore } from '../firebase';
 import { formatDate } from '../data/date';
 import { useHistory } from "react-router-dom";
 import { toUser, User } from '../models/user';
+import axios from 'axios';
+import {rooturl} from '../config';
   
   const AppointmentsPage: React.FC = () => {
 	const history = useHistory();
@@ -25,8 +26,17 @@ import { toUser, User } from '../models/user';
 	const [pastAppointments, setPastAppointments] = useState([]);
 	const [user, setUser] = useState<User>();
 	useEffect(() => {
-		const userRef =  firestore.collection('users').doc(userId);
-		userRef.get().then((doc) => setUser(toUser(doc)));
+		let userData = new URLSearchParams();
+		userData.set('id', userId);
+
+		axios.get(rooturl + '/getUser?'+ userData.toString())
+		.then(res => {
+			if(res.status === 200) {
+				// console.log(res);
+				setUser(toUser(res.data))
+			}
+		})
+		
 	}, [userId]);
 	useEffect(() => {
 		let appointmentsRef;

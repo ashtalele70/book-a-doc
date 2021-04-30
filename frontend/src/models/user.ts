@@ -11,6 +11,11 @@ export interface User {
   isAdmin: boolean;
 }
 
-export function toUser(doc: firebase.firestore.DocumentSnapshot): User {
-  return { id: doc.id, ...doc.data() } as User;
+export function toUser(doc: any): User {
+  return { ...doc } as User;
 }
+
+export function toUserFire(doc: firebase.firestore.DocumentSnapshot): User {
+	return { id: doc.id, ...doc.data() } as User;
+}
+  

@@ -20,6 +20,8 @@ import {
   import { firestore } from '../firebase';
   import { User, toUser } from '../models/user';
   import { useHistory } from 'react-router-dom'
+import axios from 'axios';
+import { rooturl } from '../config';
   
   const PatientProfilePage: React.FC = () => {
 	const { userId } = useAuth();
@@ -31,16 +33,22 @@ import {
 	const history = useHistory()
 
 	const handleSaveDetails = async () => {
-		  firestore.collection('patients').doc(userId).set({
+		const userData =   {
+			userId: userId,
 			firstname: firstName,
 			lastname: lastName,
 			dob: date,
 			gender: gender
+		  }
+		  
+		  axios.post(rooturl + '/patientDetails', userData)
+		  .then(res => {
+			if(res.status === 200) {
+				history.push('/home')
+			}
 		  })
-		  .then(() =>
-		  	history.push('/home'))
 		  .catch((e) => console.log(e))
-	  };
+	};
 
 	useEffect(() => {
 		
