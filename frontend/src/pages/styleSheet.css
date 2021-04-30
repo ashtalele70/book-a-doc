@@ -70,7 +70,7 @@ table {
   width: 100%;
 }
 
-#feedback #textArea  {
+#feedback #textArea {
   border-radius: 25px;
   border: 1.2px solid #080808;
 }
@@ -82,4 +82,8 @@ table {
 
 .paymentAlert {
   --background: #d85656;
+}
+
+#admin #heading {
+  font-weight: bold;
 }
