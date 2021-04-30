@@ -129,95 +129,85 @@ const Admin: React.FC = (): any => {
 
   const list = Object.keys(entry).map((key, value) => {
     return (
-		<IonItem>
-      <IonRow>
-        <IonCol >
-			
-			Dr. {entry[key].info && entry[key].info.firstname}{" "}
-          {entry[key].info && entry[key].info.lastname}
-			
-          
-        </IonCol>
-        <IonCol >
-			<details>
-            <summary>show</summary>
+      <IonItem id="admin">
+        <IonGrid>
+          <IonCol>
+            <IonRow>
+              <IonCol id="heading" size="1.2">
+                Name:
+              </IonCol>
+              <IonCol size="2.4">
+                Dr. {entry[key].info && entry[key].info.firstname}{" "}
+                {entry[key].info && entry[key].info.lastname}
+              </IonCol>
+            </IonRow>
 
-            <ul>
-              {entry[key].info &&
-                entry[key].info.specialties.map((row, index) => (
-                  <li>{row} </li>
-                ))}
-            </ul>
-          </details>
-          
-        </IonCol>
-        <IonCol >
-			<details>
-            <summary>show</summary>
+            <IonRow>
+              <IonCol id="heading" size="1.2">
+                Specialities:
+              </IonCol>
+              <IonCol size="2.4">
+                <details>
+                  <summary>show</summary>
 
-            <ul>
-              {entry[key].info &&
-                entry[key].info.educations.map((row, index) => <li>{row} </li>)}
-            </ul>
-          </details>
-         
-        </IonCol>
-        <IonCol >
-			<mark>{entry[key].info && entry[key].info.npiNumber}</mark>
-			
-          
-        </IonCol>
-        <IonCol >
-			<IonButton id={entry[key].id} onClick={() => handleApprove(key)}>
-            Approve
-          </IonButton>
-         
-        </IonCol>
-        <IonCol >
-			
-			<IonButton id={entry[key].id} onClick={() => handleReject(key)}>
-            Reject
-          </IonButton>
-        
-        </IonCol>
-      </IonRow>
-	  </IonItem>
+                  <ul>
+                    {entry[key].info &&
+                      entry[key].info.specialties.map((row, index) => (
+                        <li>{row} </li>
+                      ))}
+                  </ul>
+                </details>
+              </IonCol>
+            </IonRow>
+
+            <IonRow>
+              <IonCol id="heading" size="1.2">
+                Education:
+              </IonCol>
+              <IonCol size="2.4">
+                <details>
+                  <summary>show</summary>
+
+                  <ul>
+                    {entry[key].info &&
+                      entry[key].info.educations.map((row, index) => (
+                        <li>{row} </li>
+                      ))}
+                  </ul>
+                </details>
+              </IonCol>
+            </IonRow>
+
+            <IonRow>
+              <IonCol id="heading" size="1.2">
+                NPI:
+              </IonCol>
+              <IonCol size="2.4">
+                <mark>{entry[key].info && entry[key].info.npiNumber}</mark>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonButton id={entry[key].id} onClick={() => handleApprove(key)}>
+                Approve
+              </IonButton>
+              <IonButton id={entry[key].id} onClick={() => handleReject(key)}>
+                Reject
+              </IonButton>
+            </IonRow>
+          </IonCol>
+        </IonGrid>
+      </IonItem>
     );
   });
   return (
     <IonPage>
       <IonHeader>
         <h3 style={{ color: "#2dd36f", fontWeight: 600 }}>Book-a-Doc</h3>
+        <IonTitle color="primary">{entry && entry.length} results</IonTitle>
       </IonHeader>
-	  <IonContent>
-      <IonItem>
-        <IonToolbar>
-          <IonTitle color="primary">{entry && entry.length} results</IonTitle>
-        </IonToolbar>
-      </IonItem>
-      <IonGrid>
-		  
-        <strong>
-          <IonRow>
-            <IonCol >
-              <IonLabel>Doctor's Name</IonLabel>
-            </IonCol>
-            <IonCol >
-              <IonLabel>Specialities</IonLabel>
-            </IonCol>
-            <IonCol >
-              <IonLabel>Education</IonLabel>
-            </IonCol>
-            <IonCol >
-              <IonLabel>Npi number</IonLabel>
-            </IonCol>
-          </IonRow>
-        </strong>
 
-        {list}
-      </IonGrid>
-	  </IonContent>
-	</IonPage>
+      <IonContent>{list}</IonContent>
+    </IonPage>
   );
 };
 

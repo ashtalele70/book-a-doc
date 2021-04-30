@@ -25,11 +25,12 @@ import DoctorProfilePage from "./pages/DoctorProfilePage";
 import RegisterDoctorPage from "./pages/RegisterDoctorPage";
 import RegisterPage from "./pages/RegisterPage";
 import SettingsPage from "./pages/SettingsPage";
-import Doctors from "./pages/Doctors";
+import DoctorFeedback from "./pages/DoctorFeedback";
 import ZoomComponent from "./pages/ZoomMeeting";
 import Wallet from "./pages/wallet/Wallet";
 import DoctorProfile from "./pages/DoctorProfile";
 import PatientFeedback from "./pages/PatientFeedback";
+import DoctorHomePage from "./pages/DoctorHomePage";
 import Admin from "./pages/Admin";
 
 const AppTabs: React.FC = () => {
@@ -83,6 +84,12 @@ const AppTabs: React.FC = () => {
           </Route>
           <Route exact path="/patientFeedback">
             <PatientFeedback />
+          </Route>
+          <Route exact path="/feedback">
+            <DoctorFeedback />
+          </Route>
+          <Route exact path="/doctorHome">
+            <DoctorHomePage />
           </Route>
           <Route exact path="/admin">
             <Admin />

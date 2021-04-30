@@ -8,6 +8,7 @@ export interface User {
   sex: string;
   email: string;
   isPatient: boolean;
+  isAdmin: boolean;
 }
 
 export function toUser(doc: firebase.firestore.DocumentSnapshot): User {

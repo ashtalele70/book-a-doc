@@ -4,9 +4,9 @@ import {
   useElements,
   CardElement
 } from "@stripe/react-stripe-js";
-import {IonLabel, IonButton, IonGrid, IonRow, IonContent, IonCol, IonToast, IonText } from '@ionic/react';
+import { IonButton, IonGrid, IonRow, IonContent, IonCol, IonToast, IonText } from '@ionic/react';
 
-const MyForm = () => {
+const CheckoutForm = () => {
     const stripe = useStripe();
     const elements = useElements();
     const [showAlert, setShowAlert] = useState(false);
@@ -40,6 +40,9 @@ const MyForm = () => {
             <IonText color="secondary" className="ion-text-center">
                 <h3>Complete Payment</h3>
             </IonText>
+              <IonText color="tertiary" className="ion-text-center">
+                <h6>Consultation Fee: $15.00</h6>
+              </IonText>
               <IonRow className="ion-justify-content-center ion-padding-top">
                 <IonCol size="5">
                     <CardElement
@@ -58,7 +61,7 @@ const MyForm = () => {
                             },
                         }}
                     />
-                    </IonCol>
+                </IonCol>
               </IonRow>
               <IonRow className="ion-justify-content-center">
                   <IonCol size="1">
@@ -79,4 +82,4 @@ const MyForm = () => {
     );
 };
 
-export default MyForm;
+export default CheckoutForm;
