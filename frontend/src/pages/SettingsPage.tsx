@@ -22,6 +22,7 @@ import { logOut } from 'ionicons/icons';
 	
 	return (
 	  <IonPage>
+		  
 		<IonHeader>
 		  <IonToolbar>
 			<IonTitle>Settings</IonTitle>

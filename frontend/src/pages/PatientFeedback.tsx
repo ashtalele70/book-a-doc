@@ -6,6 +6,7 @@ import starfull from "./images/star-full.png";
 import { firestore } from "../firebase";
 import { useAuth } from "../auth";
 import { useHistory } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import {
   IonButton,
   IonHeader,
@@ -42,6 +43,9 @@ const PatientFeedback: React.FC = (): any => {
   }
   return (
     <IonPage>
+      <Helmet>
+        <meta name="robots" content="noindex"></meta>
+      </Helmet>
       <IonHeader>
         <IonToolbar>
           <IonTitle color="warning">How was your visit?</IonTitle>

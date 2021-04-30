@@ -4,6 +4,7 @@ import Rating from "react-rating";
 import starempty from "./images/star-empty.png";
 import starfull from "./images/star-full.png";
 import { firestore } from "../firebase";
+import { Helmet } from "react-helmet";
 import {
   IonButton,
   IonIcon,
@@ -24,6 +25,7 @@ import {
   IonCard,
   IonCardContent,
   IonText,
+  IonHeader,
 } from "@ionic/react";
 import "./styleSheet.css";
 interface IState {
@@ -63,9 +65,15 @@ const DoctorProfile: React.FC = (): any => {
       onIonScroll={() => {}}
       onIonScrollEnd={() => {}}
     >
-      <IonItemDivider color="primary">
-        <IonLabel></IonLabel>
-      </IonItemDivider>
+      <Helmet>
+        <meta
+          name="description"
+          content="This page allows users to view doctor's profile and the reviews of other patients."
+        />
+      </Helmet>
+      <IonHeader>
+        <h1 style={{ color: "#2dd36f", fontWeight: 600 }}>Book-a-Doc</h1>
+      </IonHeader>
 
       <IonItem>
         <IonGrid>

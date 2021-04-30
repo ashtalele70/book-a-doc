@@ -15,6 +15,7 @@ import React, { useEffect, useState } from "react";
 import { firestore } from "../firebase";
 import data from "../data/conditionSpecialtyMap";
 import Doctors from "./Doctors";
+import { Helmet } from "react-helmet";
 
 const HomePage: React.FC = () => {
   const [searchText, setSearchText] = useState("");
@@ -80,6 +81,12 @@ const HomePage: React.FC = () => {
 
   return (
     <IonPage>
+      <Helmet>
+        <meta
+          name="description"
+          content="This page allows users to search for verified doctors, schedule appointement or instant chat with them if they are available"
+        />
+      </Helmet>
       <IonToolbar>
         <IonTitle color="success">Book-A-Doc</IonTitle>
       </IonToolbar>

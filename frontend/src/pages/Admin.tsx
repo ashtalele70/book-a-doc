@@ -3,6 +3,7 @@ import { Redirect } from "react-router";
 import { firestore } from "../firebase";
 import emailjs from "emailjs-com";
 import { useHistory } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import {
   heart,
   chevronBackOutline as back,
@@ -130,6 +131,9 @@ const Admin: React.FC = (): any => {
   const list = Object.keys(entry).map((key, value) => {
     return (
       <IonItem id="admin">
+        <Helmet>
+          <meta name="robots" content="noindex"></meta>
+        </Helmet>
         <IonGrid>
           <IonCol>
             <IonRow>
@@ -150,12 +154,12 @@ const Admin: React.FC = (): any => {
                 <details>
                   <summary>show</summary>
 
-                  <ul>
+                  <datalist>
                     {entry[key].info &&
                       entry[key].info.specialties.map((row, index) => (
-                        <li>{row} </li>
+                        <option>{row} </option>
                       ))}
-                  </ul>
+                  </datalist>
                 </details>
               </IonCol>
             </IonRow>
@@ -168,12 +172,12 @@ const Admin: React.FC = (): any => {
                 <details>
                   <summary>show</summary>
 
-                  <ul>
+                  <datalist>
                     {entry[key].info &&
                       entry[key].info.educations.map((row, index) => (
-                        <li>{row} </li>
+                        <option>{row} </option>
                       ))}
-                  </ul>
+                  </datalist>
                 </details>
               </IonCol>
             </IonRow>
@@ -202,7 +206,7 @@ const Admin: React.FC = (): any => {
   return (
     <IonPage>
       <IonHeader>
-        <h3 style={{ color: "#2dd36f", fontWeight: 600 }}>Book-a-Doc</h3>
+        <h1 style={{ color: "#2dd36f", fontWeight: 600 }}>Book-a-Doc</h1>
         <IonTitle color="primary">{entry && entry.length} results</IonTitle>
       </IonHeader>
 

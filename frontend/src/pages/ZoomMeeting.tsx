@@ -4,7 +4,7 @@ import { useAuth } from "../auth";
 import { firestore } from "../firebase";
 import { User, toUser } from "../models/user";
 import { useHistory } from "react-router-dom";
-
+import { Helmet } from "react-helmet";
 import { ZoomMtg } from "@zoomus/websdk";
 
 const crypto = require("crypto");
@@ -104,6 +104,9 @@ const ZoomMeeting: React.FC = () => {
 
   return (
     <IonPage>
+      <Helmet>
+        <meta name="robots" content="noindex"></meta>
+      </Helmet>
       <div></div>
     </IonPage>
   );

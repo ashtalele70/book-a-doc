@@ -7,6 +7,7 @@ import { firestore } from "../firebase";
 import { useAuth } from "../auth";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import {
   heart,
   chevronBackOutline as back,
@@ -27,6 +28,7 @@ import {
   IonRow,
   IonGrid,
   IonCol,
+  IonHeader,
 } from "@ionic/react";
 import "./styleSheet.css";
 type props = {
@@ -385,8 +387,18 @@ const Doctors: React.FC<props> = (props: props): any => {
     );
   });
   return (
-    <React.Fragment>
+    <IonPage>
+      <Helmet>
+        <meta
+          name="description"
+          content="This page lists doctors based on illness. The user can then book an appointment or speak to them instantly"
+        />
+      </Helmet>
       <IonItem>
+        <IonHeader>
+          <h1 style={{ color: "#2dd36f", fontWeight: 600 }}>Book-a-Doc</h1>
+          <IonTitle color="primary">{entry && entry.length} results</IonTitle>
+        </IonHeader>
         <IonToolbar>
           <IonTitle color="primary">{entry && entry.length} results</IonTitle>
         </IonToolbar>
@@ -424,7 +436,7 @@ const Doctors: React.FC<props> = (props: props): any => {
         </div>
       </IonItem>
       {list}
-    </React.Fragment>
+    </IonPage>
   );
 };
 

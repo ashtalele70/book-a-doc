@@ -1,0 +1,30 @@
+{
+  "@context": "",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can I video chat wih doctors instantly?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, you can. You can either speak with availble doctors instantly or schedule an appointment and speak with them </p>"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much does it cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Currently every 30 minute session costs 15$"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need insurance?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. There is no need for an insurance</p>"
+      }
+    }
+  ]
+}
