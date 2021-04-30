@@ -31,6 +31,7 @@ import Wallet from "./pages/wallet/Wallet";
 import DoctorProfile from "./pages/DoctorProfile";
 import PatientFeedback from "./pages/PatientFeedback";
 import DoctorHomePage from "./pages/DoctorHomePage";
+import Admin from "./pages/Admin";
 
 const AppTabs: React.FC = () => {
   const { loggedIn } = useAuth();
@@ -90,6 +91,13 @@ const AppTabs: React.FC = () => {
           <Route exact path="/doctorHome">
             <DoctorHomePage />
           </Route>
+          <Route exact path="/admin">
+            <Admin />
+          </Route>
+
+          {/* <Route exact path="/doctors">
+          <Doctors timeSlotInfo = {[]} doctorInfo = {[]} />
+        </Route> */}
         </Switch>
       </IonRouterOutlet>
       <IonTabBar slot="bottom">
