@@ -37,7 +37,7 @@ import {
 	};
   
 	if (loggedIn) {
-	  return <Redirect to="/home" />;
+	  return <Redirect to="/doctorHome" />;
 	}
 	return (
 	  <IonPage>

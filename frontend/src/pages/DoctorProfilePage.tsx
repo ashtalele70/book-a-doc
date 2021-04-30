@@ -61,7 +61,7 @@ import {
 			languages: languages
 		  })
 		  .then(() =>
-		  	history.push('/home'))
+		  	history.push('/doctorHome'))
 		  .catch((e) => console.log(e))
 
 		  if(slots.length > 0) {
