@@ -1,0 +1,1 @@
+module.exports.frontendurl = 'http://localhost:3000';

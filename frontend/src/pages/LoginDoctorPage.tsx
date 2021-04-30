@@ -45,7 +45,7 @@ const LoginDoctorPage: React.FC = () => {
       <Helmet>
         <meta
           name="description"
-          content="This page allows doctors to Login and view patient information and speak to patients. "
+          content="This page allows doctors to Login and view patient information and speak to patients, "
         />
       </Helmet>
       <IonHeader>

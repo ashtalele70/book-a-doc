@@ -1,4 +1,5 @@
 import {
+<<<<<<< HEAD
   IonButton,
   IonContent,
   IonHeader,
@@ -49,6 +50,80 @@ const DoctorProfilePage: React.FC = () => {
   const [toTimeMM, setToTimeMM] = useState(0);
   const [about, setAbout] = useState("");
   const [gender, setGender] = useState<string>("male");
+=======
+	IonButton,
+	IonContent,
+	IonHeader,
+	IonInput,
+	IonItem,
+	IonLabel,
+	IonGrid,
+	IonPage,
+	IonTitle,
+	IonToolbar,
+	IonRow,
+	IonCol,
+	IonRadioGroup,
+	IonRadio,
+	IonSelect,
+	IonSelectOption,
+	IonIcon,
+	IonModal,
+	IonList,
+	IonTextarea,
+  } from '@ionic/react';
+  import React, { useEffect, useState } from 'react';
+  import { useAuth } from '../auth';
+  import { firestore } from '../firebase';
+  import { User, toUser } from '../models/user';
+  import { useHistory } from 'react-router-dom'
+  import { addCircle } from 'ionicons/icons';
+import axios from 'axios';
+import { rooturl } from '../config';
+  
+  const DoctorProfilePage: React.FC = () => {
+	const { userId } = useAuth();
+	const [firstName, setFirstName] = useState('');
+	const [lastName, setLastName] = useState('');
+	const [user, setUser] = useState<User>();
+	const [specialties, setSpecialties] = useState([]);
+	const [education, setEducation] = useState('');
+	const [educations, setEducations] = useState([]);
+	const [languages, setLanguages] = useState([]);
+	const [phoneNumber, setPhoneNumber] = useState('');
+	const [npiNumber, setNpiNumber] = useState('');
+	const history = useHistory();
+	const [slotModal, setSlotModal] = useState(false);
+	const [educationModal, setEducationModal] = useState(false);
+	const [slots, setSlots] = useState([]);
+	const [fromTimeHH, setFromTimeHH] = useState(0);
+	const [fromTimeMM, setFromTimeMM] = useState(0);
+	const [toTimeHH, setToTimeHH] = useState(0);
+	const [toTimeMM, setToTimeMM] = useState(0);
+	const [about, setAbout] = useState('');
+	const [gender, setGender] = useState<string>('male');
+
+	const handleSaveDetails = async () => {
+
+		  const userData = {
+			userId: userId,
+			firstname: firstName,
+			lastname: lastName,
+			gender: gender,
+			phoneNumber: phoneNumber,
+			npiNumber: npiNumber,
+			specialties: specialties,
+			educations: educations,
+			languages: languages
+		  }
+		  axios.post(rooturl + '/doctorDetails', userData)
+			.then(res => {
+				if(res.status === 200) {
+					console.log('Saved:');
+					history.push('/doctorHome');
+				}
+			})
+>>>>>>> 71975dc600cae41f7319558d0e85d18649cb67ef
 
   const handleSaveDetails = async () => {
     firestore
@@ -74,18 +149,41 @@ const DoctorProfilePage: React.FC = () => {
           return parseInt(c[0]) * 60 + parseInt(c[1]);
         }
 
+<<<<<<< HEAD
         function convertHours(mins) {
           var hour = Math.floor(mins / 60);
           mins = mins % 60;
           var converted = pad(hour, 2) + ":" + pad(mins, 2);
           return converted;
         }
+=======
+				times_ara.forEach(timeSlot => {
+					firestore.collection('doctors').doc(userId).collection('timeslots').add({
+						time: timeSlot
+					})
+				})
+				
+			 } )
+		  }
+		  
+	  };
+	
+	const addSlot = () => {
+		setSlotModal(false);
+		setSlots(slots.concat({from : fromTimeHH + ':' + fromTimeMM, to : toTimeHH + ':' + toTimeMM}));
+		setFromTimeHH(0)
+		setFromTimeMM(0)
+		setToTimeHH(0)
+		setToTimeMM(0)
+	}
+>>>>>>> 71975dc600cae41f7319558d0e85d18649cb67ef
 
         function pad(str, max) {
           str = str.toString();
           return str.length < max ? pad("0" + str, max) : str;
         }
 
+<<<<<<< HEAD
         function calculate_time_slot(start_time, end_time, interval) {
           var i, formatted_time;
           var time_slots = new Array();
@@ -99,6 +197,22 @@ const DoctorProfilePage: React.FC = () => {
         var start_time = parseTime(slot.from),
           end_time = parseTime(slot.to),
           interval = 30;
+=======
+	useEffect(() => {
+		
+		let userData = new URLSearchParams();
+		userData.set('id', userId);
+
+		axios.get(rooturl + '/getUser?'+ userData.toString())
+		.then(res => {
+			if(res.status === 200) {
+				// console.log(res);
+				setUser(toUser(res.data))
+			}
+		})
+
+    }, []);
+>>>>>>> 71975dc600cae41f7319558d0e85d18649cb67ef
 
         var times_ara = calculate_time_slot(start_time, end_time, interval);
 

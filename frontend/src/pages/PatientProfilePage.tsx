@@ -1,4 +1,5 @@
 import {
+<<<<<<< HEAD
   IonButton,
   IonContent,
   IonHeader,
@@ -30,6 +31,58 @@ const PatientProfilePage: React.FC = () => {
   const [date, setDate] = useState("");
   const [gender, setGender] = useState<string>("male");
   const history = useHistory();
+=======
+	IonButton,
+	IonContent,
+	IonHeader,
+	IonInput,
+	IonItem,
+	IonLabel,
+	IonGrid,
+	IonPage,
+	IonTitle,
+	IonToolbar,
+	IonRow,
+	IonCol,
+	IonDatetime,
+	IonRadioGroup,
+	IonRadio,
+  } from '@ionic/react';
+  import React, { useEffect, useState } from 'react';
+  import { useAuth } from '../auth';
+  import { firestore } from '../firebase';
+  import { User, toUser } from '../models/user';
+  import { useHistory } from 'react-router-dom'
+import axios from 'axios';
+import { rooturl } from '../config';
+  
+  const PatientProfilePage: React.FC = () => {
+	const { userId } = useAuth();
+	const [firstName, setFirstName] = useState('');
+	const [lastName, setLastName] = useState('');
+	const [user, setUser] = useState<User>();
+	const [date, setDate] = useState('');
+	const [gender, setGender] = useState<string>('male');
+	const history = useHistory()
+
+	const handleSaveDetails = async () => {
+		const userData =   {
+			userId: userId,
+			firstname: firstName,
+			lastname: lastName,
+			dob: date,
+			gender: gender
+		  }
+		  
+		  axios.post(rooturl + '/patientDetails', userData)
+		  .then(res => {
+			if(res.status === 200) {
+				history.push('/home')
+			}
+		  })
+		  .catch((e) => console.log(e))
+	};
+>>>>>>> 71975dc600cae41f7319558d0e85d18649cb67ef
 
   const handleSaveDetails = async () => {
     firestore
