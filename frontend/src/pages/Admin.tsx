@@ -203,15 +203,10 @@ const Admin: React.FC = (): any => {
     <IonPage>
       <IonHeader>
         <h3 style={{ color: "#2dd36f", fontWeight: 600 }}>Book-a-Doc</h3>
+        <IonTitle color="primary">{entry && entry.length} results</IonTitle>
       </IonHeader>
-      <IonContent>
-        <IonItem>
-          <IonToolbar>
-            <IonTitle color="primary">{entry && entry.length} results</IonTitle>
-          </IonToolbar>
-        </IonItem>
-        {list}
-      </IonContent>
+
+      <IonContent>{list}</IonContent>
     </IonPage>
   );
 };
