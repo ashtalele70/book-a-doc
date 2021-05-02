@@ -32,12 +32,10 @@ import DoctorProfile from "./pages/DoctorProfile";
 import PatientFeedback from "./pages/PatientFeedback";
 import DoctorHomePage from "./pages/DoctorHomePage";
 import Admin from "./pages/Admin";
+import AdminLogin from "./pages/AdminLogin";
 
 const AppTabs: React.FC = () => {
   const { loggedIn } = useAuth();
-  // if (!loggedIn) {
-  //   return <Redirect to="/home" />;
-  // }
   return (
     <IonTabs>
       <IonRouterOutlet>
@@ -94,10 +92,9 @@ const AppTabs: React.FC = () => {
           <Route exact path="/admin">
             <Admin />
           </Route>
-
-          {/* <Route exact path="/doctors">
-          <Doctors timeSlotInfo = {[]} doctorInfo = {[]} />
-        </Route> */}
+          <Route exact path="/loginAdmin">
+            <AdminLogin />
+          </Route>
         </Switch>
       </IonRouterOutlet>
       <IonTabBar slot="bottom">

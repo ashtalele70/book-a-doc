@@ -12,6 +12,7 @@ import {
   IonCol,
   IonCardContent,
   IonCard,
+  IonLoading
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { firestore } from "../firebase";
@@ -31,6 +32,7 @@ const HomePage: React.FC = () => {
   const [hideMostSearchedWords, setHideMostSearchedWords] = useState(false);
   const { loggedIn } = useAuth();
   const [pages, setPages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onChangeHandler = (e) => {
     setSearchText(e.detail.value);
@@ -41,11 +43,12 @@ const HomePage: React.FC = () => {
 
   }
 
-  const onClickHandler = async (name?) => {
+  const onClickHandler = async () => {
+    setIsLoading(true);
     setHideTitle(true);
     setHideMostSearchedWords(true);
 
-    const specialties = searchText != "" ? data[searchText] : data[name];
+    const specialties = data[searchText];
     let doctors = [],
       times = [],
       appointments = [];
@@ -106,6 +109,7 @@ const HomePage: React.FC = () => {
     if(5 < times.length) setTimeslotInfo(times.slice(0, 5));
     if(5 < appointments.length) setAppointmentInfo(appointments.slice(0, 5));
     // setIsSearchClicked(true);
+    setIsLoading(false);
   };
 
   const handlePageClick = async (e) => {
@@ -191,7 +195,7 @@ const HomePage: React.FC = () => {
         <IonTitle color="success">Book-A-Doc</IonTitle>
       </IonToolbar>
 
-      {!hideTitle && loggedIn && (
+      {!hideTitle && (
         <div>
           <IonToolbar>
             <IonTitle id="AppTitle" size="large" color="success">
@@ -217,6 +221,7 @@ const HomePage: React.FC = () => {
               </IonButton>
             </IonCol>
           </IonRow>
+          <IonLoading isOpen={isLoading} />
           {timeSlotInfo.length > 0 && doctorInfo.length > 0 && (
             <Doctors
               timeSlotInfo={timeSlotInfo}

@@ -18,7 +18,7 @@ const App: React.FC = () => {
         <title>Book-A-Doc</title>
         <meta
           name="description"
-          content="This app allows patients to meet doctors online at any time of the day. They can either book an appointment or speak to the doctor instantly if the doctor is availble. The can search for doctors based on illness and video chat with doctor for 30 minutes  "
+          content="This app allows patients to meet doctors online at any time of the day. They can either book an appointment or speak to the doctor instantly if the doctor is available. They can search for doctors based on illness and video chat with doctor for 30 minutes  "
         />
         <script src="snippet.js" type="application/ld+json" />
       </Helmet>
