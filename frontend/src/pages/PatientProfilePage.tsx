@@ -67,11 +67,15 @@ const PatientProfilePage: React.FC = () => {
   };
 */
   useEffect(() => {
-    firestore
-      .collection("users")
-      .doc(userId)
-      .get()
-      .then((doc) => setUser(toUser(doc)));
+    let userData = new URLSearchParams();
+    userData.set("id", userId);
+
+    axios.get(rooturl + "/getUser?" + userData.toString()).then((res) => {
+      if (res.status === 200) {
+        // console.log(res);
+        setUser(toUser(res.data));
+      }
+    });
   }, []);
 
   return (
@@ -95,7 +99,7 @@ const PatientProfilePage: React.FC = () => {
           <IonRow>
             <IonCol>
               <IonItem>
-                <IonLabel position="floating">First Name</IonLabel>
+                <IonLabel position="fixed">First Name</IonLabel>
                 <IonInput
                   value={firstName}
                   onIonChange={(event) => setFirstName(event.detail.value)}
@@ -104,7 +108,7 @@ const PatientProfilePage: React.FC = () => {
             </IonCol>
             <IonCol>
               <IonItem>
-                <IonLabel position="floating">Last Name</IonLabel>
+                <IonLabel position="fixed">Last Name</IonLabel>
                 <IonInput
                   value={lastName}
                   onIonChange={(event) => setLastName(event.detail.value)}

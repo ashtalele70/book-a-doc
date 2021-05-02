@@ -6,7 +6,7 @@ const router = express.Router();
 router.post('/registerDoctor', async (req, res) => {
 	const usersRef = firestore.collection('users');
 	const {credential, email, isPatient} = {...req.body};
-	await usersRef.doc(credential.user.uid).set({email, isPatient});
+	await usersRef.doc(credential.user.uid).set({email, isPatient, isAdmin: false});
 	return res.status(200).json('Successful');
 })
 

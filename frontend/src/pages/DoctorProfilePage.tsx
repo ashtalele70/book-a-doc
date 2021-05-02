@@ -29,6 +29,7 @@ import { addCircle } from "ionicons/icons";
 import axios from "axios";
 import { rooturl } from "../config";
 import { Helmet } from "react-helmet";
+import { remove } from "ionicons/icons";
 
 const DoctorProfilePage: React.FC = () => {
   const { userId } = useAuth();
@@ -51,6 +52,7 @@ const DoctorProfilePage: React.FC = () => {
   const [toTimeMM, setToTimeMM] = useState(0);
   const [about, setAbout] = useState("");
   const [gender, setGender] = useState<string>("male");
+  
 
   const handleSaveDetails = async () => {
     const userData = {
@@ -133,11 +135,19 @@ const DoctorProfilePage: React.FC = () => {
     setToTimeMM(0);
   };
 
+  const removeSlot = (slo) => {
+	setSlots(slots.filter(item => item !== slo));
+  }
+
   const addEducation = () => {
     setEducationModal(false);
     setEducations(educations.concat(education));
     setEducation("");
   };
+
+  const removeEducation = (edu) => {
+    setEducations(educations.filter(item => item !== edu));
+  }
 
   useEffect(() => {
     let userData = new URLSearchParams();
@@ -173,7 +183,7 @@ const DoctorProfilePage: React.FC = () => {
           <IonRow>
             <IonCol>
               <IonItem>
-                <IonLabel position="floating">First Name</IonLabel>
+                <IonLabel position="fixed">First Name</IonLabel>
                 <IonInput
                   value={firstName}
                   onIonChange={(event) => setFirstName(event.detail.value)}
@@ -182,7 +192,7 @@ const DoctorProfilePage: React.FC = () => {
             </IonCol>
             <IonCol>
               <IonItem>
-                <IonLabel position="floating">Last Name</IonLabel>
+                <IonLabel position="fixed">Last Name</IonLabel>
                 <IonInput
                   value={lastName}
                   onIonChange={(event) => setLastName(event.detail.value)}
@@ -211,11 +221,15 @@ const DoctorProfilePage: React.FC = () => {
             </IonCol>
           </IonRow>
           <IonRow>
-            <IonLabel position="fixed">About</IonLabel>
-            <IonTextarea
-              value={about}
-              onIonChange={(event) => setAbout(event.detail.value)}
-            ></IonTextarea>
+			  <IonCol>
+			  <IonItem>
+			  	<IonLabel position="fixed">About</IonLabel>
+				<IonTextarea 
+					value={about}
+					onIonChange={(event) => setAbout(event.detail.value)}
+				></IonTextarea>
+			  </IonItem>
+			  </IonCol>
           </IonRow>
           <IonRow>
             <IonCol>
@@ -469,7 +483,7 @@ const DoctorProfilePage: React.FC = () => {
           <IonRow>
             <IonCol>
               <IonItem>
-                <IonLabel position="floating">Direct Phone Number</IonLabel>
+                <IonLabel position="fixed">Contact No.</IonLabel>
                 <IonInput
                   value={phoneNumber}
                   onIonChange={(event) => setPhoneNumber(event.detail.value)}
@@ -478,7 +492,7 @@ const DoctorProfilePage: React.FC = () => {
             </IonCol>
             <IonCol>
               <IonItem>
-                <IonLabel position="floating">NPI Number</IonLabel>
+                <IonLabel position="fixed">NPI No.</IonLabel>
                 <IonInput
                   value={npiNumber}
                   onIonChange={(event) => setNpiNumber(event.detail.value)}
@@ -500,11 +514,17 @@ const DoctorProfilePage: React.FC = () => {
             {educations && educations.length > 0 && (
               <IonCol>
                 <IonList>
-                  <IonLabel position="stacked">Education</IonLabel>
+                  <IonLabel position="fixed">Education</IonLabel>
                   {educations.map((edu) => (
+					  <>
                     <IonItem key={edu}>
                       <IonLabel>{edu}</IonLabel>
+					  <IonButton slot="end" onClick={() => removeEducation(edu)}>
+							<IonIcon icon={remove} />
+					  </IonButton>
                     </IonItem>
+					
+					</>
                   ))}
                 </IonList>
               </IonCol>
@@ -518,6 +538,9 @@ const DoctorProfilePage: React.FC = () => {
                       <IonLabel>
                         {slot.from} - {slot.to}
                       </IonLabel>
+					  <IonButton slot="end" onClick={() => removeSlot(slot)}>
+							<IonIcon icon={remove} />
+					  </IonButton>
                     </IonItem>
                   ))}
                 </IonList>
@@ -535,7 +558,7 @@ const DoctorProfilePage: React.FC = () => {
               <IonCol>
                 <IonItem>
                   <IonLabel position="stacked">From Time</IonLabel>
-                  <IonLabel position="floating">HH</IonLabel>
+                  <IonLabel position="fixed">HH</IonLabel>
                   <IonInput
                     type="number"
                     value={fromTimeHH}
@@ -543,7 +566,7 @@ const DoctorProfilePage: React.FC = () => {
                       setFromTimeHH(Number(event.detail.value))
                     }
                   />
-                  <IonLabel position="floating">MM</IonLabel>
+                  <IonLabel position="fixed">MM</IonLabel>
                   <IonInput
                     type="number"
                     value={fromTimeMM}
@@ -556,7 +579,7 @@ const DoctorProfilePage: React.FC = () => {
               <IonCol>
                 <IonItem>
                   <IonLabel position="stacked">To Time</IonLabel>
-                  <IonLabel position="floating">HH</IonLabel>
+                  <IonLabel position="fixed">HH</IonLabel>
                   <IonInput
                     type="number"
                     value={toTimeHH}
@@ -564,7 +587,7 @@ const DoctorProfilePage: React.FC = () => {
                       setToTimeHH(Number(event.detail.value))
                     }
                   />
-                  <IonLabel position="floating">MM</IonLabel>
+                  <IonLabel position="fixed">MM</IonLabel>
                   <IonInput
                     type="number"
                     value={toTimeMM}
@@ -589,12 +612,14 @@ const DoctorProfilePage: React.FC = () => {
         </IonModal>
 
         <IonModal isOpen={educationModal}>
+		
           <IonGrid>
-            <IonRow>
-              <IonItem>
-                <IonLabel position="floating">
+		  <IonLabel position="fixed">
                   Education(Degree, University)
                 </IonLabel>
+            <IonRow>
+              <IonItem>
+                
                 <IonInput
                   value={education}
                   onIonChange={(event) => setEducation(event.detail.value)}

@@ -239,13 +239,24 @@ const AppointmentsPage: React.FC = () => {
           Already have an account?
         </IonButton>
       )}
+	  {
+		  !(user?.isPatient) && (
+			<IonButton color="warning" onClick={() => history.push("/zoom")}>
+				Talk now
+		  	</IonButton>
+		  )
+	  }
       {loggedIn && (
-        <div>
+		  (currentAppointments.length == 0 && upcomingAppointments.length == 0 && pastAppointments.length == 0) ?(
+				<IonListHeader><h2>You have no appointments!!!</h2></IonListHeader>
+		  ) :
+        (<div>
           <IonList>
             <IonListHeader lines="inset">
               <IonLabel>Current Appointments</IonLabel>
             </IonListHeader>
-            {currentAppointments.map((appointment) => (
+            {currentAppointments.length == 0 ? (<IonListHeader><h6>You have no current appointments!!!</h6></IonListHeader>) :
+			(currentAppointments.map((appointment) => (
               <IonItem key={appointment.id}>
                 <IonLabel>
                   {/* <h2>{formatDate(entry.date)}</h2>
@@ -261,13 +272,15 @@ const AppointmentsPage: React.FC = () => {
                   Join now
                 </IonButton>
               </IonItem>
-            ))}
+            )))
+			}
           </IonList>
           <IonList>
             <IonListHeader lines="inset">
               <IonLabel>Upcoming Appointments</IonLabel>
             </IonListHeader>
-            {upcomingAppointments.map((appointment) => (
+            {upcomingAppointments.length == 0 ? (<IonListHeader><h6>You have no upcoming appointments!!!</h6></IonListHeader>) :
+			(upcomingAppointments.map((appointment) => (
               <IonItem key={appointment.id}>
                 <IonLabel>
                   {/* <h2>{formatDate(entry.date)}</h2>
@@ -284,13 +297,14 @@ const AppointmentsPage: React.FC = () => {
                   Scheduled
                 </IonButton>
               </IonItem>
-            ))}
+            )))}
           </IonList>
           <IonList>
             <IonListHeader lines="inset">
               <IonLabel>Past Appointments</IonLabel>
             </IonListHeader>
-            {pastAppointments.map((appointment) => (
+            {pastAppointments.length == 0 ? (<IonListHeader><h6>You have no past appointments!!!</h6></IonListHeader>) :
+			(pastAppointments.map((appointment) => (
               <IonItem key={appointment.id}>
                 <IonLabel>
                   {/* <h2>{formatDate(entry.date)}</h2>
@@ -300,9 +314,9 @@ const AppointmentsPage: React.FC = () => {
                   )}
                 </IonLabel>
               </IonItem>
-            ))}
+            )))}
           </IonList>
-        </div>
+        </div>)
       )} 
        </IonContent> 
     </IonPage>

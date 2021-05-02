@@ -19,9 +19,10 @@ import data from "../data/conditionSpecialtyMap";
 import Doctors from "./Doctors";
 import { useAuth } from "../auth";
 import { Helmet } from "react-helmet";
-import ReactPaginate from 'react-paginate';
+import { useHistory } from "react-router-dom";
 
 const HomePage: React.FC = () => {
+  let history = useHistory();
   const [searchText, setSearchText] = useState("");
   const [doctorInfo, setDoctorInfo] = useState([]);
   const [timeSlotInfo, setTimeslotInfo] = useState([]);
@@ -35,11 +36,16 @@ const HomePage: React.FC = () => {
     setSearchText(e.detail.value);
   };
 
-  const onClickHandler = async () => {
+  const onClickMostSearchedWord = (e, word) => {
+	setSearchText(word);
+
+  }
+
+  const onClickHandler = async (name?) => {
     setHideTitle(true);
     setHideMostSearchedWords(true);
 
-    const specialties = data[searchText];
+    const specialties = searchText != "" ? data[searchText] : data[name];
     let doctors = [],
       times = [],
       appointments = [];
@@ -231,7 +237,7 @@ const HomePage: React.FC = () => {
               return (
                 <IonCol>
                   <IonCard color="warning" style={{ Size: "2em" }}>
-                    <IonCardContent>
+                    <IonCardContent onClick={(e) => {onClickMostSearchedWord(e, name)}}>
                       {(name.length % 3 == 0 && (
                         <h1>{name.charAt(0).toUpperCase() + name.slice(1)}</h1>
                       )) ||
