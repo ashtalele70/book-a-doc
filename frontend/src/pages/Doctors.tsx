@@ -93,7 +93,7 @@ const Doctors: React.FC<props> = (props: props): any => {
             });
         });
       });*/
-  }, [entry]);
+  }, [props, entry]);
 
   function daysOfWeek() {
     let startDate = new Date();
@@ -184,10 +184,10 @@ const Doctors: React.FC<props> = (props: props): any => {
     //   Object.keys(timeslots).map((key, value) => {
     let i;
     let numberOfItems = showMore[index]
-      ? timeslots.length
-      : timeslots.length > 5
+      ? timeslots?.length
+      : timeslots?.length > 5
       ? 5
-      : timeslots.length; //timeslots.length > 5 ? 5 : timeslots.length;
+      : timeslots?.length; //timeslots.length > 5 ? 5 : timeslots.length;
     // console.log(timeslotArray); 2.3 for iphone .9 for web
     table.push(
       <IonRow>
@@ -219,30 +219,30 @@ const Doctors: React.FC<props> = (props: props): any => {
       let arr = new Array(7).fill(tempDate);
       //data to be added
 
-      console.log("grey");
-      console.log(grey);
+      // console.log("grey");
+      // console.log(grey);
 
-      children = arr.map((child, childIndex) => {
-        console.log("date");
-        console.log(child);
-        console.log(child.getTime() / 1000 + childIndex * 24 * 60 * 60);
-        console.log(child.getTime() + childIndex * 24 * 60 * 60 * 1000);
-        console.log(currentTime.getTime());
-      });
+      // children = arr.map((child, childIndex) => {
+      //   console.log("date");
+      //   console.log(child);
+      //   console.log(child.getTime() / 1000 + childIndex * 24 * 60 * 60);
+      //   console.log(child.getTime() + childIndex * 24 * 60 * 60 * 1000);
+      //   console.log(currentTime.getTime());
+      // });
 
       children = arr.map((child, childIndex) => (
         <IonCol size="0.9" col-12 col-xl-2 col-lg-3 col-md-4>
           <IonButton
             id={(
-              child.getTime() / 1000 +
+              child?.getTime() / 1000 +
               childIndex * 24 * 60 * 60 +
               index
             ).toString()}
             disabled={
-              grey.includes(
-                child.getTime() / 1000 + childIndex * 24 * 60 * 60
+              grey?.includes(
+                child?.getTime() / 1000 + childIndex * 24 * 60 * 60
               ) ||
-              child.getTime() + childIndex * 24 * 60 * 60 * 1000 <
+              child?.getTime() + childIndex * 24 * 60 * 60 * 1000 <
                 currentTime.getTime()
                 ? true
                 : false
@@ -254,12 +254,12 @@ const Doctors: React.FC<props> = (props: props): any => {
                 cssClass: "my-custom-class",
                 header: "Appointment Details",
                 message:
-                  child.toLocaleDateString("en-US", {
+                  child?.toLocaleDateString("en-US", {
                     weekday: "long",
                     year: "numeric",
                     month: "long",
                     day: "numeric",
-                  }) + child.toLocaleTimeString("en-US"),
+                  }) + child?.toLocaleTimeString("en-US"),
                 buttons: [
                   "Cancel",
                   {
@@ -371,9 +371,9 @@ const Doctors: React.FC<props> = (props: props): any => {
           {/*<table>{getRows()}</table>*/}
           <IonCol size="6">
             <IonGrid id="scheduleTable">
-              {getRows(timeSlot[value], value, entry[key].id)}
+              {timeSlot && getRows(timeSlot[value], value, entry[key].id)}
             </IonGrid>
-            {timeSlot[value].length > 5 && (
+            {timeSlot && timeSlot[value]?.length > 5 && (
               <IonButton id={"myBtn" + key} onClick={() => handleClick(key)}>
                 Read More
               </IonButton>
@@ -383,6 +383,9 @@ const Doctors: React.FC<props> = (props: props): any => {
       </IonItem>
     );
   });
+
+  
+
   return (
     <React.Fragment>
       <Helmet>
