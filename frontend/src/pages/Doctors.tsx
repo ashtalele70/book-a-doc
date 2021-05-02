@@ -71,7 +71,6 @@ const Doctors: React.FC<props> = (props: props): any => {
           };
           console.log(doctorInfo);
           setEntry((entry) => [...entry, doctorInfo]);
-
           let timeSlotInfo = [];
           doc.ref
             .collection("timeslots")
@@ -82,9 +81,7 @@ const Doctors: React.FC<props> = (props: props): any => {
                 //console.log(doc.id, " => ", timeslot.data());
                 let timehhmm = timeslot.data().time.split(":");
                 var d = new Date();
-
                 d.setHours(timehhmm[0], timehhmm[1], 0, 0);
-
                
                 if (d > new Date()) {
                  
@@ -387,7 +384,7 @@ const Doctors: React.FC<props> = (props: props): any => {
     );
   });
   return (
-    <IonPage>
+    <React.Fragment>
       <Helmet>
         <meta
           name="description"
@@ -395,10 +392,6 @@ const Doctors: React.FC<props> = (props: props): any => {
         />
       </Helmet>
       <IonItem>
-        <IonHeader>
-          <h1 style={{ color: "#2dd36f", fontWeight: 600 }}>Book-a-Doc</h1>
-          <IonTitle color="primary">{entry && entry.length} results</IonTitle>
-        </IonHeader>
         <IonToolbar>
           <IonTitle color="primary">{entry && entry.length} results</IonTitle>
         </IonToolbar>
@@ -436,7 +429,7 @@ const Doctors: React.FC<props> = (props: props): any => {
         </div>
       </IonItem>
       {list}
-    </IonPage>
+    </React.Fragment>
   );
 };
 

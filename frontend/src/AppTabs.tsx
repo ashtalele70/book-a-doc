@@ -105,11 +105,12 @@ const AppTabs: React.FC = () => {
           <IonIcon icon={homeIcon} />
           <IonLabel>Search</IonLabel>
         </IonTabButton>
-
-        <IonTabButton tab="appointments" href="/appointments">
-          <IonIcon icon={timeOutline} />
-          <IonLabel>Appointments</IonLabel>
-        </IonTabButton>
+        {loggedIn && (
+          <IonTabButton tab="appointments" href="/appointments">
+            <IonIcon icon={timeOutline} />
+            <IonLabel>Appointments</IonLabel>
+          </IonTabButton>
+        )}  
         {!loggedIn && (
           <IonTabButton tab="login-signup" href="/login-signup">
             <IonIcon icon={personCircleOutline} />

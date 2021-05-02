@@ -232,13 +232,15 @@ const AppointmentsPage: React.FC = () => {
       <IonToolbar>
         <IonTitle color="warning">Appointments</IonTitle>
       </IonToolbar>
+     
+      <IonContent className="ion-padding">
       {!loggedIn && (
         <IonButton expand="block" fill="clear" routerLink="/login">
           Already have an account?
         </IonButton>
       )}
       {loggedIn && (
-        <IonContent className="ion-padding">
+        <div>
           <IonList>
             <IonListHeader lines="inset">
               <IonLabel>Current Appointments</IonLabel>
@@ -300,8 +302,9 @@ const AppointmentsPage: React.FC = () => {
               </IonItem>
             ))}
           </IonList>
-        </IonContent>
-      )}
+        </div>
+      )} 
+       </IonContent> 
     </IonPage>
   );
 };
