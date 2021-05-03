@@ -1,4 +1,5 @@
 import { IonPage } from "@ionic/react";
+import { useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../auth";
 import { firestore } from "../firebase";
@@ -6,15 +7,24 @@ import { User, toUser } from "../models/user";
 import { useHistory } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { ZoomMtg } from "@zoomus/websdk";
+interface IState {
+  doctorID?: "";
+}
 
 const crypto = require("crypto");
 
 const ZoomMeeting: React.FC = () => {
   const { userId } = useAuth();
+  const zoomUserName = "patient";
   //const [isPatient, setIsPatient] = useState(false);
   const [leaveUrl, setLeaveUrl] = useState("http://localhost:3000/feedback");
+  const [doctorID, setDoctorID] = useState("");
+  const [patientName, setPatientName] = useState("");
+  const location = useLocation<IState>();
 
   useEffect(() => {
+    setDoctorID(location.state.doctorID);
+
     firestore
       .collection("users")
       .doc(userId)
@@ -64,9 +74,9 @@ const ZoomMeeting: React.FC = () => {
 
   var apiKey = "S9-p4L87SFWDpFkpsUj9fg";
   var apiSecret = "v3CPKnBmKcReC5GJEaSwapLRNzquN3a7H2H1";
-  var meetingNumber = 8085861668;
+  var meetingNumber = 7238894301;
 
-  var userName = "WebSDK";
+  var userName = zoomUserName;
   var userEmail = "terrylinda13@gmail.com";
   var passWord = "hH6BwE";
 
@@ -84,7 +94,7 @@ const ZoomMeeting: React.FC = () => {
         ZoomMtg.join({
           signature: signature,
           meetingNumber: meetingNumber,
-          userName: userName,
+          userName: zoomUserName,
           apiKey: apiKey,
           userEmail: userEmail,
           passWord: passWord,

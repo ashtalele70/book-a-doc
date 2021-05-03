@@ -30,18 +30,19 @@ const PatientFeedback: React.FC = (): any => {
   const history = useHistory();
 
   function handleSaveDetails() {
-	const userData = { userId: userId,  
-		date: new Date(),
-        patientID: userId,
-        review: comments,
-        rating: rating};
-	axios.post(rooturl + '/addFeedback', userData)
-	.then(res => {
-		if(res.status === 200) {
-			console.log('Saved:');
-			history.push("/payment")
-		}
-	})
+    const userData = {
+      userId: userId,
+      date: new Date(),
+      patientID: userId,
+      review: comments,
+      rating: rating,
+    };
+    axios.post(rooturl + "/addFeedback", userData).then((res) => {
+      if (res.status === 200) {
+        console.log("Saved:");
+        history.push("/payment");
+      }
+    });
   }
   return (
     <IonPage>

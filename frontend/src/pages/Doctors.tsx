@@ -45,6 +45,7 @@ const Doctors: React.FC<props> = (props: props): any => {
   //const [grey, setGrey] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const [text, setText] = useState("Read More");
+  const { loggedIn } = useAuth();
   const [present] = useIonAlert();
   const { userId } = useAuth();
   const history = useHistory();
@@ -54,6 +55,7 @@ const Doctors: React.FC<props> = (props: props): any => {
     settimeSlot(props.timeSlotInfo);
     setShowMore(Array.from({ length: entry.length }, (i) => (i = false)));
     setAppointments(props.appointmentInfo);
+
     //setGrey(appointments);
     console.log(props.appointmentInfo);
     console.log(props.appointmentInfo && props.appointmentInfo[0]);
@@ -249,33 +251,46 @@ const Doctors: React.FC<props> = (props: props): any => {
             }
             expand="block"
             color="warning"
-            onClick={() =>
-              present({
-                cssClass: "my-custom-class",
-                header: "Appointment Details",
-                message:
-                  child?.toLocaleDateString("en-US", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  }) + child?.toLocaleTimeString("en-US"),
-                buttons: [
-                  "Cancel",
-                  {
-                    text: "Confirm",
-                    handler: (d) =>
-                      scheduleAppointment(
-                        child,
-                        Number(childIndex),
-                        doctorID,
-                        index
-                      ),
-                  },
-                ],
-                onDidDismiss: (e) => console.log("did dismiss"),
-              })
-            }
+            onClick={() => {
+              if (loggedIn) {
+                present({
+                  cssClass: "my-custom-class",
+                  header: "Appointment Details",
+                  message:
+                    child?.toLocaleDateString("en-US", {
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    }) + child?.toLocaleTimeString("en-US"),
+                  buttons: [
+                    "Cancel",
+                    {
+                      text: "Confirm",
+                      handler: (d) =>
+                        scheduleAppointment(
+                          child,
+                          Number(childIndex),
+                          doctorID,
+                          index
+                        ),
+                    },
+                  ],
+                  onDidDismiss: (e) => console.log("did dismiss"),
+                });
+              } else {
+                present({
+                  cssClass: "my-css",
+                  header: "Oops:(",
+                  message: "Please Login to schedule an appointment.",
+                  buttons: [
+                    "Cancel",
+                    { text: "Ok", handler: (d) => console.log("ok pressed") },
+                  ],
+                  onDidDismiss: (e) => console.log("did dismiss"),
+                });
+              }
+            }}
           >
             {timeslots[i] &&
               timeslots[i].toLocaleTimeString([], {
@@ -327,8 +342,19 @@ const Doctors: React.FC<props> = (props: props): any => {
     }
   }
 
-  function zoomMeeting() {
-    history.push("/zoom");
+  function zoomMeeting(doctorID, patientName) {
+    loggedIn
+      ? history.push("/zoom", { doctorID: doctorID, patientName: patientName })
+      : present({
+          cssClass: "my-css",
+          header: "Oops:(",
+          message: "Please Login to speak to a doctor.",
+          buttons: [
+            "Cancel",
+            { text: "Ok", handler: (d) => console.log("ok pressed") },
+          ],
+          onDidDismiss: (e) => console.log("did dismiss"),
+        });
   }
 
   function viewProfile(key) {
@@ -362,7 +388,10 @@ const Doctors: React.FC<props> = (props: props): any => {
                 <IonLabel class="EBinfor">{row}</IonLabel>
               ))}
             {2 > 1 && (
-              <IonButton color="warning" onClick={() => history.push("/zoom")}>
+              <IonButton
+                color="warning"
+                onClick={() => zoomMeeting(entry[key].id, "username")}
+              >
                 Talk now
               </IonButton>
             )}
@@ -383,8 +412,6 @@ const Doctors: React.FC<props> = (props: props): any => {
       </IonItem>
     );
   });
-
-  
 
   return (
     <React.Fragment>

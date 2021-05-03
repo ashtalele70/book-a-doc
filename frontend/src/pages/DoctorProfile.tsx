@@ -21,15 +21,31 @@ import {
 import "./styleSheet.css";
 interface IState {
   info?: any[];
+  reviews?: any[];
 }
 
 const DoctorProfile: React.FC = (): any => {
   const [entry, setEntry] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const location = useLocation<IState>();
-
+  const appointments = [];
   useEffect(() => {
     setEntry(location.state.info);
-  });
+    //setReviews(location.state.info);
+
+    firestore
+      .collection("doctors/" + "1nOipQQaw5Zgd12zStb0dAxvR5x1" + "/reviews")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          console.log(reviews);
+          console.log(doc.data());
+          setReviews((reviews) => [...reviews, doc.data()]);
+          console.log(reviews);
+        });
+      });
+  }, []);
 
   return (
     <IonContent
@@ -94,7 +110,7 @@ const DoctorProfile: React.FC = (): any => {
               readonly={true}
             />
           </IonRow>
-          <IonRow>
+          {/*<IonRow>
             <IonLabel class="heading">Recent Reviews</IonLabel>
           </IonRow>
 
@@ -122,17 +138,34 @@ const DoctorProfile: React.FC = (): any => {
             <IonButton size="small" color="light">
               Read more Reviews
             </IonButton>
-          </IonRow>
+          </IonRow> */}
         </IonGrid>
       </IonItem>
       <IonItem>
         <IonGrid>
-          <IonRow>
-            <IonLabel class="heading">About Dr. Ramandeep Kaur</IonLabel>
-          </IonRow>
-          <IonRow>
-            <p>{entry && entry["about"]}</p>
-          </IonRow>
+          <IonLabel class="heading">Patient Reviews</IonLabel>
+
+          {reviews &&
+            reviews.map((row, index) => (
+              <div>
+                <IonRow>
+                  <p>{row["review"]}</p>
+                </IonRow>
+                <IonRow>
+                  <IonCol size="2.5">
+                    <Rating
+                      emptySymbol={<img src={starempty} className="icon" />}
+                      fullSymbol={<img src={starfull} className="icon" />}
+                      initialRating={row["rating"]}
+                      readonly={true}
+                    />
+                  </IonCol>
+                  <IonCol size="2.5">
+                    <p>{row["date"]}</p>
+                  </IonCol>
+                </IonRow>
+              </div>
+            ))}
         </IonGrid>
       </IonItem>
       <IonItem>
@@ -175,19 +208,6 @@ const DoctorProfile: React.FC = (): any => {
             <IonLabel class="sub-heading">NPI number</IonLabel>
           </IonRow>
           <IonRow class="EBinfor">{entry && entry["npiNumber"]}</IonRow>
-        </IonGrid>
-      </IonItem>
-      <IonItem>
-        <IonGrid>
-          <IonLabel class="heading">Patient Reviews</IonLabel>
-
-          {entry &&
-            entry["doctorRating"] &&
-            entry["doctorRating"].map((row, index) => (
-              <IonRow>
-                <p>{row.reviewComment}</p>
-              </IonRow>
-            ))}
         </IonGrid>
       </IonItem>
     </IonContent>
