@@ -8,6 +8,8 @@ import { useAuth } from "../auth";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { sendEmail } from "../data/email";
+import { zoomurl } from "../config";
 import {
   heart,
   chevronBackOutline as back,
@@ -43,6 +45,7 @@ const Doctors: React.FC<props> = (props: props): any => {
   const [entry, setEntry] = useState([]);
   const [timeSlot, settimeSlot] = useState([]);
   const [showMore, setShowMore] = useState([]);
+  const [reviewInfo, setReviewInfo] = useState([]);
   //const [grey, setGrey] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const [text, setText] = useState("Read More");
@@ -56,10 +59,12 @@ const Doctors: React.FC<props> = (props: props): any => {
     settimeSlot(props.timeSlotInfo);
     setShowMore(Array.from({ length: entry.length }, (i) => (i = false)));
     setAppointments(props.appointmentInfo);
+    setReviewInfo(props.reviewInfo);
 
     //setGrey(appointments);
     console.log(props.appointmentInfo);
     console.log(props.appointmentInfo && props.appointmentInfo[0]);
+    console.log(props.reviewInfo[0]);
     /*
     firestore
       .collection("doctors")
@@ -343,7 +348,14 @@ const Doctors: React.FC<props> = (props: props): any => {
     }
   }
 
-  function zoomMeeting(doctorID, patientName) {
+  function zoomMeeting(doctorID, doctorName, patientName) {
+    sendEmail(
+      doctorName,
+      "Patient " +
+        patientName +
+        "is waiting to meet you. Please join you meeting room" +
+        zoomurl
+    );
     loggedIn
       ? history.push("/zoom", { doctorID: doctorID, patientName: patientName })
       : present({
@@ -359,7 +371,10 @@ const Doctors: React.FC<props> = (props: props): any => {
   }
 
   function viewProfile(key) {
-    history.push("/viewProfile", { info: entry[key].info });
+    history.push("/viewProfile", {
+      info: entry[key].info,
+      reviewInfo: reviewInfo[key],
+    });
     //history.push('/search-results', { entry[key].id });
     // history.push("/viewProfile")
   }
@@ -391,7 +406,16 @@ const Doctors: React.FC<props> = (props: props): any => {
             {2 > 1 && (
               <IonButton
                 color="warning"
-                onClick={() => zoomMeeting(entry[key].id, "username")}
+                onClick={() =>
+                  zoomMeeting(
+                    entry[key].id,
+                    "Dr." +
+                      entry[key].info.firstname +
+                      " " +
+                      entry[key].info.lastname,
+                    "username"
+                  )
+                }
               >
                 Talk now
               </IonButton>

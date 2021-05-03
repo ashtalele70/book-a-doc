@@ -7,6 +7,7 @@ import { User, toUser } from "../models/user";
 import { useHistory } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { ZoomMtg } from "@zoomus/websdk";
+import { zoomMeetingNumber } from "../config";
 interface IState {
   doctorID?: "";
 }
@@ -74,7 +75,7 @@ const ZoomMeeting: React.FC = () => {
 
   var apiKey = "S9-p4L87SFWDpFkpsUj9fg";
   var apiSecret = "v3CPKnBmKcReC5GJEaSwapLRNzquN3a7H2H1";
-  var meetingNumber = 7238894301;
+  var meetingNumber = zoomMeetingNumber;
 
   var userName = zoomUserName;
   var userEmail = "terrylinda13@gmail.com";
