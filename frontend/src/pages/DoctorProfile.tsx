@@ -161,7 +161,12 @@ const DoctorProfile: React.FC = (): any => {
                     />
                   </IonCol>
                   <IonCol size="2.5">
-                    <p>{row["date"]}</p>
+                    <p>
+                      {row["date"].toDate().toLocaleDateString("en-US", {
+                        timeZone: "UTC",
+                        timeZoneName: "short",
+                      })}
+                    </p>
                   </IonCol>
                 </IonRow>
               </div>

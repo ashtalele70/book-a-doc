@@ -8,9 +8,6 @@ import { useHistory } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { ZoomMtg } from "@zoomus/websdk";
 import { zoomMeetingNumber } from "../config";
-interface IState {
-  doctorID?: "";
-}
 
 const crypto = require("crypto");
 
@@ -19,13 +16,11 @@ const ZoomMeeting: React.FC = () => {
   const zoomUserName = "patient";
   //const [isPatient, setIsPatient] = useState(false);
   const [leaveUrl, setLeaveUrl] = useState("http://localhost:3000/feedback");
-  const [doctorID, setDoctorID] = useState("");
-  const [patientName, setPatientName] = useState("");
-  const location = useLocation<IState>();
+  // const [doctorID, setDoctorID] = useState("");
+  // const [patientName, setPatientName] = useState("");
+  // const location = useLocation<IState>();
 
   useEffect(() => {
-    setDoctorID(location.state.doctorID);
-
     firestore
       .collection("users")
       .doc(userId)
@@ -46,7 +41,7 @@ const ZoomMeeting: React.FC = () => {
       })
       .catch((e) => console.log(e));
     //console.log(isPatient);
-    console.log("pp");
+
     // console.log(isPatient === true);
     console.log(leaveUrl);
   }, [leaveUrl]);

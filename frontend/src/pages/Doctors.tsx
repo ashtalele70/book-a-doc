@@ -353,7 +353,7 @@ const Doctors: React.FC<props> = (props: props): any => {
       doctorName,
       "Patient " +
         patientName +
-        "is waiting to meet you. Please join you meeting room" +
+        " is waiting to meet you. Please join your meeting room " +
         zoomurl
     );
     loggedIn
