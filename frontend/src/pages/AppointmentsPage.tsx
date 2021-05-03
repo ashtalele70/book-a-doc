@@ -16,8 +16,9 @@ import { formatDate } from "../data/date";
 import { useHistory } from "react-router-dom";
 import { toUser, User } from "../models/user";
 import axios from "axios";
-import { rooturl } from "../config";
+import { rooturl, zoomurl } from "../config";
 import { Helmet } from "react-helmet";
+import { sendEmail } from "../data/email";
 
 const AppointmentsPage: React.FC = () => {
   const history = useHistory();
@@ -62,6 +63,7 @@ const AppointmentsPage: React.FC = () => {
           docs.map((doc) => ({
             id: doc.id,
             date: doc.data().date,
+			doctorID: doc.data().doctorID
           }))
         )
       );
@@ -89,6 +91,7 @@ const AppointmentsPage: React.FC = () => {
           docs.map((doc) => ({
             id: doc.id,
             date: doc.data().date,
+			doctorID: doc.data().doctorID
           }))
         )
       );
@@ -120,10 +123,34 @@ const AppointmentsPage: React.FC = () => {
           docs.map((doc) => ({
             id: doc.id,
             date: doc.data().date,
+			doctorID: doc.data().doctorID
           }))
         )
       );
   }, [user?.isPatient, userId]);
+
+  const joinNow = (appointment) => {
+	
+
+	// fetch doctor from doct table
+	if(user.isPatient) {
+		let userData = new URLSearchParams();
+		userData.set("id", appointment.doctorID);
+		sessionStorage.setItem("doctorID", appointment.doctorID);
+		axios.get(rooturl + "/getDoctor?" + userData.toString()).then((res) => {
+		  if (res.status === 200) {
+			// console.log(res);
+			sendEmail(
+			"Dr. " + res.data.firstname + " " + res.data.lastname,
+			"Patient " +
+			  localStorage.getItem("firstname") + " " + localStorage.getItem("lastname") +
+			  " is waiting to meet you. Please join you meeting room" +
+			  zoomurl)
+		  }
+		});	
+	}
+	history.push("/zoom");
+  }
 
   // const AppointmentsPage: React.FC = () => {
   //   const history = useHistory();
@@ -267,7 +294,7 @@ const AppointmentsPage: React.FC = () => {
                 </IonLabel>
                 <IonButton
                   color="warning"
-                  onClick={() => history.push("/zoom")}
+                  onClick={() => joinNow(appointment)}
                 >
                   Join now
                 </IonButton>

@@ -12,11 +12,14 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Redirect } from "react-router";
 import { useAuth } from "../auth";
 import { auth } from "../firebase";
 import { Helmet } from "react-helmet";
+import axios from "axios";
+import { rooturl } from "../config";
+import { toUser, User } from "../models/user";
 const LoginPage: React.FC = () => {
   const { loggedIn } = useAuth();
   const [email, setEmail] = useState("");
@@ -29,12 +32,83 @@ const LoginPage: React.FC = () => {
       setStatus({ loading: true, error: false });
       const credential = await auth.signInWithEmailAndPassword(email, password);
       console.log("credential:", credential);
+	  let userData = new URLSearchParams();
+	  userData.set("id", credential?.user?.uid);
+	axios.get(rooturl + "/getUser?" + userData.toString()).then((res) => {
+	if (res.status === 200) {
+
+		if(res.data.isPatient && !res.data.isAdmin) {
+			//patient
+			let userData = new URLSearchParams();
+			userData.set("id", credential?.user?.uid);
+			axios.get(rooturl + "/getPatient?" + userData.toString()).then((res) => {
+			  if (res.status === 200) {
+				localStorage.setItem("firstname", res.data.firstname);
+				localStorage.setItem("lastname", res.data.lastname);
+			  }
+			});	
+	
+		} else if(!res.data.isPatient && !res.data.isAdmin){
+			//doctor
+			let userData = new URLSearchParams();
+			userData.set("id", credential?.user?.uid);
+			axios.get(rooturl + "/getDoctor?" + userData.toString()).then((res) => {
+			  if (res.status === 200) {
+				localStorage.setItem("firstname", res.data.firstname);
+				localStorage.setItem("lastname", res.data.lastname);
+			  }
+			});	
+		}
+	}
+	});
+
+
+	
+
+
     } catch (error) {
       setStatus({ loading: false, error: true });
       setErrorMessage(error.message);
       console.log("error:", error);
     }
   };
+
+//   useEffect(() => {
+// 	let userData = new URLSearchParams();
+//     userData.set("id", uid);
+
+//     axios.get(rooturl + "/getUser?" + userData.toString()).then((res) => {
+//       if (res.status === 200) {
+//         setUser(toUser(res.data));
+//       }
+//     });
+//   }, [uid]);
+
+//   useEffect(() => {
+	
+// 	if(user?.isPatient && !user?.isAdmin) {
+// 		//patient
+// 		let userData = new URLSearchParams();
+// 		userData.set("id", uid);
+// 		axios.get(rooturl + "/getPatient?" + userData.toString()).then((res) => {
+// 		  if (res.status === 200) {
+// 			localStorage.setItem("firstname", res.data.firstname);
+// 			localStorage.setItem("lastname", res.data.lastname);
+// 		  }
+// 		});	
+
+// 	} else if(!user?.isPatient && !user?.isAdmin){
+// 		//doctor
+// 		let userData = new URLSearchParams();
+// 		userData.set("id", uid);
+// 		axios.get(rooturl + "/getDoctor?" + userData.toString()).then((res) => {
+// 		  if (res.status === 200) {
+// 			localStorage.setItem("firstname", res.data.firstname);
+// 			localStorage.setItem("lastname", res.data.lastname);
+// 		  }
+// 		});	
+// 	}
+//   }, [user]);
 
   // 	if (loggedIn) {
   // 	  return <Redirect to="/doctorHome" />;

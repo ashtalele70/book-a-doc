@@ -17,6 +17,8 @@ import { Redirect } from "react-router";
 import { useAuth } from "../auth";
 import { auth } from "../firebase";
 import { Helmet } from "react-helmet";
+import axios from "axios";
+import { rooturl } from "../config";
 
 const LoginDoctorPage: React.FC = () => {
   const { loggedIn } = useAuth();
@@ -30,6 +32,35 @@ const LoginDoctorPage: React.FC = () => {
       setStatus({ loading: true, error: false });
       const credential = await auth.signInWithEmailAndPassword(email, password);
       console.log("credential:", credential);
+	  let userData = new URLSearchParams();
+	  userData.set("id", credential?.user?.uid);
+	axios.get(rooturl + "/getUser?" + userData.toString()).then((res) => {
+	if (res.status === 200) {
+
+		if(res.data.isPatient && !res.data.isAdmin) {
+			//patient
+			let userData = new URLSearchParams();
+			userData.set("id", credential?.user?.uid);
+			axios.get(rooturl + "/getPatient?" + userData.toString()).then((res) => {
+			  if (res.status === 200) {
+				localStorage.setItem("firstname", res.data.firstname);
+				localStorage.setItem("lastname", res.data.lastname);
+			  }
+			});	
+	
+		} else if(!res.data.isPatient && !res.data.isAdmin){
+			//doctor
+			let userData = new URLSearchParams();
+			userData.set("id", credential?.user?.uid);
+			axios.get(rooturl + "/getDoctor?" + userData.toString()).then((res) => {
+			  if (res.status === 200) {
+				localStorage.setItem("firstname", res.data.firstname);
+				localStorage.setItem("lastname", res.data.lastname);
+			  }
+			});	
+		}
+	}
+	});
     } catch (error) {
       setStatus({ loading: false, error: true });
       setErrorMessage(error.message);
