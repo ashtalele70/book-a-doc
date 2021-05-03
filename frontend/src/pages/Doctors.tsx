@@ -357,7 +357,7 @@ const Doctors: React.FC<props> = (props: props): any => {
         zoomurl
     );
     loggedIn
-      ? history.push("/zoom", { doctorID: doctorID, patientName: patientName })
+      ? history.push("/zoom")
       : present({
           cssClass: "my-css",
           header: "Oops:(",
