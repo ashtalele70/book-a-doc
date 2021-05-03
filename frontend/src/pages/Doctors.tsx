@@ -35,6 +35,7 @@ type props = {
   doctorInfo: any[];
   timeSlotInfo: any[];
   appointmentInfo: any[];
+  reviewInfo: any[];
 };
 
 const Doctors: React.FC<props> = (props: props): any => {

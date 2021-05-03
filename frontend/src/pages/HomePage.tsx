@@ -28,6 +28,7 @@ const HomePage: React.FC = () => {
   const [doctorInfo, setDoctorInfo] = useState([]);
   const [timeSlotInfo, setTimeslotInfo] = useState([]);
   const [appointmentInfo, setAppointmentInfo] = useState([]);
+  const [reviewInfo, setReviewInfo] = useState([]);
   const [hideTitle, setHideTitle] = useState(false);
   const [hideMostSearchedWords, setHideMostSearchedWords] = useState(false);
   const { loggedIn } = useAuth();
@@ -49,9 +50,7 @@ const HomePage: React.FC = () => {
     setHideMostSearchedWords(true);
 
     const specialties = data[searchText];
-    let doctors = [],
-      times = [],
-      appointments = [];
+    let doctors = [], times = [], appointments = [], reviews = [];
 
     const doctorRef = await firestore.collection("doctors").get();
     doctorRef.forEach((doc) => {
@@ -90,6 +89,15 @@ const HomePage: React.FC = () => {
         apts.push(doc.data().date.seconds);
       });
       appointments.push(apts);
+
+      const reviewRef = await firestore
+        .collection("doctors/" + doctor.id + "/reviews")
+        .get();
+      let reviewData = [];
+      reviewRef.forEach((doc) => {
+        reviewData.push(doc.data());
+      });
+      reviews.push(reviewData);
     }
     
     if(doctors) {
@@ -108,6 +116,7 @@ const HomePage: React.FC = () => {
     if(5 < doctors.length) setDoctorInfo(doctors.slice(0, 5));
     if(5 < times.length) setTimeslotInfo(times.slice(0, 5));
     if(5 < appointments.length) setAppointmentInfo(appointments.slice(0, 5));
+    if(5 < reviews.length) setReviewInfo(reviews.slice(0, 5));
     // setIsSearchClicked(true);
     setIsLoading(false);
   };
@@ -117,9 +126,7 @@ const HomePage: React.FC = () => {
     let startIndex = (page - 1) * 5;
 
     const specialties = data[searchText];
-    let doctors = [],
-      times = [],
-      appointments = [];
+    let doctors = [], times = [], appointments = [], reviews = [];
 
     const doctorRef = await firestore.collection("doctors").get();
     doctorRef.forEach((doc) => {
@@ -158,6 +165,15 @@ const HomePage: React.FC = () => {
         apts.push(doc.data().date.seconds);
       });
       appointments.push(apts);
+
+      const reviewRef = await firestore
+        .collection("doctors/" + doctor.id + "/reviews")
+        .get();
+      let reviewData = [];
+      reviewRef.forEach((doc) => {
+        reviewData.push(doc.data());
+      });
+      reviews.push(reviewData);
     }
 
     if(startIndex + 5 < doctors.length) {
@@ -178,6 +194,13 @@ const HomePage: React.FC = () => {
     }
     else {
       setAppointmentInfo(appointments.slice(startIndex));
+    }
+
+    if(startIndex + 5 < reviews.length) {
+      setReviewInfo(reviews.slice(startIndex, startIndex + 5));
+    }
+    else {
+      setReviewInfo(reviews.slice(startIndex));
     }
     //setActivePage(page);
   }
@@ -227,6 +250,7 @@ const HomePage: React.FC = () => {
               timeSlotInfo={timeSlotInfo}
               doctorInfo={doctorInfo}
               appointmentInfo={appointmentInfo}
+              reviewInfo={reviewInfo}
             />
           )}
           <IonRow>
