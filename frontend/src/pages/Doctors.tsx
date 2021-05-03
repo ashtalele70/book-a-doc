@@ -349,6 +349,7 @@ const Doctors: React.FC<props> = (props: props): any => {
   }
 
   function zoomMeeting(doctorID, doctorName, patientName) {
+    sessionStorage.setItem("doctorID", "doctorID");
     sendEmail(
       doctorName,
       "Patient " +
@@ -371,6 +372,7 @@ const Doctors: React.FC<props> = (props: props): any => {
   }
 
   function viewProfile(key) {
+    console.log(reviewInfo[key]);
     history.push("/viewProfile", {
       info: entry[key].info,
       reviewInfo: reviewInfo[key],

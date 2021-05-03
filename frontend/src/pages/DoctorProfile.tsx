@@ -3,8 +3,13 @@ import { useLocation } from "react-router-dom";
 import Rating from "react-rating";
 import starempty from "./images/star-empty.png";
 import starfull from "./images/star-full.png";
+import starYellow from "./images/star-yellow.png";
 import { firestore } from "../firebase";
 import { Helmet } from "react-helmet";
+import SvgIcon from "@material-ui/core";
+import ReactStars from "react-rating-stars-component";
+import { informationCircleOutline } from "ionicons/icons";
+
 import {
   IonButton,
   IonContent,
@@ -17,11 +22,12 @@ import {
   IonCol,
   IonText,
   IonHeader,
+  IonIcon,
 } from "@ionic/react";
 import "./styleSheet.css";
 interface IState {
   info?: any[];
-  reviews?: any[];
+  reviewInfo?: any[];
 }
 
 const DoctorProfile: React.FC = (): any => {
@@ -31,22 +37,30 @@ const DoctorProfile: React.FC = (): any => {
   const appointments = [];
   useEffect(() => {
     setEntry(location.state.info);
-    //setReviews(location.state.info);
-
-    firestore
-      .collection("doctors/" + "1nOipQQaw5Zgd12zStb0dAxvR5x1" + "/reviews")
-      .get()
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          console.log(reviews);
-          console.log(doc.data());
-          setReviews((reviews) => [...reviews, doc.data()]);
-          console.log(reviews);
-        });
-      });
+    setReviews(location.state.reviewInfo);
+    let ratings = reviews?.map(function (element) {
+      return element["rating"];
+    });
+    // firestore
+    //   .collection("doctors/" + "1nOipQQaw5Zgd12zStb0dAxvR5x1" + "/reviews")
+    //   .get()
+    //   .then((querySnapshot) => {
+    //     querySnapshot.forEach((doc) => {
+    //       // doc.data() is never undefined for query doc snapshots
+    //       console.log(reviews);
+    //       console.log(doc.data());
+    //       setReviews((reviews) => [...reviews, doc.data()]);
+    //       console.log(reviews);
+    //     });
+    //   });
   }, []);
-
+  function getRating() {
+    let ratings = reviews?.map(function (element) {
+      return element["rating"];
+    });
+    console.log(ratings);
+    return ratings.reduce((a, b) => a + b, 0) / ratings.length;
+  }
   return (
     <IonContent
       scrollEvents={true}
@@ -79,11 +93,11 @@ const DoctorProfile: React.FC = (): any => {
               Dr. {entry && entry["firstname"]} {entry && entry["lastname"]}, MD
             </IonLabel>
           </IonRow>
-          <IonRow>
-            <IonLabel id="doctor-title">
-              Primary Care Doctor, Family Physician
-            </IonLabel>
-          </IonRow>
+          {entry &&
+            entry["specialties"] &&
+            entry["specialties"].map((row, index) => (
+              <IonRow class="EBinfor">{row}</IonRow>
+            ))}
           <IonRow>
             <IonLabel class="grey-label">
               {entry &&
@@ -100,14 +114,19 @@ const DoctorProfile: React.FC = (): any => {
           </IonRow>
 
           <IonRow>
-            <IonText id="rating">4.75</IonText>
+            <IonText id="rating">{getRating()}</IonText>
           </IonRow>
           <IonRow>
-            <Rating
-              emptySymbol={<img src={starempty} className="icon" />}
-              fullSymbol={<img src={starfull} className="icon" />}
-              initialRating={4.75}
-              readonly={true}
+            <ReactStars
+              count={5}
+              size={50}
+              value={4.5}
+              isHalf={true}
+              edit={false}
+              emptyIcon={<i className="far fa-star"></i>}
+              halfIcon={<i className="fa fa-star-half-alt"></i>}
+              fullIcon={<i className="fa fa-star"></i>}
+              activeColor="#ffd700"
             />
           </IonRow>
           {/*<IonRow>
@@ -153,18 +172,25 @@ const DoctorProfile: React.FC = (): any => {
                 </IonRow>
                 <IonRow>
                   <IonCol size="2.5">
-                    <Rating
-                      emptySymbol={<img src={starempty} className="icon" />}
-                      fullSymbol={<img src={starfull} className="icon" />}
-                      initialRating={row["rating"]}
-                      readonly={true}
+                    <ReactStars
+                      count={5}
+                      size={24}
+                      value={row["rating"]}
+                      isHalf={true}
+                      edit={false}
+                      emptyIcon={<i className="far fa-star"></i>}
+                      halfIcon={<i className="fa fa-star-half-alt"></i>}
+                      fullIcon={<i className="fa fa-star"></i>}
+                      activeColor="#ffd700"
                     />
                   </IonCol>
                   <IonCol size="2.5">
                     <p>
                       {row["date"].toDate().toLocaleDateString("en-US", {
-                        timeZone: "UTC",
-                        timeZoneName: "short",
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
                       })}
                     </p>
                   </IonCol>
@@ -210,7 +236,14 @@ const DoctorProfile: React.FC = (): any => {
           </IonRow>
           <IonRow class="EBinfor">{entry && entry["gender"]}</IonRow>
           <IonRow>
-            <IonLabel class="sub-heading">NPI number</IonLabel>
+            <div className="tooltip">
+              <IonLabel class="sub-heading">
+                NPI number
+                <span className="tooltiptext">
+                  National Provider Identifier
+                </span>
+              </IonLabel>
+            </div>
           </IonRow>
           <IonRow class="EBinfor">{entry && entry["npiNumber"]}</IonRow>
         </IonGrid>
