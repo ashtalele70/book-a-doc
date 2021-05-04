@@ -10,6 +10,7 @@ import { useHistory } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { sendEmail } from "../data/email";
 import { zoomurl } from "../config";
+import { useStateWithCallbackLazy } from "use-state-with-callback";
 import {
   heart,
   chevronBackOutline as back,
@@ -45,26 +46,58 @@ const Doctors: React.FC<props> = (props: props): any => {
   const [entry, setEntry] = useState([]);
   const [timeSlot, settimeSlot] = useState([]);
   const [showMore, setShowMore] = useState([]);
+  const [disableZoom, setDisableZoom] = useState(
+    Array.from({ length: 5 }, (i) => (i = false))
+  );
   const [reviewInfo, setReviewInfo] = useState([]);
   //const [grey, setGrey] = useState([]);
-  const [appointments, setAppointments] = useState([]);
+  const [appointments, setAppointments] = useStateWithCallbackLazy([]);
   const [text, setText] = useState("Read More");
   const { loggedIn } = useAuth();
   const [present] = useIonAlert();
   const { userId } = useAuth();
   const history = useHistory();
+  const [currentDate] = useState(new Date().getTime() / 1000);
+  var coff = 1000 * 60 * 30;
   let grey;
   useEffect(() => {
+    setAppointments(props.appointmentInfo, () => {
+      // setDisableZoom(Array.from({ length: entry.length }, (i) => (i = false)));
+      var now =
+        new Date(Math.floor(new Date().getTime() / coff) * coff).getTime() /
+        1000;
+      var i;
+      console.log("current time");
+      console.log(
+        new Date(Math.floor(new Date().getTime() / coff) * coff).getTime() /
+          1000
+      );
+
+      for (i = 0; i < appointments.length; i++) {
+        if (appointments[i].includes(now)) {
+          console.log("here?  ");
+          let newArr = [...disableZoom];
+          newArr[i] = true;
+          console.log("newArr", newArr);
+
+          setDisableZoom([...newArr]);
+          console.log("disable Zoom", disableZoom);
+        }
+      }
+    });
+
+    console.log(props.appointmentInfo);
     setEntry(props.doctorInfo);
     settimeSlot(props.timeSlotInfo);
     setShowMore(Array.from({ length: entry.length }, (i) => (i = false)));
-    setAppointments(props.appointmentInfo);
+    //setAppointments(props.appointmentInfo);
     setReviewInfo(props.reviewInfo);
-
     //setGrey(appointments);
     console.log(props.appointmentInfo);
-    console.log(props.appointmentInfo && props.appointmentInfo[0]);
     console.log(props.reviewInfo[0]);
+
+    //Check date
+
     /*
     firestore
       .collection("doctors")
@@ -101,7 +134,25 @@ const Doctors: React.FC<props> = (props: props): any => {
             });
         });
       });*/
-  }, [props, entry]);
+  }, [props, entry, appointments]);
+
+  // setInterval(function () {
+  //   var now =
+  //     new Date(Math.floor(new Date().getTime() / coff) * coff).getTime() / 1000;
+  //   var i;
+  //   console.log(
+  //     new Date(Math.floor(new Date().getTime() / coff) * coff).getTime() / 1000
+  //   );
+  //   if (appointments) {
+  //     for (i = 0; i < appointments.length; i++) {
+  //       if (appointments[i].includes(now)) {
+  //         let newArr = [...disableZoom];
+  //         newArr[i] = !showMore[i];
+  //         setDisableZoom(newArr);
+  //       }
+  //     }
+  //   }
+  // }, 60 * 1000);
 
   function daysOfWeek() {
     let startDate = new Date();
@@ -110,8 +161,6 @@ const Doctors: React.FC<props> = (props: props): any => {
     //console.log(Object.values(timeSlot));
 
     for (i = 1; i <= 7; i++) {
-      console.log(startDate.getDate());
-
       dates.push(
         startDate.toLocaleString("default", {
           weekday: "short",
@@ -140,8 +189,6 @@ const Doctors: React.FC<props> = (props: props): any => {
   }
 
   function scheduleAppointment(appointmentTime, noOfDays, doctorID, index) {
-    console.log(appointmentTime);
-    console.log(userId);
     let newDate = new Date(appointmentTime.getTime());
     let id = (
       appointmentTime.getTime() / 1000 +
@@ -405,9 +452,10 @@ const Doctors: React.FC<props> = (props: props): any => {
               entry[key].info.specialties.map((row, index) => (
                 <IonLabel class="EBinfor">{row}</IonLabel>
               ))}
-            {2 > 1 && (
+            {
               <IonButton
                 color="warning"
+                disabled={disableZoom[key]}
                 onClick={() =>
                   zoomMeeting(
                     entry[key].id,
@@ -421,7 +469,7 @@ const Doctors: React.FC<props> = (props: props): any => {
               >
                 Talk now
               </IonButton>
-            )}
+            }
           </IonCol>
 
           {/*<table>{getRows()}</table>*/}
