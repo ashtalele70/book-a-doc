@@ -212,7 +212,7 @@ const Admin: React.FC = (): any => {
     <IonPage>
       <IonHeader>
         <h1 style={{ color: "#2dd36f", fontWeight: 600 }}>{t('Book-a-Doc')}</h1>
-		<caption style={{ color: "#2dd36f", fontWeight: 400, width: 200 }}><h2>Doctors List</h2></caption>
+		<caption style={{ color: "#2dd36f", width: 100 }}>Doctor List</caption>
         <IonTitle color="primary">{entry && entry.length} {t('results')}</IonTitle>
         <IonRadioGroup value={language} onIonChange={e => handleLanguageChange(e.detail.value)}>
                 <IonRow>
