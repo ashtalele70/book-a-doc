@@ -3,14 +3,14 @@ const cors = require('cors');
 const frontEndURL = require('./hostname');
 const app = express();
 
-app.use(cors({ origin: frontEndURL.frontendurl, credentials: true }));
+app.use(cors());
 app.use(express.static('uploads'));
 // Connect Database
 // connectDB.connectDB();
 
 // Allow Access Control
 app.use((req, res, next) => {
-	res.setHeader('Access-Control-Allow-Origin', frontEndURL.frontendurl);
+	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.setHeader('Access-Control-Allow-Credentials', 'true');
 	res.setHeader(
 		'Access-Control-Allow-Methods',
@@ -35,6 +35,7 @@ app.use('/', require('./routes/appointments'));
 app.use('/', require('./routes/admin'));
 app.use('/', require('./routes/registerDoctor'));
 app.use('/', require('./routes/feedback'));
+app.use('/', require('./routes/getDoctors'));
 
 
 const PORT = process.env.PORT || 8080;
