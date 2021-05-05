@@ -35,6 +35,7 @@ app.use('/', require('./routes/appointments'));
 app.use('/', require('./routes/admin'));
 app.use('/', require('./routes/registerDoctor'));
 app.use('/', require('./routes/feedback'));
+app.use('/', require('./routes/getDoctors'));
 
 
 const PORT = process.env.PORT || 8080;
