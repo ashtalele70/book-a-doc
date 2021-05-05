@@ -51,7 +51,7 @@ const Doctors: React.FC<props> = (props: props): any => {
   );
   const [reviewInfo, setReviewInfo] = useState([]);
   //const [grey, setGrey] = useState([]);
-  const [appointments, setAppointments] = useStateWithCallbackLazy([]);
+  const [appointments, setAppointments] = useState([]);
   const [text, setText] = useState("Read More");
   const { loggedIn } = useAuth();
   const [present] = useIonAlert();
@@ -61,30 +61,7 @@ const Doctors: React.FC<props> = (props: props): any => {
   var coff = 1000 * 60 * 30;
   let grey;
   useEffect(() => {
-    setAppointments(props.appointmentInfo, () => {
-      // setDisableZoom(Array.from({ length: entry.length }, (i) => (i = false)));
-      var now =
-        new Date(Math.floor(new Date().getTime() / coff) * coff).getTime() /
-        1000;
-      var i;
-      console.log("current time");
-      console.log(
-        new Date(Math.floor(new Date().getTime() / coff) * coff).getTime() /
-          1000
-      );
-
-      for (i = 0; i < appointments.length; i++) {
-        if (appointments[i].includes(now)) {
-          console.log("here?  ");
-          let newArr = [...disableZoom];
-          newArr[i] = true;
-          console.log("newArr", newArr);
-
-          setDisableZoom([...newArr]);
-          console.log("disable Zoom", disableZoom);
-        }
-      }
-    });
+    setAppointments(props.appointmentInfo);
 
     console.log(props.appointmentInfo);
     setEntry(props.doctorInfo);
@@ -135,6 +112,32 @@ const Doctors: React.FC<props> = (props: props): any => {
         });
       });*/
   }, [props, entry, appointments]);
+
+
+  useEffect(() => {
+	var now =
+	new Date(Math.floor(new Date().getTime() / coff) * coff).getTime() /
+	1000;
+  var i;
+  console.log("current time");
+  console.log(
+	new Date(Math.floor(new Date().getTime() / coff) * coff).getTime() /
+	  1000
+  );
+
+  for (i = 0; i < appointments.length; i++) {
+	if (appointments[i].includes(now)) {
+	  console.log("here?  ");
+	  let newArr = [...disableZoom];
+	  newArr[i] = true;
+	  console.log("newArr", newArr);
+
+	  setDisableZoom([...newArr]);
+	  console.log("disable Zoom", disableZoom);
+	}
+  }
+
+  }, [appointments]);
 
   // setInterval(function () {
   //   var now =

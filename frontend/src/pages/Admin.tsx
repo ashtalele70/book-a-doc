@@ -19,14 +19,19 @@ import {
   IonPage,
   IonHeader,
   IonContent,
+  IonRadioGroup,
+  IonRadio,
 } from "@ionic/react";
 import "./styleSheet.css";
 import axios from "axios";
 import { rooturl } from "../config";
+import { useTranslation } from "react-i18next";
 
 const Admin: React.FC = (): any => {
   // const {doctorInfo, timeSlotInfo} = props;
+  const { t, i18n } = useTranslation();
   const [entry, setEntry] = useState<any>([]);
+  const [language, setLanguage] = useState("en");
 
   useEffect(() => {
     axios.get(rooturl + "/getEntries").then((res) => {
@@ -35,6 +40,11 @@ const Admin: React.FC = (): any => {
       }
     });
   }, []);
+
+  const handleLanguageChange = (newlang) => {
+    setLanguage(newlang);
+    i18n.changeLanguage(newlang);
+  };
 
   function handleApprove(key) {
     axios.post(rooturl + "/approve", { id: entry[key].id }).then((res) => {
@@ -114,7 +124,7 @@ const Admin: React.FC = (): any => {
           <IonCol>
             <IonRow>
               <IonCol id="heading" size="1.2">
-                Name:
+                {t("Name")}:
               </IonCol>
               <IonCol size="2.4">
                 Dr. {entry[key].info && entry[key].info.firstname}{" "}
@@ -124,43 +134,56 @@ const Admin: React.FC = (): any => {
 
             <IonRow>
               <IonCol id="heading" size="1.2">
-                Specialities:
+                {t("Specialities")}:
               </IonCol>
               <IonCol size="2.4">
                 <details>
                   <summary>show</summary>
 
-                  <datalist>
+                  {/* <datalist>
                     {entry[key].info &&
                       entry[key].info.specialties.map((row, index) => (
                         <option>{row} </option>
                       ))}
-                  </datalist>
+                  </datalist> */}
+
+                  <ul>
+                    {entry[key].info &&
+                      entry[key].info.specialties.map((row, index) => (
+                        <li>{row} </li>
+                      ))}
+                  </ul>
                 </details>
               </IonCol>
             </IonRow>
 
             <IonRow>
               <IonCol id="heading" size="1.2">
-                Education:
+                {t("Education")}:
               </IonCol>
               <IonCol size="2.4">
                 <details>
                   <summary>show</summary>
 
-                  <datalist>
+                  {/* <datalist>
                     {entry[key].info &&
                       entry[key].info.educations.map((row, index) => (
                         <option>{row} </option>
                       ))}
-                  </datalist>
+                  </datalist> */}
+                  <ul>
+                    {entry[key].info &&
+                      entry[key].info.educations.map((row, index) => (
+                        <li>{row} </li>
+                      ))}
+                  </ul>
                 </details>
               </IonCol>
             </IonRow>
 
             <IonRow>
               <IonCol id="heading" size="1.2">
-                NPI:
+                {t("NPI")}:
               </IonCol>
               <IonCol size="2.4">
                 <mark>{entry[key].info && entry[key].info.npiNumber}</mark>
@@ -168,10 +191,10 @@ const Admin: React.FC = (): any => {
             </IonRow>
             <IonRow>
               <IonButton id={entry[key].id} onClick={() => handleApprove(key)}>
-                Approve
+                {t("Approve")}
               </IonButton>
               <IonButton id={entry[key].id} onClick={() => handleReject(key)}>
-                Reject
+                {t("Reject")}
               </IonButton>
             </IonRow>
           </IonCol>
@@ -182,9 +205,35 @@ const Admin: React.FC = (): any => {
   return (
     <IonPage>
       <IonHeader>
-        <h1 style={{ color: "#2dd36f", fontWeight: 600 }}>Book-a-Doc</h1>
+        <h1 style={{ color: "#2dd36f", fontWeight: 600 }}>{t("Book-a-Doc")}</h1>
         <caption style={{ color: "#2dd36f", width: 100 }}>Doctor List</caption>
-        <IonTitle color="primary">{entry && entry.length} results</IonTitle>
+        <IonTitle color="primary">
+          {entry && entry.length} {t("results")}
+        </IonTitle>
+        <IonRadioGroup
+          value={language}
+          onIonChange={(e) => handleLanguageChange(e.detail.value)}
+        >
+          <IonRow>
+            <IonCol>
+              <IonLabel>Select Language</IonLabel>
+            </IonCol>
+
+            <IonCol>
+              <IonItem>
+                <IonLabel>English</IonLabel>
+                <IonRadio value="en" />
+              </IonItem>
+            </IonCol>
+
+            <IonCol>
+              <IonItem>
+                <IonLabel>Hindi</IonLabel>
+                <IonRadio value="hin" />
+              </IonItem>
+            </IonCol>
+          </IonRow>
+        </IonRadioGroup>
       </IonHeader>
 
       <IonContent>{list}</IonContent>
