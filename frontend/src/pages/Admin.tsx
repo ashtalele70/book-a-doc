@@ -29,84 +29,79 @@ const Admin: React.FC = (): any => {
   const [entry, setEntry] = useState<any>([]);
 
   useEffect(() => {
-
-	axios.get(rooturl + '/getEntries')
-		.then(res => {
-			if(res.status === 200) {
-				setEntry(res.data)
-			}
-		})
+    axios.get(rooturl + "/getEntries").then((res) => {
+      if (res.status === 200) {
+        setEntry(res.data);
+      }
+    });
   }, []);
 
   function handleApprove(key) {
-	axios.post(rooturl + '/approve', {id: entry[key].id})
-	.then(res => {
-		if(res.status === 200) {
-			var templateParams = {
-				to_email: "testbeta442@gmail.com",
-				to_name:
-				  "Dr." +
-				  entry[key].info["firstname"] +
-				  " " +
-				  entry[key].info["lastname"],
-				message: "Your application as doctor is verified.",
-			  };
-			  emailjs
-				.send(
-				  "service_iwbj3qf",
-				  "template_clfu2qq",
-				  templateParams,
-				  "user_OmceiOldqPYmh6SrleowV"
-				)
-				.then(
-				  (result) => {
-					console.log(result.text);
-				  },
-				  (error) => {
-					console.log(error.text);
-				  }
-				);
-	  
-				var entryData = [...entry];
-				entryData.splice(key, 1);
-				setEntry(entryData);
-		}
-	})
+    axios.post(rooturl + "/approve", { id: entry[key].id }).then((res) => {
+      if (res.status === 200) {
+        var templateParams = {
+          to_email: "testbeta442@gmail.com",
+          to_name:
+            "Dr." +
+            entry[key].info["firstname"] +
+            " " +
+            entry[key].info["lastname"],
+          message: "Your application as doctor is verified.",
+        };
+        emailjs
+          .send(
+            "service_iwbj3qf",
+            "template_clfu2qq",
+            templateParams,
+            "user_OmceiOldqPYmh6SrleowV"
+          )
+          .then(
+            (result) => {
+              console.log(result.text);
+            },
+            (error) => {
+              console.log(error.text);
+            }
+          );
+
+        var entryData = [...entry];
+        entryData.splice(key, 1);
+        setEntry(entryData);
+      }
+    });
   }
   function handleReject(key) {
-
-	axios.post(rooturl + '/reject', {id: entry[key].id})
-	.then(res => {
-		if(res.status === 200) {
-			var templateParams = {
-			to_email: "testbeta442@gmail.com",
-			to_name:
-				"Dr." +
-				entry[key].info["firstname"] +
-				" " +
-				entry[key].info["lastname"],
-			message: "You application as doctor is rejected.",
-			};
-			emailjs
-			.send(
-				"service_iwbj3qf",
-				"template_clfu2qq",
-				templateParams,
-				"user_OmceiOldqPYmh6SrleowV"
-			)
-			.then(
-				(result) => {
-				console.log(result.text);
-				},
-				(error) => {
-				console.log(error.text);
-				}
-			);
-			var entryData = [...entry];
-			entryData.splice(key, 1);
-			setEntry(entryData);
-		}
-	})
+    axios.post(rooturl + "/reject", { id: entry[key].id }).then((res) => {
+      if (res.status === 200) {
+        var templateParams = {
+          to_email: "testbeta442@gmail.com",
+          to_name:
+            "Dr." +
+            entry[key].info["firstname"] +
+            " " +
+            entry[key].info["lastname"],
+          message: "You application as doctor is rejected.",
+        };
+        emailjs
+          .send(
+            "service_iwbj3qf",
+            "template_clfu2qq",
+            templateParams,
+            "user_OmceiOldqPYmh6SrleowV"
+          )
+          .then(
+            (result) => {
+              console.log(result.text);
+            },
+            (error) => {
+              console.log(error.text);
+            }
+          );
+        var entryData = [...entry];
+        entryData.splice(key, 1);
+        setEntry(entryData);
+      }
+    });
   }
 
   const list = Object.keys(entry).map((key, value) => {
@@ -188,6 +183,7 @@ const Admin: React.FC = (): any => {
     <IonPage>
       <IonHeader>
         <h1 style={{ color: "#2dd36f", fontWeight: 600 }}>Book-a-Doc</h1>
+        <caption style={{ color: "#2dd36f", width: 100 }}>Doctor List</caption>
         <IonTitle color="primary">{entry && entry.length} results</IonTitle>
       </IonHeader>
 
