@@ -11,6 +11,7 @@ import {
   settings as settingsIcon,
   personCircleOutline,
   timeOutline,
+  folderOpenOutline
 } from "ionicons/icons";
 import React, { useState, useEffect } from "react";
 import { Switch, Redirect, Route } from "react-router-dom";
@@ -36,6 +37,7 @@ import AdminLogin from "./pages/AdminLogin";
 import { toUser, User } from "./models/user";
 import axios from "axios";
 import { rooturl } from "./config";
+import PatientHistory from "./pages/PatientHistory";
 
 const AppTabs: React.FC = () => {
   const { loggedIn, userId } = useAuth();
@@ -105,6 +107,9 @@ const AppTabs: React.FC = () => {
           <Route exact path="/doctorHome">
             <DoctorHomePage />
           </Route>
+          <Route exact path="/patientHistory">
+            <PatientHistory />
+          </Route>
           {loggedIn && <Route exact path="/admin">
             <Admin />
           </Route>}
@@ -114,6 +119,10 @@ const AppTabs: React.FC = () => {
         </Switch>
       </IonRouterOutlet>
       <IonTabBar slot="bottom">
+        <IonTabButton tab="history" href="/patientHistory">
+          <IonIcon icon={folderOpenOutline} />
+          <IonLabel>Patient History</IonLabel>
+        </IonTabButton>
         <IonTabButton tab="home" href="/home">
           <IonIcon icon={homeIcon} />
           <IonLabel>Search</IonLabel>

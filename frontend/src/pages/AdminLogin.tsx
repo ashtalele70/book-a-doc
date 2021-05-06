@@ -29,6 +29,7 @@ import {
         setStatus({ loading: true, error: false });
         const credential = await auth.signInWithEmailAndPassword(email, password);
         console.log("credential:", credential);
+        sessionStorage.setItem("isAdmin", "true");
       } catch (error) {
         setStatus({ loading: false, error: true });
         setErrorMessage(error.message);

@@ -222,7 +222,7 @@ const HomePage: React.FC = () => {
 
       <IonToolbar>
         <IonTitle color="success" className="ion-float-left">Book-A-Doc</IonTitle>
-        <IonTitle color="success" className="ion-float-right">Hello, {sessionStorage.getItem('firstname')}</IonTitle>
+        {sessionStorage.getItem('firstname') && <IonTitle color="success" className="ion-float-right">Hello, {sessionStorage.getItem('firstname')}</IonTitle>}
       </IonToolbar>
 
       {!hideTitle && (

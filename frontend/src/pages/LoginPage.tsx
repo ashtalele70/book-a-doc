@@ -36,7 +36,7 @@ const LoginPage: React.FC = () => {
 	  userData.set("id", credential?.user?.uid);
 	axios.get(rooturl + "/getUser?" + userData.toString()).then((res) => {
 	if (res.status === 200) {
-
+    if(!res.data.isAdmin) sessionStorage.setItem("isAdmin", "false");
 		if(res.data.isPatient && !res.data.isAdmin) {
 			//patient
 			let userData = new URLSearchParams();
