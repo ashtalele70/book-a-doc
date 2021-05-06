@@ -12,65 +12,88 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router";
 import { useAuth } from "../auth";
 import { auth } from "../firebase";
 import { Helmet } from "react-helmet";
 import axios from "axios";
 import { rooturl } from "../config";
+import { useHistory } from "react-router-dom";
 
 const LoginDoctorPage: React.FC = () => {
   const { loggedIn } = useAuth();
+  // const [loggedIn, setLoggedIn] = useState(useAuth().loggedIn);
   const [email, setEmail] = useState("");
+  const [isAdmin, setIsAdmin] = useState("");
+  const [isPatient, setIsPatient] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState({ loading: false, error: false });
   const [errorMessage, setErrorMessage] = useState("");
+  const history = useHistory();
+
+  // useEffect(() => {
+  //   if (loggedIn && isAdmin && isPatient) {
+  //     if (!isAdmin) sessionStorage.setItem("isAdmin", "false");
+  //     if (!isPatient) sessionStorage.setItem("isPatient", "false");
+  //     history.push("/home");
+  //   }
+  // }, [loggedIn]);
 
   const handleLogin = async () => {
+    console.log(sessionStorage.getItem("isPatient"));
     try {
       setStatus({ loading: true, error: false });
       const credential = await auth.signInWithEmailAndPassword(email, password);
       console.log("credential:", credential);
-	  let userData = new URLSearchParams();
-	  userData.set("id", credential?.user?.uid);
-	axios.get(rooturl + "/getUser?" + userData.toString()).then((res) => {
-	if (res.status === 200) {
+      let userData = new URLSearchParams();
+      userData.set("id", credential?.user?.uid);
 
-		if(res.data.isPatient && !res.data.isAdmin) {
-			//patient
-			let userData = new URLSearchParams();
-			userData.set("id", credential?.user?.uid);
-			axios.get(rooturl + "/getPatient?" + userData.toString()).then((res) => {
-			  if (res.status === 200) {
-				sessionStorage.setItem("firstname", res.data.firstname);
-				sessionStorage.setItem("lastname", res.data.lastname);
-			  }
-			});	
-	
-		} else if(!res.data.isPatient && !res.data.isAdmin){
-			//doctor
-			let userData = new URLSearchParams();
-			userData.set("id", credential?.user?.uid);
-			axios.get(rooturl + "/getDoctor?" + userData.toString()).then((res) => {
-			  if (res.status === 200) {
-        sessionStorage.setItem("firstname", res.data.firstname);
-				sessionStorage.setItem("lastname", res.data.lastname);
-			  }
-			});	
-		}
-	}
-	});
+      axios.get(rooturl + "/getUser?" + userData.toString()).then((res) => {
+        if (res.status === 200) {
+          setIsAdmin(res.data.isAdmin);
+          setIsPatient(res.data.isPatient);
+          if (!res.data.isAdmin) sessionStorage.setItem("isAdmin", "false");
+          if (!res.data.isPatient) sessionStorage.setItem("isPatient", "false");
+          console.log(res.data.isPatient);
+          if (res.data.isPatient && !res.data.isAdmin) {
+            //patient
+            let userData = new URLSearchParams();
+            userData.set("id", credential?.user?.uid);
+            axios
+              .get(rooturl + "/getPatient?" + userData.toString())
+              .then((res) => {
+                if (res.status === 200) {
+                  sessionStorage.setItem("firstname", res.data.firstname);
+                  sessionStorage.setItem("lastname", res.data.lastname);
+                }
+              });
+          } else if (!res.data.isPatient && !res.data.isAdmin) {
+            //doctor
+            let userData = new URLSearchParams();
+            userData.set("id", credential?.user?.uid);
+            axios
+              .get(rooturl + "/getDoctor?" + userData.toString())
+              .then((res) => {
+                if (res.status === 200) {
+                  sessionStorage.setItem("firstname", res.data.firstname);
+                  sessionStorage.setItem("lastname", res.data.lastname);
+                  // if (loggedIn) history.push("/home");
+                }
+              });
+          }
+        }
+      });
     } catch (error) {
       setStatus({ loading: false, error: true });
       setErrorMessage(error.message);
       console.log("error:", error);
     }
   };
-
   if (loggedIn) {
-    return <Redirect to="/home" />;
+    history.push("/home");
   }
+
   return (
     <IonPage>
       <Helmet>
