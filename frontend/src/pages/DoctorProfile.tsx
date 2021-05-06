@@ -6,7 +6,7 @@ import starfull from "./images/star-full.png";
 import starYellow from "./images/star-yellow.png";
 import { firestore } from "../firebase";
 import { Helmet } from "react-helmet";
-import SvgIcon from "@material-ui/core";
+// import SvgIcon from "@material-ui/core";
 import ReactStars from "react-rating-stars-component";
 import { informationCircleOutline } from "ionicons/icons";
 
@@ -23,6 +23,8 @@ import {
   IonText,
   IonHeader,
   IonIcon,
+  IonToolbar,
+  IonTitle
 } from "@ionic/react";
 import "./styleSheet.css";
 interface IState {
@@ -74,9 +76,13 @@ const DoctorProfile: React.FC = (): any => {
           content="This page allows users to view doctor's profile and the reviews of other patients."
         />
       </Helmet>
-      <IonHeader>
+      {/* <IonHeader>
         <h1 style={{ color: "#2dd36f", fontWeight: 600 }}>Book-a-Doc</h1>
-      </IonHeader>
+      </IonHeader> */}
+      <IonToolbar>
+        <IonTitle color="success" className="ion-float-left">Book-A-Doc</IonTitle>
+        <IonTitle color="success" className="ion-float-right">Hello, {sessionStorage.getItem('firstname')}</IonTitle>
+      </IonToolbar>
 
       <IonItem>
         <IonGrid>

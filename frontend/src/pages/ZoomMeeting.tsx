@@ -13,8 +13,7 @@ const crypto = require("crypto");
 
 const ZoomMeeting: React.FC = () => {
   const { userId } = useAuth();
-  const zoomUserName =
-    localStorage.getItem("firstname") + " " + localStorage.getItem("lastname");
+  const zoomUserName = sessionStorage.getItem("firstname") + " " + sessionStorage.getItem("lastname");
   //const [isPatient, setIsPatient] = useState(false);
   const [leaveUrl, setLeaveUrl] = useState(rooturl+"/feedback");
   // const [doctorID, setDoctorID] = useState("");

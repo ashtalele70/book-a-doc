@@ -57,7 +57,8 @@ const HomePage: React.FC = () => {
       if (
         doc
           .data()
-          .specialties.some((specialty) => specialties.indexOf(specialty) >= 0)
+          .specialties.some((specialty) => specialties.indexOf(specialty) >= 0) &&
+          doc.data().isVerified == "2"
       ) {
         let doctor = {
           id: doc.id,
@@ -114,9 +115,13 @@ const HomePage: React.FC = () => {
     }
 
     if(5 < doctors.length) setDoctorInfo(doctors.slice(0, 5));
+    else setDoctorInfo(doctors);
     if(5 < times.length) setTimeslotInfo(times.slice(0, 5));
+    else setTimeslotInfo(times);
     if(5 < appointments.length) setAppointmentInfo(appointments.slice(0, 5));
+    else setAppointmentInfo(appointments);
     if(5 < reviews.length) setReviewInfo(reviews.slice(0, 5));
+    else setReviewInfo(reviews);
     // setIsSearchClicked(true);
     setIsLoading(false);
   };
@@ -133,7 +138,8 @@ const HomePage: React.FC = () => {
       if (
         doc
           .data()
-          .specialties.some((specialty) => specialties.indexOf(specialty) >= 0)
+          .specialties.some((specialty) => specialties.indexOf(specialty) >= 0) &&
+          doc.data().isVerified == "2"
       ) {
         let doctor = {
           id: doc.id,
@@ -215,7 +221,8 @@ const HomePage: React.FC = () => {
       </Helmet>
 
       <IonToolbar>
-        <IonTitle color="success">Book-A-Doc</IonTitle>
+        <IonTitle color="success" className="ion-float-left">Book-A-Doc</IonTitle>
+        <IonTitle color="success" className="ion-float-right">Hello, {sessionStorage.getItem('firstname')}</IonTitle>
       </IonToolbar>
 
       {!hideTitle && (

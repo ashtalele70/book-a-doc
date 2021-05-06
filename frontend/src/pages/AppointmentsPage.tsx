@@ -143,7 +143,7 @@ const AppointmentsPage: React.FC = () => {
 			sendEmail(
 			"Dr. " + res.data.firstname + " " + res.data.lastname,
 			"Patient " +
-			  localStorage.getItem("firstname") + " " + localStorage.getItem("lastname") +
+        sessionStorage.getItem("firstname") + " " + sessionStorage.getItem("lastname") +
 			  " is waiting to meet you. Please join you meeting room" +
 			  zoomurl)
 		  }
@@ -257,7 +257,8 @@ const AppointmentsPage: React.FC = () => {
         <meta name="robots" content="noindex"></meta>
       </Helmet>
       <IonToolbar>
-        <IonTitle color="warning">Appointments</IonTitle>
+        <IonTitle color="warning" className="ion-float-left">Appointments</IonTitle>
+        <IonTitle color="success" className="ion-float-right">Hello, {sessionStorage.getItem('firstname')}</IonTitle>
       </IonToolbar>
      
       <IonContent className="ion-padding">

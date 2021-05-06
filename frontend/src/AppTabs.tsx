@@ -12,7 +12,7 @@ import {
   personCircleOutline,
   timeOutline,
 } from "ionicons/icons";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Switch, Redirect, Route } from "react-router-dom";
 import { useAuth } from "./auth";
 import AppointmentsPage from "./pages/AppointmentsPage";
@@ -33,9 +33,25 @@ import PatientFeedback from "./pages/PatientFeedback";
 import DoctorHomePage from "./pages/DoctorHomePage";
 import Admin from "./pages/Admin";
 import AdminLogin from "./pages/AdminLogin";
+import { toUser, User } from "./models/user";
+import axios from "axios";
+import { rooturl } from "./config";
 
 const AppTabs: React.FC = () => {
-  const { loggedIn } = useAuth();
+  const { loggedIn, userId } = useAuth();
+  const [user, setUser] = useState<User>();
+
+  useEffect(() => {
+    let userData = new URLSearchParams();
+    userData.set("id", userId);
+
+    axios.get(rooturl + "/getUser?" + userData.toString()).then((res) => {
+      if (res.status === 200) {
+        setUser(toUser(res.data));
+      }
+    });
+  }, [userId]);
+
   return (
     <IonTabs>
       <IonRouterOutlet>
@@ -89,12 +105,12 @@ const AppTabs: React.FC = () => {
           <Route exact path="/doctorHome">
             <DoctorHomePage />
           </Route>
-          <Route exact path="/admin">
+          {loggedIn && <Route exact path="/admin">
             <Admin />
-          </Route>
-          <Route exact path="/loginAdmin">
+          </Route>}
+          {!loggedIn && <Route exact path="/loginAdmin">
             <AdminLogin />
-          </Route>
+          </Route>}
         </Switch>
       </IonRouterOutlet>
       <IonTabBar slot="bottom">

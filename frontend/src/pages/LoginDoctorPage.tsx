@@ -43,8 +43,8 @@ const LoginDoctorPage: React.FC = () => {
 			userData.set("id", credential?.user?.uid);
 			axios.get(rooturl + "/getPatient?" + userData.toString()).then((res) => {
 			  if (res.status === 200) {
-				localStorage.setItem("firstname", res.data.firstname);
-				localStorage.setItem("lastname", res.data.lastname);
+				sessionStorage.setItem("firstname", res.data.firstname);
+				sessionStorage.setItem("lastname", res.data.lastname);
 			  }
 			});	
 	
@@ -54,8 +54,8 @@ const LoginDoctorPage: React.FC = () => {
 			userData.set("id", credential?.user?.uid);
 			axios.get(rooturl + "/getDoctor?" + userData.toString()).then((res) => {
 			  if (res.status === 200) {
-				localStorage.setItem("firstname", res.data.firstname);
-				localStorage.setItem("lastname", res.data.lastname);
+        sessionStorage.setItem("firstname", res.data.firstname);
+				sessionStorage.setItem("lastname", res.data.lastname);
 			  }
 			});	
 		}

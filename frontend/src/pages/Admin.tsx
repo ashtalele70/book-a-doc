@@ -127,8 +127,7 @@ const Admin: React.FC = (): any => {
                 {t("Name")}:
               </IonCol>
               <IonCol size="2.4">
-                Dr. {entry[key].info && entry[key].info.firstname}{" "}
-                {entry[key].info && entry[key].info.lastname}
+                {t('Dr.')} {entry[key].info && t(entry[key].info.firstname + " " + entry[key].info.lastname)}
               </IonCol>
             </IonRow>
 
@@ -138,7 +137,7 @@ const Admin: React.FC = (): any => {
               </IonCol>
               <IonCol size="2.4">
                 <details>
-                  <summary>show</summary>
+                  <summary>{t('show')}</summary>
 
                   {/* <datalist>
                     {entry[key].info &&
@@ -150,7 +149,7 @@ const Admin: React.FC = (): any => {
                   <ul>
                     {entry[key].info &&
                       entry[key].info.specialties.map((row, index) => (
-                        <li>{row} </li>
+                        <li>{t(row)} </li>
                       ))}
                   </ul>
                 </details>
@@ -163,7 +162,7 @@ const Admin: React.FC = (): any => {
               </IonCol>
               <IonCol size="2.4">
                 <details>
-                  <summary>show</summary>
+                  <summary>{t('show')}</summary>
 
                   {/* <datalist>
                     {entry[key].info &&
@@ -174,7 +173,7 @@ const Admin: React.FC = (): any => {
                   <ul>
                     {entry[key].info &&
                       entry[key].info.educations.map((row, index) => (
-                        <li>{row} </li>
+                        <li>{t(row)} </li>
                       ))}
                   </ul>
                 </details>
@@ -205,35 +204,32 @@ const Admin: React.FC = (): any => {
   return (
     <IonPage>
       <IonHeader>
-        <h1 style={{ color: "#2dd36f", fontWeight: 600 }}>{t("Book-a-Doc")}</h1>
-        <caption style={{ color: "#2dd36f", width: 100 }}>Doctor List</caption>
-        <IonTitle color="primary">
-          {entry && entry.length} {t("results")}
-        </IonTitle>
-        <IonRadioGroup
-          value={language}
-          onIonChange={(e) => handleLanguageChange(e.detail.value)}
-        >
-          <IonRow>
-            <IonCol>
-              <IonLabel>Select Language</IonLabel>
-            </IonCol>
+        <h1 style={{ color: "#2dd36f", fontWeight: 600 }}>{t('Book-a-Doc')}</h1>
+		<caption style={{ color: "#2dd36f", width: 100 }}>{t('Doctor List')}</caption>
+        <IonTitle color="primary">{entry && entry.length} {t('results')}</IonTitle>
+        <IonRadioGroup value={language} onIonChange={e => handleLanguageChange(e.detail.value)}>
+                <IonRow>
+                  <IonCol>
+                    <IonLabel>
+                        {t('Select Language')}
+                    </IonLabel>
+                  </IonCol>
 
-            <IonCol>
-              <IonItem>
-                <IonLabel>English</IonLabel>
-                <IonRadio value="en" />
-              </IonItem>
-            </IonCol>
+                  <IonCol>
+                    <IonItem>
+                        <IonLabel>{t('English')}</IonLabel>
+                        <IonRadio value="en" />
+                    </IonItem>
+                  </IonCol>
 
-            <IonCol>
-              <IonItem>
-                <IonLabel>Hindi</IonLabel>
-                <IonRadio value="hin" />
-              </IonItem>
-            </IonCol>
-          </IonRow>
-        </IonRadioGroup>
+                  <IonCol>
+                    <IonItem>
+                        <IonLabel>{t('Hindi')}</IonLabel>
+                        <IonRadio value="hin" />
+                    </IonItem>
+                  </IonCol>
+                  </IonRow>
+              </IonRadioGroup>
       </IonHeader>
 
       <IonContent>{list}</IonContent>

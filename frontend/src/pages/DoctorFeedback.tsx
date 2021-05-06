@@ -23,6 +23,7 @@ import {
   import { auth, firestore } from '../firebase';
   
   const DoctorFeedback: React.FC = () => {
+	const history = useHistory();
 	const [gender, setGender] = useState<string>('female');
 	const [age, setAge] = useState('');
 	const [condition, setCondition] = useState('');
@@ -40,6 +41,7 @@ import {
 		.add(summaryData)
 		.then(() => {
 			console.log("Document successfully written!");
+			history.push('/doctorHome');
 		})
 		.catch((error) => {
 			console.error("Error writing document: ", error);
@@ -50,7 +52,8 @@ import {
 	  <IonPage>
 		<IonHeader>
 		  <IonToolbar>
-		  	<IonTitle color="success">Book-A-Doc</IonTitle>
+		  	<IonTitle color="success" className="ion-float-left">Book-A-Doc</IonTitle>
+			<IonTitle color="success" className="ion-float-right">Hello, {sessionStorage.getItem('firstname')}</IonTitle>
 		  </IonToolbar>
 		</IonHeader>
 		<IonContent className="ion-padding">

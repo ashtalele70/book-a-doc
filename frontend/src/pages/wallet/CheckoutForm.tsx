@@ -5,8 +5,10 @@ import {
   CardElement
 } from "@stripe/react-stripe-js";
 import { IonButton, IonGrid, IonRow, IonContent, IonCol, IonToast, IonText } from '@ionic/react';
+import { useHistory } from "react-router-dom";
 
 const CheckoutForm = () => {
+    const history = useHistory();
     const stripe = useStripe();
     const elements = useElements();
     const [showAlert, setShowAlert] = useState(false);
@@ -30,6 +32,7 @@ const CheckoutForm = () => {
         setAlertMessage(error.message);
       } else {
         setAlertMessage("Payment Successful.");
+        setTimeout(() => history.push('/home'), 1000);
       }
       setShowAlert(true);
     };

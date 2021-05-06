@@ -18,6 +18,7 @@ import {
     const [ageData, setAgeData] = useState([]);
     const [conditionData, setConditionData] = useState([["Condition", "Per Month"]]);
     const [visitData, setVisitData] = useState([]);
+    const [showMessage, setShowMessage] = useState(false);
 
     const titles = ["Gender", "Age", "Condition", "New v/s Repeat Patients"];
     const options = {
@@ -34,6 +35,7 @@ import {
             let newVisit = 0, repeatVisit = 0;
             let conditionMap = new Map();
             let conditionCount = 0;
+            if(summaryRef?.docs?.length == 0) setShowMessage(true);
             summaryRef.forEach(doc => {
                 let data = doc.data();
                 noOfMales = data.gender == 'male' ? noOfMales + 1 : noOfMales;
@@ -80,12 +82,15 @@ import {
     return (
       <IonPage>
         <IonToolbar>
-          <IonTitle color="success">Book-A-Doc</IonTitle>
+          <IonTitle color="success" className="ion-float-left">Book-A-Doc</IonTitle>
+          <IonTitle color="success" className="ion-float-right">Hello, {sessionStorage.getItem('firstname')}</IonTitle>
         </IonToolbar>
-  
-        <IonContent>
+        {showMessage && <IonContent><IonText color="warning" className="ion-text-center">
+			<h4>You have no patients!!!</h4>
+		</IonText></IonContent>}
+        {!showMessage && <IonContent>
         <IonText color="warning" className="ion-text-center">
-			<h4 >Patient Summary</h4>
+			<h4>Patient Summary</h4>
 		</IonText>
         <IonRow>
             <IonCol size="6">
@@ -125,7 +130,7 @@ import {
                 />
             </IonCol>
         </IonRow>
-        </IonContent>
+        </IonContent>}
       </IonPage>
     );
   };

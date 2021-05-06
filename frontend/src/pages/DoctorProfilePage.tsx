@@ -169,7 +169,8 @@ const DoctorProfilePage: React.FC = () => {
 
       <IonHeader>
         <IonToolbar>
-          <IonTitle color="warning">Create an account</IonTitle>
+          <IonTitle color="warning" className="ion-float-left">Create an account</IonTitle>
+          <IonTitle color="success" className="ion-float-right">Hello, {sessionStorage.getItem('firstname')}</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
