@@ -20,52 +20,60 @@ import { Helmet } from "react-helmet";
 import axios from "axios";
 import { rooturl } from "../config";
 import { toUser, User } from "../models/user";
+import { useHistory } from "react-router-dom";
+
 const LoginPage: React.FC = () => {
   const { loggedIn } = useAuth();
   const [email, setEmail] = useState("");
+  const [isAdmin, setIsAdmin] = useState("");
+  const [isPatient, setIsPatient] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState({ loading: false, error: false });
   const [errorMessage, setErrorMessage] = useState("");
+  
+  const history = useHistory();
 
   const handleLogin = async () => {
     try {
       setStatus({ loading: true, error: false });
       const credential = await auth.signInWithEmailAndPassword(email, password);
       console.log("credential:", credential);
-	  let userData = new URLSearchParams();
-	  userData.set("id", credential?.user?.uid);
-	axios.get(rooturl + "/getUser?" + userData.toString()).then((res) => {
-	if (res.status === 200) {
-    if(!res.data.isAdmin) sessionStorage.setItem("isAdmin", "false");
-		if(res.data.isPatient && !res.data.isAdmin) {
-			//patient
-			let userData = new URLSearchParams();
-			userData.set("id", credential?.user?.uid);
-			axios.get(rooturl + "/getPatient?" + userData.toString()).then((res) => {
-			  if (res.status === 200) {
-        sessionStorage.setItem("firstname", res.data.firstname);
-				sessionStorage.setItem("lastname", res.data.lastname);
-			  }
-			});	
-	
-		} else if(!res.data.isPatient && !res.data.isAdmin){
-			//doctor
-			let userData = new URLSearchParams();
-			userData.set("id", credential?.user?.uid);
-			axios.get(rooturl + "/getDoctor?" + userData.toString()).then((res) => {
-			  if (res.status === 200) {
-				sessionStorage.setItem("firstname", res.data.firstname);
-				sessionStorage.setItem("lastname", res.data.lastname);
-			  }
-			});
-		}
-	}
-	});
+      let userData = new URLSearchParams();
+      userData.set("id", credential?.user?.uid);
+      axios.get(rooturl + "/getUser?" + userData.toString()).then((res) => {
+        if (res.status === 200) {
+          setIsAdmin(res.data.isAdmin);
+          setIsPatient(res.data.isPatient);
+          // if (!res.data.isAdmin) sessionStorage.setItem("isAdmin", "false");
+          // if (res.data.isPatient) sessionStorage.setItem("isPatient", "true");
+          if (res.data.isPatient && !res.data.isAdmin) {
+            //patient
+            let userData = new URLSearchParams();
+            userData.set("id", credential?.user?.uid);
+            axios
+              .get(rooturl + "/getPatient?" + userData.toString())
+              .then((res) => {
+                if (res.status === 200) {
+                  sessionStorage.setItem("firstname", res.data.firstname);
+                  sessionStorage.setItem("lastname", res.data.lastname);
+                }
+              });
+          } else if (!res.data.isPatient && !res.data.isAdmin) {
+            //doctor
 
-
-	
-
-
+            let userData = new URLSearchParams();
+            userData.set("id", credential?.user?.uid);
+            axios
+              .get(rooturl + "/getDoctor?" + userData.toString())
+              .then((res) => {
+                if (res.status === 200) {
+                  sessionStorage.setItem("firstname", res.data.firstname);
+                  sessionStorage.setItem("lastname", res.data.lastname);
+                }
+              });
+          }
+        }
+      });
     } catch (error) {
       setStatus({ loading: false, error: true });
       setErrorMessage(error.message);
@@ -73,42 +81,42 @@ const LoginPage: React.FC = () => {
     }
   };
 
-//   useEffect(() => {
-// 	let userData = new URLSearchParams();
-//     userData.set("id", uid);
+  //   useEffect(() => {
+  // 	let userData = new URLSearchParams();
+  //     userData.set("id", uid);
 
-//     axios.get(rooturl + "/getUser?" + userData.toString()).then((res) => {
-//       if (res.status === 200) {
-//         setUser(toUser(res.data));
-//       }
-//     });
-//   }, [uid]);
+  //     axios.get(rooturl + "/getUser?" + userData.toString()).then((res) => {
+  //       if (res.status === 200) {
+  //         setUser(toUser(res.data));
+  //       }
+  //     });
+  //   }, [uid]);
 
-//   useEffect(() => {
-	
-// 	if(user?.isPatient && !user?.isAdmin) {
-// 		//patient
-// 		let userData = new URLSearchParams();
-// 		userData.set("id", uid);
-// 		axios.get(rooturl + "/getPatient?" + userData.toString()).then((res) => {
-// 		  if (res.status === 200) {
-// 			localStorage.setItem("firstname", res.data.firstname);
-// 			localStorage.setItem("lastname", res.data.lastname);
-// 		  }
-// 		});	
+  //   useEffect(() => {
 
-// 	} else if(!user?.isPatient && !user?.isAdmin){
-// 		//doctor
-// 		let userData = new URLSearchParams();
-// 		userData.set("id", uid);
-// 		axios.get(rooturl + "/getDoctor?" + userData.toString()).then((res) => {
-// 		  if (res.status === 200) {
-// 			localStorage.setItem("firstname", res.data.firstname);
-// 			localStorage.setItem("lastname", res.data.lastname);
-// 		  }
-// 		});	
-// 	}
-//   }, [user]);
+  // 	if(user?.isPatient && !user?.isAdmin) {
+  // 		//patient
+  // 		let userData = new URLSearchParams();
+  // 		userData.set("id", uid);
+  // 		axios.get(rooturl + "/getPatient?" + userData.toString()).then((res) => {
+  // 		  if (res.status === 200) {
+  // 			localStorage.setItem("firstname", res.data.firstname);
+  // 			localStorage.setItem("lastname", res.data.lastname);
+  // 		  }
+  // 		});
+
+  // 	} else if(!user?.isPatient && !user?.isAdmin){
+  // 		//doctor
+  // 		let userData = new URLSearchParams();
+  // 		userData.set("id", uid);
+  // 		axios.get(rooturl + "/getDoctor?" + userData.toString()).then((res) => {
+  // 		  if (res.status === 200) {
+  // 			localStorage.setItem("firstname", res.data.firstname);
+  // 			localStorage.setItem("lastname", res.data.lastname);
+  // 		  }
+  // 		});
+  // 	}
+  //   }, [user]);
 
   // 	if (loggedIn) {
   // 	  return <Redirect to="/doctorHome" />;
@@ -149,7 +157,9 @@ const LoginPage: React.FC = () => {
   //   };
 
   if (loggedIn) {
-    return <Redirect to="/home" />;
+    if (!isAdmin) sessionStorage.setItem("isAdmin", "false");
+    if (!isPatient) sessionStorage.setItem("isPatient", "true");
+    history.push("/home");
   }
   return (
     <IonPage>
