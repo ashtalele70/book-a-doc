@@ -130,7 +130,7 @@ const AppTabs: React.FC = () => {
           <IonLabel>Search</IonLabel>
         </IonTabButton>
         {loggedIn && sessionStorage.getItem("isPatient") == "false" && (
-          <IonTabButton tab="appointments" href="/appointments">
+          <IonTabButton tab="appointments" href="/doctorHome">
             <IonIcon icon={analyticsOutline} />
             <IonLabel>Patient Summary</IonLabel>
           </IonTabButton>
