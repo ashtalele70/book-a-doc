@@ -53,7 +53,7 @@ import {
             <IonCard>
                 <IonCardHeader>
                     <IonCardTitle>{info.name}</IonCardTitle>
-                    <IonCardSubtitle>{info.condition}</IonCardSubtitle>
+                    <IonCardSubtitle>Condition: {info.condition}</IonCardSubtitle>
                     <IonButton color="primary" onClick={() => handleClick(info)}>Follow Up</IonButton>
                 </IonCardHeader>
 
@@ -77,7 +77,7 @@ import {
         <IonText color="warning" className="ion-text-center">
 			<h4>Patient History</h4>
 		</IonText>
-        <IonRow>
+        <IonRow className="ion-justify-content-center">
             {list}
         </IonRow>
         </IonContent>}
