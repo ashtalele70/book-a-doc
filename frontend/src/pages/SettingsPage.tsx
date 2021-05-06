@@ -16,6 +16,8 @@ import { logOut } from 'ionicons/icons';
   const SettingsPage: React.FC = () => {
 	let history = useHistory();
 	const logout = () => {
+		sessionStorage.removeItem("firstname");
+		sessionStorage.removeItem("lastname");
 		auth.signOut();
 		history.push("/home");
 	}

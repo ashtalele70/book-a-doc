@@ -24,6 +24,7 @@ import {
   
   const DoctorFeedback: React.FC = () => {
 	const history = useHistory();
+	const [name, setName] = useState('');
 	const [gender, setGender] = useState<string>('female');
 	const [age, setAge] = useState('');
 	const [condition, setCondition] = useState('');
@@ -32,7 +33,7 @@ import {
 	const { userId } = useAuth();
   
 	const handleSubmit = async () => {
-		const summaryData = { gender, age, condition, notes, visit };
+		const summaryData = { name, gender, age, condition, notes, visit };
 
 		firestore
 		.collection("doctors")
@@ -61,6 +62,12 @@ import {
 			<h4 >Enter Meeting Summary</h4>
 		</IonText>
 		  <IonList>
+		  	<IonItem>
+			  <IonLabel>Patient Name</IonLabel>
+			  <IonInput type="text" value={name}
+				onIonChange={(event) => setName(event.detail.value)}
+			  />
+			</IonItem>
 			<IonItem>
                 <IonRadioGroup value={gender} onIonChange={e => setGender(e.detail.value)}>
 				<IonRow>

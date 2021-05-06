@@ -10,45 +10,55 @@ import {
     IonCardHeader,
     IonCardTitle,
     IonCardSubtitle,
-    IonCardContent
+    IonCardContent,
+    IonButton
   } from "@ionic/react";
   import React, { useEffect, useState } from "react";
   import { firestore } from "../firebase";
   import { useAuth } from '../auth';
-  import { Chart } from "react-google-charts";
+  import { sendEmail } from "../data/email";
+  import { rooturl } from "../config";
   
   const PatientHistory: React.FC = () => {
     const { userId } = useAuth();
-    const [notes, setNotes] = useState([]);
+    const [patientInfo, setPatientInfo] = useState([]);
     const [showMessage, setShowMessage] = useState(false);
 
     useEffect(() => {
-        let notesInfo = [];
+        let info = [];
         const func = async () => {
             const summaryRef = await firestore.collection("doctors/" + userId + "/summary").get();
             if(summaryRef?.docs?.length == 0) setShowMessage(true);
             summaryRef.forEach(doc => {
                 let data = doc.data();
-                notesInfo.push(data.notes);
+                info.push(data);
             });
 
-            setNotes(notesInfo);
+            setPatientInfo(info);
         };
 
         func();
 
     }, []);
 
-    let list = notes.map(note => {
+    const handleClick = (patientInfo) => {
+        sendEmail(
+            patientInfo.name,
+			"How are you feeling after your last visit? Please schedule a follow-up appointment with Dr. " + sessionStorage.getItem("firstname") + " " + sessionStorage.getItem("lastname") + " at the link here: " 
+            + rooturl)
+    }
+
+    let list = patientInfo.map(info => {
         return <IonCol size="2">
             <IonCard>
                 <IonCardHeader>
-                    <IonCardSubtitle>Card Subtitle</IonCardSubtitle>
-                    <IonCardTitle>Card Title</IonCardTitle>
+                    <IonCardTitle>{info.name}</IonCardTitle>
+                    <IonCardSubtitle>{info.condition}</IonCardSubtitle>
+                    <IonButton color="primary" onClick={() => handleClick(info)}>Follow Up</IonButton>
                 </IonCardHeader>
 
                 <IonCardContent>
-                    {note}
+                    {info.notes}
                 </IonCardContent>
             </IonCard>
         </IonCol>
