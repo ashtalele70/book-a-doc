@@ -45,16 +45,27 @@ const AppTabs: React.FC = () => {
   const { loggedIn, userId } = useAuth();
   const [user, setUser] = useState<User>();
 
-  // useEffect(() => {
-  //   let userData = new URLSearchParams();
-  //   userData.set("id", userId);
+  useEffect(() => {
+	  if(loggedIn) {
+		let userData = new URLSearchParams();
+		userData.set("id", userId);
+	
+		axios.get(rooturl + "/getUser?" + userData.toString()).then((res) => {
+		  if (res.status === 200) {
+			setUser(toUser(res.data));
+		  }
+		});
 
-  //   axios.get(rooturl + "/getUser?" + userData.toString()).then((res) => {
-  //     if (res.status === 200) {
-  //       setUser(toUser(res.data));
-  //     }
-  //   });
-  // }, [userId]);
+	  }
+    
+  }, [userId, loggedIn]);
+
+//   useEffect(() => {
+
+// 	sessionStorage.setItem("isAdmin", user?.isAdmin?.toString());
+// 	sessionStorage.setItem("isPatient", user?.isPatient?.toString());
+
+//   }, [user]);
 
   return (
     <IonTabs>
@@ -112,7 +123,8 @@ const AppTabs: React.FC = () => {
           <Route exact path="/patientHistory">
             <PatientHistory />
           </Route>
-          {loggedIn && sessionStorage.getItem("isAdmin") == "true" && (
+          {/* {loggedIn && sessionStorage.getItem("isAdmin") == "true" && ( */}
+			{loggedIn && (
             <Route exact path="/admin">
               <Admin />
             </Route>
@@ -125,23 +137,35 @@ const AppTabs: React.FC = () => {
         </Switch>
       </IonRouterOutlet>
       <IonTabBar slot="bottom">
-        <IonTabButton tab="home" href="/home">
+	  {(!loggedIn || (user?.isPatient && !user?.isAdmin))&& (
+	  	<IonTabButton tab="home" href="/home">
           <IonIcon icon={homeIcon} />
           <IonLabel>Search</IonLabel>
         </IonTabButton>
-        {loggedIn && sessionStorage.getItem("isPatient") == "false" && (
-          <IonTabButton tab="appointments" href="/doctorHome">
+	  )}
+        {/* {loggedIn && sessionStorage.getItem("isPatient") == "false" && ( */}
+			{loggedIn && !user?.isPatient && (
+          <IonTabButton tab="doctorHomec" href="/doctorHome">
             <IonIcon icon={analyticsOutline} />
             <IonLabel>Patient Summary</IonLabel>
           </IonTabButton>
         )}
-        {loggedIn && sessionStorage.getItem("isPatient") == "false" && (
+        {/* {loggedIn && sessionStorage.getItem("isPatient") == "false" && ( */}
+			{loggedIn && !user?.isPatient && (
           <IonTabButton tab="patientHistory" href="/patientHistory">
             <IonIcon icon={peopleOutline} />
             <IonLabel>Patient History</IonLabel>
           </IonTabButton>
         )}
-        {loggedIn && sessionStorage.getItem("isAdmin") == "false" && (
+
+		{loggedIn && user?.isAdmin && (
+          <IonTabButton tab="adminHome" href="/admin">
+            <IonIcon icon={peopleOutline} />
+            <IonLabel>Home</IonLabel>
+          </IonTabButton>
+        )}
+        {/* {loggedIn && sessionStorage.getItem("isAdmin") == "false" && ( */}
+			{loggedIn && !user?.isAdmin && (
           <IonTabButton tab="appointments" href="/appointments">
             <IonIcon icon={timeOutline} />
             <IonLabel>Appointments</IonLabel>

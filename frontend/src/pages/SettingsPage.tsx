@@ -18,6 +18,9 @@ import { logOut } from 'ionicons/icons';
 	const logout = () => {
 		sessionStorage.removeItem("firstname");
 		sessionStorage.removeItem("lastname");
+		sessionStorage.removeItem("isAdmin");
+		sessionStorage.removeItem("isPatient");
+		sessionStorage.removeItem("doctorID");
 		auth.signOut();
 		history.push("/home");
 	}

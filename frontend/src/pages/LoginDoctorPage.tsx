@@ -32,16 +32,16 @@ const LoginDoctorPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const history = useHistory();
 
-  // useEffect(() => {
-  //   if (loggedIn && isAdmin && isPatient) {
-  //     if (!isAdmin) sessionStorage.setItem("isAdmin", "false");
-  //     if (!isPatient) sessionStorage.setItem("isPatient", "false");
-  //     history.push("/home");
-  //   }
-  // }, [loggedIn]);
+  useEffect(() => {
+    if (loggedIn && isAdmin && isPatient) {
+    //   if (!isAdmin) sessionStorage.setItem("isAdmin", "false");
+    //   if (!isPatient) sessionStorage.setItem("isPatient", "false");
+      history.push("/home");
+    }
+  }, [loggedIn, isAdmin, isPatient]);
 
   const handleLogin = async () => {
-    console.log(sessionStorage.getItem("isPatient"));
+    // console.log(sessionStorage.getItem("isPatient"));
     try {
       setStatus({ loading: true, error: false });
       const credential = await auth.signInWithEmailAndPassword(email, password);
@@ -53,8 +53,8 @@ const LoginDoctorPage: React.FC = () => {
         if (res.status === 200) {
           setIsAdmin(res.data.isAdmin);
           setIsPatient(res.data.isPatient);
-          if (!res.data.isAdmin) sessionStorage.setItem("isAdmin", "false");
-          if (!res.data.isPatient) sessionStorage.setItem("isPatient", "false");
+        //   if (!res.data.isAdmin) sessionStorage.setItem("isAdmin", "false");
+        //   if (!res.data.isPatient) sessionStorage.setItem("isPatient", "false");
           console.log(res.data.isPatient);
           if (res.data.isPatient && !res.data.isAdmin) {
             //patient
@@ -91,7 +91,7 @@ const LoginDoctorPage: React.FC = () => {
     }
   };
   if (loggedIn) {
-    history.push("/home");
+    history.push("/doctorHome");
   }
 
   return (

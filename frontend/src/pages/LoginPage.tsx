@@ -157,8 +157,8 @@ const LoginPage: React.FC = () => {
   //   };
 
   if (loggedIn) {
-    if (!isAdmin) sessionStorage.setItem("isAdmin", "false");
-    if (!isPatient) sessionStorage.setItem("isPatient", "true");
+    // if (!isAdmin) sessionStorage.setItem("isAdmin", "false");
+    // if (!isPatient) sessionStorage.setItem("isPatient", "true");
     history.push("/home");
   }
   return (

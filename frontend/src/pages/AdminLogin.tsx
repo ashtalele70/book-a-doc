@@ -12,7 +12,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Redirect } from "react-router";
 import { useAuth } from "../auth";
 import { auth } from "../firebase";
@@ -33,7 +33,7 @@ const AdminLogin: React.FC = () => {
       setStatus({ loading: true, error: false });
       const credential = await auth.signInWithEmailAndPassword(email, password);
       console.log("credential:", credential);
-      sessionStorage.setItem("isAdmin", "true");
+    //   sessionStorage.setItem("isAdmin", "true");
       setIsAdmin("true");
     } catch (error) {
       setStatus({ loading: false, error: true });
@@ -41,11 +41,11 @@ const AdminLogin: React.FC = () => {
       console.log("error:", error);
     }
   };
-
   if (loggedIn) {
     console.log(isAdmin);
-    if (isAdmin) sessionStorage.setItem("isAdmin", "true");
     history.push("/admin");
+  } else if(!loggedIn) {
+	history.push("/loginAdmin");
   }
   return (
     <IonPage>
