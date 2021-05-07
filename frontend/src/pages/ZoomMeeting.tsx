@@ -7,7 +7,7 @@ import { User, toUser } from "../models/user";
 import { useHistory } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { ZoomMtg } from "@zoomus/websdk";
-import { zoomMeetingNumber, rooturl } from "../config";
+import { zoomMeetingNumber, frontendurl } from "../config";
 
 const crypto = require("crypto");
 
@@ -15,7 +15,7 @@ const ZoomMeeting: React.FC = () => {
   const { userId } = useAuth();
   const zoomUserName = sessionStorage.getItem("firstname") + " " + sessionStorage.getItem("lastname");
   //const [isPatient, setIsPatient] = useState(false);
-  const [leaveUrl, setLeaveUrl] = useState(rooturl+"/feedback");
+  const [leaveUrl, setLeaveUrl] = useState(frontendurl+"/feedback");
   // const [doctorID, setDoctorID] = useState("");
   // const [patientName, setPatientName] = useState("");
   // const location = useLocation<IState>();
@@ -29,8 +29,8 @@ const ZoomMeeting: React.FC = () => {
         //setIsPatient(doc.data()["isPatient"]);
 
         doc.data()["isPatient"]
-          ? setLeaveUrl(rooturl+"/patientFeedback")
-          : setLeaveUrl(rooturl+"/feedback");
+          ? setLeaveUrl(frontendurl+"/patientFeedback")
+          : setLeaveUrl(frontendurl+"/feedback");
 
         console.log(leaveUrl);
         showZoomDIv();
