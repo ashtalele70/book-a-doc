@@ -31,7 +31,7 @@ const PatientFeedback: React.FC = (): any => {
 
   function handleSaveDetails() {
     const userData = {
-      userId: userId,
+      userId: sessionStorage.getItem("doctorID"),
       date: new Date(),
       patientID: userId,
       review: comments,
