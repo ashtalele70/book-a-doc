@@ -24,7 +24,7 @@ import {
   IonHeader,
   IonIcon,
   IonToolbar,
-  IonTitle
+  IonTitle,
 } from "@ionic/react";
 import "./styleSheet.css";
 interface IState {
@@ -40,6 +40,7 @@ const DoctorProfile: React.FC = (): any => {
   useEffect(() => {
     setEntry(location.state.info);
     setReviews(location.state.reviewInfo);
+    console.log(reviews);
     let ratings = reviews?.map(function (element) {
       return element["rating"];
     });
@@ -79,10 +80,17 @@ const DoctorProfile: React.FC = (): any => {
       {/* <IonHeader>
         <h1 style={{ color: "#2dd36f", fontWeight: 600 }}>Book-a-Doc</h1>
       </IonHeader> */}
+      <IonHeader>
       <IonToolbar>
-        <IonTitle color="success" className="ion-float-left">Book-A-Doc</IonTitle>
-        <IonTitle color="success" className="ion-float-right">Hello, {sessionStorage.getItem('firstname')}</IonTitle>
+        <IonTitle color="success" className="ion-float-left">
+          Book-A-Doc
+        </IonTitle>
+        <IonTitle color="success" className="ion-float-right">
+          Hello, {sessionStorage.getItem("firstname")}
+        </IonTitle>
       </IonToolbar>
+      </IonHeader>
+      
 
       <IonItem>
         <IonGrid>
@@ -104,12 +112,16 @@ const DoctorProfile: React.FC = (): any => {
             entry["specialties"].map((row, index) => (
               <IonRow class="EBinfor">{row}</IonRow>
             ))}
+        </IonGrid>
+      </IonItem>
+      <IonItem>
+        <IonGrid>
           <IonRow>
-            <IonLabel class="grey-label">
-              {entry &&
-                entry["doctorAddress"] &&
-                entry["doctorAddress"]["state"]}
-            </IonLabel>
+            <IonLabel class="heading">About</IonLabel>
+          </IonRow>
+
+          <IonRow>
+            <IonText>entry["about"]</IonText>
           </IonRow>
         </IonGrid>
       </IonItem>
@@ -166,45 +178,47 @@ const DoctorProfile: React.FC = (): any => {
           </IonRow> */}
         </IonGrid>
       </IonItem>
-      <IonItem>
-        <IonGrid>
-          <IonLabel class="heading">Patient Reviews</IonLabel>
+      {reviews.length != 0 && (
+        <IonItem>
+          <IonGrid>
+            <IonLabel class="heading">Patient Reviews</IonLabel>
 
-          {reviews &&
-            reviews.map((row, index) => (
-              <div>
-                <IonRow>
-                  <p>{row["review"]}</p>
-                </IonRow>
-                <IonRow>
-                  <IonCol size="2.5">
-                    <ReactStars
-                      count={5}
-                      size={24}
-                      value={row["rating"]}
-                      isHalf={true}
-                      edit={false}
-                      emptyIcon={<i className="far fa-star"></i>}
-                      halfIcon={<i className="fa fa-star-half-alt"></i>}
-                      fullIcon={<i className="fa fa-star"></i>}
-                      activeColor="#ffd700"
-                    />
-                  </IonCol>
-                  <IonCol size="2.5">
-                    <p>
-                      {row["date"].toDate().toLocaleDateString("en-US", {
-                        weekday: "long",
-                        year: "numeric",
-                        month: "long",  
-                        day: "numeric",
-                      })}
-                    </p>
-                  </IonCol>
-                </IonRow>
-              </div>
-            ))}
-        </IonGrid>
-      </IonItem>
+            {reviews &&
+              reviews.map((row, index) => (
+                <div>
+                  <IonRow>
+                    <p>{row["review"]}</p>
+                  </IonRow>
+                  <IonRow>
+                    <IonCol size="2.5">
+                      <ReactStars
+                        count={5}
+                        size={24}
+                        value={row["rating"]}
+                        isHalf={true}
+                        edit={false}
+                        emptyIcon={<i className="far fa-star"></i>}
+                        halfIcon={<i className="fa fa-star-half-alt"></i>}
+                        fullIcon={<i className="fa fa-star"></i>}
+                        activeColor="#ffd700"
+                      />
+                    </IonCol>
+                    <IonCol size="2.5">
+                      <p>
+                        {row["date"].toDate().toLocaleDateString("en-US", {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </p>
+                    </IonCol>
+                  </IonRow>
+                </div>
+              ))}
+          </IonGrid>
+        </IonItem>
+      )}
       <IonItem>
         <IonGrid>
           <IonRow>

@@ -314,7 +314,12 @@ const Doctors: React.FC<props> = (props: props): any => {
                       year: "numeric",
                       month: "long",
                       day: "numeric",
-                    }) + child?.toLocaleTimeString("en-US"),
+                    }) +
+                    " " +
+                    child?.toLocaleTimeString("en-US", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }),
                   buttons: [
                     "Cancel",
                     {
@@ -400,7 +405,7 @@ const Doctors: React.FC<props> = (props: props): any => {
       doctorName,
       "Patient " +
         patientName +
-        " is waiting to meet you. Please join your meeting room " +
+        " is waiting to meet you. Please join your meeting room  " +
         zoomurl
     );
     loggedIn
