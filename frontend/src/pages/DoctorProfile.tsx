@@ -195,7 +195,7 @@ const DoctorProfile: React.FC = (): any => {
                       {row["date"].toDate().toLocaleDateString("en-US", {
                         weekday: "long",
                         year: "numeric",
-                        month: "long",
+                        month: "long",  
                         day: "numeric",
                       })}
                     </p>

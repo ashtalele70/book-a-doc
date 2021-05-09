@@ -462,7 +462,7 @@ const Doctors: React.FC<props> = (props: props): any => {
                       entry[key].info.firstname +
                       " " +
                       entry[key].info.lastname,
-                    "username"
+                    sessionStorage.getItem("firstname")
                   )
                 }
               >
