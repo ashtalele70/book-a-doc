@@ -113,30 +113,26 @@ const Doctors: React.FC<props> = (props: props): any => {
       });*/
   }, [props, entry, appointments]);
 
-
   useEffect(() => {
-	var now =
-	new Date(Math.floor(new Date().getTime() / coff) * coff).getTime() /
-	1000;
-  var i;
-  console.log("current time");
-  console.log(
-	new Date(Math.floor(new Date().getTime() / coff) * coff).getTime() /
-	  1000
-  );
+    var now =
+      new Date(Math.floor(new Date().getTime() / coff) * coff).getTime() / 1000;
+    var i;
+    console.log("current time");
+    console.log(
+      new Date(Math.floor(new Date().getTime() / coff) * coff).getTime() / 1000
+    );
 
-  for (i = 0; i < appointments.length; i++) {
-	if (appointments[i].includes(now)) {
-	  console.log("here?  ");
-	  let newArr = [...disableZoom];
-	  newArr[i] = true;
-	  console.log("newArr", newArr);
+    for (i = 0; i < appointments.length; i++) {
+      if (appointments[i].includes(now)) {
+        console.log("here?  ");
+        let newArr = [...disableZoom];
+        newArr[i] = true;
+        console.log("newArr", newArr);
 
-	  setDisableZoom([...newArr]);
-	  console.log("disable Zoom", disableZoom);
-	}
-  }
-
+        setDisableZoom([...newArr]);
+        console.log("disable Zoom", disableZoom);
+      }
+    }
   }, [appointments]);
 
   // setInterval(function () {
@@ -399,7 +395,7 @@ const Doctors: React.FC<props> = (props: props): any => {
   }
 
   function zoomMeeting(doctorID, doctorName, patientName) {
-    sessionStorage.setItem("doctorID", "doctorID");
+    sessionStorage.setItem("doctorID", doctorID);
     sendEmail(
       doctorName,
       "Patient " +
