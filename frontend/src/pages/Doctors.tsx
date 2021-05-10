@@ -207,6 +207,7 @@ const Doctors: React.FC<props> = (props: props): any => {
       })
       .then(() => {
         console.log("Document successfully written!");
+        sendEmail("", "You have an appointmnent scheduled on" + newDate + ".");
       })
       .catch((error) => {
         console.error("Error writing document: ", error);
@@ -309,14 +310,18 @@ const Doctors: React.FC<props> = (props: props): any => {
                   cssClass: "my-custom-class",
                   header: "Appointment Details",
                   message:
-                    child?.toLocaleDateString("en-US", {
-                      weekday: "long",
+                    new Date(
+                      child.getTime() + childIndex * 24 * 60 * 60 * 1000
+                    ).toLocaleDateString("en-US", {
+                      weekday: "short",
                       year: "numeric",
                       month: "long",
                       day: "numeric",
                     }) +
                     " " +
-                    child?.toLocaleTimeString("en-US", {
+                    new Date(
+                      child.getTime() + childIndex * 24 * 60 * 60 * 1000
+                    ).toLocaleTimeString("en-US", {
                       hour: "2-digit",
                       minute: "2-digit",
                     }),
