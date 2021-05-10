@@ -33,7 +33,32 @@ const PatientProfilePage: React.FC = () => {
   const [gender, setGender] = useState<string>("male");
   const history = useHistory();
 
+  const validate = async () => {
+	if(firstName == "") {
+		alert("Enter first name")
+		return false;
+	}
+
+	if(lastName == "") {
+		alert("Enter last name")
+		return false;
+	}
+
+	if(date == "") {
+		alert("Enter date of birth")
+		return false;
+	}
+
+	if(gender == "") {
+		alert("Enter gender")
+		return false;
+	}
+
+	return true;
+
+  }
   const handleSaveDetails = async () => {
+	if(await validate()) {
     const userData = {
       userId: userId,
       firstname: firstName,
@@ -50,6 +75,7 @@ const PatientProfilePage: React.FC = () => {
         }
       })
       .catch((e) => console.log(e));
+	}
   };
   /*
   const handleSaveDetails = async () => {

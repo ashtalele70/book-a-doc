@@ -53,86 +53,172 @@ const DoctorProfilePage: React.FC = () => {
   const [about, setAbout] = useState("");
   const [gender, setGender] = useState<string>("male");
   
+  const validate = async () => {
+	if(firstName == "") {
+		alert("Enter first name")
+		return false;
+	}
+
+	if(lastName == "") {
+		alert("Enter last name")
+		return false;
+	}
+
+	if(gender == "") {
+		alert("Enter gender")
+		return false;
+	}
+
+	if(about == "") {
+		alert("Enter about")
+		return false;
+	}
+
+	if(specialties.length == 0) {
+		alert("Enter specialties")
+		return false;
+	}
+	if(languages.length == 0) {
+		alert("Enter languages")
+		return false;
+	}
+
+	if(phoneNumber == "") {
+		alert("Enter phone number")
+		return false;
+	} else {
+
+		if(!(validatePhoneNumber(phoneNumber))) {
+			alert("Enter valid phone number format")
+			return false;
+		}
+	}
+	if(npiNumber == "") {
+		alert("Enter NPI number")
+		return false;
+	} else {
+		if(!(/^\d{10}$/.test(npiNumber))) {
+			alert("Enter valid NPI number format")
+			return false;
+		}
+	}
+
+	if(slots.length == 0) {
+		alert("Enter time slots")
+		return false;
+	}
+
+	if(educations.length == 0) {
+		alert("Enter education")
+		return false;
+	}
+
+	return true;
+	
+  }
+
+  const validatePhoneNumber = (input_str) => {
+    var re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+    return re.test(input_str);
+  }
 
   const handleSaveDetails = async () => {
-    const userData = {
-      userId: userId,
-      firstname: firstName,
-      lastname: lastName,
-      gender: gender,
-      phoneNumber: phoneNumber,
-      npiNumber: npiNumber,
-      specialties: specialties,
-      educations: educations,
-      languages: languages,
-    };
-    axios.post(rooturl + "/doctorDetails", userData).then((res) => {
-      if (res.status === 200) {
-        console.log("Saved:");
-        history.push("/doctorHome");
-      }
-    });
-
-    if (slots.length > 0) {
-      slots.map((slot) => {
-        function parseTime(s) {
-          var c = s.split(":");
-          return parseInt(c[0]) * 60 + parseInt(c[1]);
-        }
-
-        function convertHours(mins) {
-          var hour = Math.floor(mins / 60);
-          mins = mins % 60;
-          var converted = pad(hour, 2) + ":" + pad(mins, 2);
-          return converted;
-        }
-
-        function pad(str, max) {
-          str = str.toString();
-          return str.length < max ? pad("0" + str, max) : str;
-        }
-
-        function calculate_time_slot(start_time, end_time, interval) {
-          var i, formatted_time;
-          var time_slots = new Array();
-          for (var i = start_time; i <= end_time; i = i + interval) {
-            formatted_time = convertHours(i);
-            time_slots.push(formatted_time);
-          }
-          return time_slots;
-        }
-
-        var start_time = parseTime(slot.from),
-          end_time = parseTime(slot.to),
-          interval = 30;
-
-        var times_ara = calculate_time_slot(start_time, end_time, interval);
-
-        times_ara.forEach((timeSlot) => {
-          firestore
-            .collection("doctors")
-            .doc(userId)
-            .collection("timeslots")
-            .add({
-              time: timeSlot,
-            });
-        });
-      });
-    }
+	  if(await validate()) {
+		const userData = {
+			userId: userId,
+			firstname: firstName,
+			lastname: lastName,
+			gender: gender,
+			phoneNumber: phoneNumber,
+			npiNumber: npiNumber,
+			specialties: specialties,
+			educations: educations,
+			languages: languages,
+			about: about
+		  };
+		  axios.post(rooturl + "/doctorDetails", userData).then((res) => {
+			if (res.status === 200) {
+			  console.log("Saved:");
+			  history.push("/doctorHome");
+			}
+		  });
+	  
+		  if (slots.length > 0) {
+			slots.map((slot) => {
+			  function parseTime(s) {
+				var c = s.split(":");
+				return parseInt(c[0]) * 60 + parseInt(c[1]);
+			  }
+	  
+			  function convertHours(mins) {
+				var hour = Math.floor(mins / 60);
+				mins = mins % 60;
+				var converted = pad(hour, 2) + ":" + pad(mins, 2);
+				return converted;
+			  }
+	  
+			  function pad(str, max) {
+				str = str.toString();
+				return str.length < max ? pad("0" + str, max) : str;
+			  }
+	  
+			  function calculate_time_slot(start_time, end_time, interval) {
+				var i, formatted_time;
+				var time_slots = new Array();
+				for (var i = start_time; i <= end_time; i = i + interval) {
+				  formatted_time = convertHours(i);
+				  time_slots.push(formatted_time);
+				}
+				return time_slots;
+			  }
+	  
+			  var start_time = parseTime(slot.from),
+				end_time = parseTime(slot.to),
+				interval = 30;
+	  
+			  var times_ara = calculate_time_slot(start_time, end_time, interval);
+	  
+			  times_ara.forEach((timeSlot) => {
+				firestore
+				  .collection("doctors")
+				  .doc(userId)
+				  .collection("timeslots")
+				  .add({
+					time: timeSlot,
+				  });
+			  });
+			});
+		  }
+	  }
+    
   };
 
   const addSlot = () => {
-    setSlotModal(false);
-    setSlots(
-      slots.concat({
-        from: fromTimeHH + ":" + fromTimeMM,
-        to: toTimeHH + ":" + toTimeMM,
-      })
-    );
-    setFromTimeHH(0);
-    setFromTimeMM(0);
-    setToTimeHH(0);
-    setToTimeMM(0);
+	  if((toTimeHH < 0 || toTimeHH > 24) || (fromTimeHH < 0 || fromTimeHH > 24) ||
+	  !(toTimeMM ==  0 || toTimeMM == 30) ||
+	  !(fromTimeMM ==  0 || fromTimeMM == 30)) 
+	{
+		alert("Please enter correct time range")
+	  }else if(toTimeHH <= fromTimeHH) {
+		  if(((toTimeHH == fromTimeHH) && (toTimeMM == fromTimeHH))
+		 	|| (toTimeMM <= fromTimeMM)
+		  ) 
+		alert("From time should be lesser than To time")
+	  } else {
+		setSlotModal(false);
+		setSlots(
+		  slots.concat({
+			from: fromTimeHH + ":" + fromTimeMM,
+			to: toTimeHH + ":" + toTimeMM,
+		  })
+		);
+		setFromTimeHH(0);
+		setFromTimeMM(0);
+		setToTimeHH(0);
+		setToTimeMM(0);
+
+	  }
+   
   };
 
   const removeSlot = (slo) => {
@@ -140,9 +226,14 @@ const DoctorProfilePage: React.FC = () => {
   }
 
   const addEducation = () => {
-    setEducationModal(false);
-    setEducations(educations.concat(education));
-    setEducation("");
+	if(education != "") {
+		setEducationModal(false);
+		setEducations(educations.concat(education));
+		setEducation("");
+	} else {
+		alert("Education cannot be blank")
+	}
+    
   };
 
   const removeEducation = (edu) => {
@@ -485,20 +576,27 @@ const DoctorProfilePage: React.FC = () => {
             <IonCol>
               <IonItem>
                 <IonLabel position="fixed">Contact No.</IonLabel>
+				
                 <IonInput
                   value={phoneNumber}
                   onIonChange={(event) => setPhoneNumber(event.detail.value)}
                 />
               </IonItem>
+			  <small>Format: XXX-XXX-XXXX</small>
             </IonCol>
             <IonCol>
               <IonItem>
-                <IonLabel position="fixed">NPI No.</IonLabel>
+                <IonLabel position="fixed">NPI No.
+				</IonLabel>
+				
                 <IonInput
                   value={npiNumber}
                   onIonChange={(event) => setNpiNumber(event.detail.value)}
                 />
               </IonItem>
+			  <small>
+			  * The NPI (National Provider Identifier) Number is a 10-digit numerical identifier used to identify an individual provider or a health care entity
+			  </small>
             </IonCol>
           </IonRow>
           <IonRow>
@@ -599,6 +697,12 @@ const DoctorProfilePage: React.FC = () => {
                 </IonItem>
               </IonCol>
             </IonRow>
+			<IonRow>
+				HH should be between 0 - 24
+			</IonRow>
+			<IonRow>
+				MM should 0, 30
+			</IonRow>
             <IonRow>
               <IonCol>
                 <IonButton onClick={addSlot}>Add</IonButton>

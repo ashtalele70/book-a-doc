@@ -11,7 +11,7 @@ router.post('/registerDoctor', async (req, res) => {
 })
 
 router.post('/doctorDetails', async (req, res) => {
-	const {userId, firstname, lastname, gender, phoneNumber, npiNumber, specialties, educations, languages} = {...req.body};
+	const {userId, firstname, lastname, gender, phoneNumber, npiNumber, specialties, educations, languages, about} = {...req.body};
 	await firestore.collection('doctors').doc(userId).set({
 		userId: userId,
 		firstname: firstname,
@@ -21,7 +21,8 @@ router.post('/doctorDetails', async (req, res) => {
 		npiNumber: npiNumber,
 		specialties: specialties,
 		educations: educations,
-		languages: languages
+		languages: languages,
+		about: about
 	  })
 	return res.status(200).json('Successful');
 })
