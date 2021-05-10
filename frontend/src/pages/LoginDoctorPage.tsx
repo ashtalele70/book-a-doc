@@ -83,16 +83,16 @@ const LoginDoctorPage: React.FC = () => {
               });
           }
         }
-      });
+      }).then(() => history.push("/doctorHome"));
     } catch (error) {
       setStatus({ loading: false, error: true });
       setErrorMessage(error.message);
       console.log("error:", error);
     }
   };
-  if (loggedIn) {
-    history.push("/doctorHome");
-  }
+//   if (loggedIn) {
+//     history.push("/doctorHome");
+//   }
 
   return (
     <IonPage>
