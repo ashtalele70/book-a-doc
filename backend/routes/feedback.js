@@ -10,7 +10,7 @@ router.post('/addFeedback', async (req, res) => {
 	.doc(userId)
 	.collection("reviews")
 	.add({
-	  date,
+	  date: new Date(date),
 	  patientID,
 	  review,
 	  rating
