@@ -7,7 +7,7 @@ router.get('/getEntries', async (req, res) => {
 	let entries = []
 	const docRef = await firestore
       .collection("doctors")
-      //.where("isVerified", "==","1" )
+      .where("isVerified", "==","1" )
       .get();
 
 	  docRef.forEach((doc) => {

@@ -23,7 +23,7 @@ router.post('/doctorDetails', async (req, res) => {
 		educations: educations,
 		languages: languages,
 		about: about,
-		isVerified: false
+		isVerified: "1"
 	  })
 	return res.status(200).json('Successful');
 })
