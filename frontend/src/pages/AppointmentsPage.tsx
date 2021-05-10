@@ -5,6 +5,7 @@ import {
   IonLabel,
   IonList,
   IonListHeader,
+  IonHeader,
   IonPage,
   IonTitle,
   IonToolbar,
@@ -63,7 +64,7 @@ const AppointmentsPage: React.FC = () => {
           docs.map((doc) => ({
             id: doc.id,
             date: doc.data().date,
-			doctorID: doc.data().doctorID
+            doctorID: doc.data().doctorID,
           }))
         )
       );
@@ -91,7 +92,7 @@ const AppointmentsPage: React.FC = () => {
           docs.map((doc) => ({
             id: doc.id,
             date: doc.data().date,
-			doctorID: doc.data().doctorID
+            doctorID: doc.data().doctorID,
           }))
         )
       );
@@ -123,34 +124,35 @@ const AppointmentsPage: React.FC = () => {
           docs.map((doc) => ({
             id: doc.id,
             date: doc.data().date,
-			doctorID: doc.data().doctorID
+            doctorID: doc.data().doctorID,
           }))
         )
       );
   }, [user?.isPatient, userId]);
 
   const joinNow = (appointment) => {
-	
-
-	// fetch doctor from doct table
-	if(user.isPatient) {
-		let userData = new URLSearchParams();
-		userData.set("id", appointment.doctorID);
-		sessionStorage.setItem("doctorID", appointment.doctorID);
-		axios.get(rooturl + "/getDoctor?" + userData.toString()).then((res) => {
-		  if (res.status === 200) {
-			// console.log(res);
-			sendEmail(
-			"Dr. " + res.data.firstname + " " + res.data.lastname,
-			"Patient " +
-        sessionStorage.getItem("firstname") + " " + sessionStorage.getItem("lastname") +
-			  " is waiting to meet you. Please join you meeting room" +
-			  zoomurl)
-		  }
-		});	
-	}
-	history.push("/zoom");
-  }
+    // fetch doctor from doct table
+    if (user.isPatient) {
+      let userData = new URLSearchParams();
+      userData.set("id", appointment.doctorID);
+      sessionStorage.setItem("doctorID", appointment.doctorID);
+      axios.get(rooturl + "/getDoctor?" + userData.toString()).then((res) => {
+        if (res.status === 200) {
+          // console.log(res);
+          sendEmail(
+            "Dr. " + res.data.firstname + " " + res.data.lastname,
+            "Patient " +
+              sessionStorage.getItem("firstname") +
+              " " +
+              sessionStorage.getItem("lastname") +
+              " is waiting to meet you. Please join you meeting room" +
+              zoomurl
+          );
+        }
+      });
+    }
+    history.push("/zoom");
+  };
 
   // const AppointmentsPage: React.FC = () => {
   //   const history = useHistory();
@@ -256,97 +258,125 @@ const AppointmentsPage: React.FC = () => {
       <Helmet>
         <meta name="robots" content="noindex"></meta>
       </Helmet>
-      <IonToolbar>
-        <IonTitle color="warning" className="ion-float-left">Appointments</IonTitle>
-        <IonTitle color="success" className="ion-float-right">Hello, {sessionStorage.getItem('firstname')}</IonTitle>
-      </IonToolbar>
-     
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle color="warning" className="ion-float-left">
+            Appointments
+          </IonTitle>
+          <IonTitle color="success" className="ion-float-right">
+            Hello, {sessionStorage.getItem("firstname")}
+          </IonTitle>
+        </IonToolbar>
+      </IonHeader>
+
       <IonContent className="ion-padding">
-      {!loggedIn && (
-        <IonButton expand="block" fill="clear" routerLink="/login">
-          Already have an account?
-        </IonButton>
-      )}
-	  {
-		  !(user?.isPatient) && (
-			<IonButton color="warning" onClick={() => history.push("/zoom")}>
-				Talk now
-		  	</IonButton>
-		  )
-	  }
-      {loggedIn && (
-		  (currentAppointments.length == 0 && upcomingAppointments.length == 0 && pastAppointments.length == 0) ?(
-				<IonListHeader><h2>You have no appointments!!!</h2></IonListHeader>
-		  ) :
-        (<div>
-          <IonList>
-            <IonListHeader lines="inset">
-              <IonLabel>Current Appointments</IonLabel>
+        {!loggedIn && (
+          <IonButton expand="block" fill="clear" routerLink="/login">
+            Already have an account?
+          </IonButton>
+        )}
+        {!user?.isPatient && (
+          <IonButton color="warning" onClick={() => history.push("/zoom")}>
+            Talk now
+          </IonButton>
+        )}
+        {loggedIn &&
+          (currentAppointments.length == 0 &&
+          upcomingAppointments.length == 0 &&
+          pastAppointments.length == 0 ? (
+            <IonListHeader>
+              <h2>You have no appointments!!!</h2>
             </IonListHeader>
-            {currentAppointments.length == 0 ? (<IonListHeader><h6>You have no current appointments!!!</h6></IonListHeader>) :
-			(currentAppointments.map((appointment) => (
-              <IonItem key={appointment.id}>
-                <IonLabel>
-                  {/* <h2>{formatDate(entry.date)}</h2>
+          ) : (
+            <div>
+              <IonList>
+                <IonListHeader lines="inset">
+                  <IonLabel>Current Appointments</IonLabel>
+                </IonListHeader>
+                {currentAppointments.length == 0 ? (
+                  <IonListHeader>
+                    <h6>You have no current appointments!!!</h6>
+                  </IonListHeader>
+                ) : (
+                  currentAppointments.map((appointment) => (
+                    <IonItem key={appointment.id}>
+                      <IonLabel>
+                        {/* <h2>{formatDate(entry.date)}</h2>
 						<h3>{entry.title}</h3> */}
-                  {formatDate(
-                    new Date(appointment.date.seconds * 1000).toISOString()
-                  )}
-                </IonLabel>
-                <IonButton
-                  color="warning"
-                  onClick={() => joinNow(appointment)}
-                >
-                  Join now
-                </IonButton>
-              </IonItem>
-            )))
-			}
-          </IonList>
-          <IonList>
-            <IonListHeader lines="inset">
-              <IonLabel>Upcoming Appointments</IonLabel>
-            </IonListHeader>
-            {upcomingAppointments.length == 0 ? (<IonListHeader><h6>You have no upcoming appointments!!!</h6></IonListHeader>) :
-			(upcomingAppointments.map((appointment) => (
-              <IonItem key={appointment.id}>
-                <IonLabel>
-                  {/* <h2>{formatDate(entry.date)}</h2>
+                        {formatDate(
+                          new Date(
+                            appointment.date.seconds * 1000
+                          ).toISOString()
+                        )}
+                      </IonLabel>
+                      <IonButton
+                        color="warning"
+                        onClick={() => joinNow(appointment)}
+                      >
+                        Join now
+                      </IonButton>
+                    </IonItem>
+                  ))
+                )}
+              </IonList>
+              <IonList>
+                <IonListHeader lines="inset">
+                  <IonLabel>Upcoming Appointments</IonLabel>
+                </IonListHeader>
+                {upcomingAppointments.length == 0 ? (
+                  <IonListHeader>
+                    <h6>You have no upcoming appointments!!!</h6>
+                  </IonListHeader>
+                ) : (
+                  upcomingAppointments.map((appointment) => (
+                    <IonItem key={appointment.id}>
+                      <IonLabel>
+                        {/* <h2>{formatDate(entry.date)}</h2>
 						<h3>{entry.title}</h3> */}
-                  {formatDate(
-                    new Date(appointment.date.seconds * 1000).toISOString()
-                  )}
-                </IonLabel>
-                <IonButton
-                  color="warning"
-                  disabled
-                  onClick={() => history.push("/zoom")}
-                >
-                  Scheduled
-                </IonButton>
-              </IonItem>
-            )))}
-          </IonList>
-          <IonList>
-            <IonListHeader lines="inset">
-              <IonLabel>Past Appointments</IonLabel>
-            </IonListHeader>
-            {pastAppointments.length == 0 ? (<IonListHeader><h6>You have no past appointments!!!</h6></IonListHeader>) :
-			(pastAppointments.map((appointment) => (
-              <IonItem key={appointment.id}>
-                <IonLabel>
-                  {/* <h2>{formatDate(entry.date)}</h2>
+                        {formatDate(
+                          new Date(
+                            appointment.date.seconds * 1000
+                          ).toISOString()
+                        )}
+                      </IonLabel>
+                      <IonButton
+                        color="warning"
+                        disabled
+                        onClick={() => history.push("/zoom")}
+                      >
+                        Scheduled
+                      </IonButton>
+                    </IonItem>
+                  ))
+                )}
+              </IonList>
+              <IonList>
+                <IonListHeader lines="inset">
+                  <IonLabel>Past Appointments</IonLabel>
+                </IonListHeader>
+                {pastAppointments.length == 0 ? (
+                  <IonListHeader>
+                    <h6>You have no past appointments!!!</h6>
+                  </IonListHeader>
+                ) : (
+                  pastAppointments.map((appointment) => (
+                    <IonItem key={appointment.id}>
+                      <IonLabel>
+                        {/* <h2>{formatDate(entry.date)}</h2>
 						<h3>{entry.title}</h3> */}
-                  {formatDate(
-                    new Date(appointment.date.seconds * 1000).toISOString()
-                  )}
-                </IonLabel>
-              </IonItem>
-            )))}
-          </IonList>
-        </div>)
-      )} 
-       </IonContent> 
+                        {formatDate(
+                          new Date(
+                            appointment.date.seconds * 1000
+                          ).toISOString()
+                        )}
+                      </IonLabel>
+                    </IonItem>
+                  ))
+                )}
+              </IonList>
+            </div>
+          ))}
+      </IonContent>
     </IonPage>
   );
 };
