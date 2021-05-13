@@ -291,7 +291,7 @@ const AppointmentsPage: React.FC = () => {
             <div>
               <IonList>
                 <IonListHeader lines="inset">
-                  <IonLabel>Current Appointments</IonLabel>
+                  <IonLabel class="heading">Current Appointments</IonLabel>
                 </IonListHeader>
                 {currentAppointments.length == 0 ? (
                   <IonListHeader>
@@ -321,7 +321,7 @@ const AppointmentsPage: React.FC = () => {
               </IonList>
               <IonList>
                 <IonListHeader lines="inset">
-                  <IonLabel>Upcoming Appointments</IonLabel>
+                  <IonLabel class="heading">Upcoming Appointments</IonLabel>
                 </IonListHeader>
                 {upcomingAppointments.length == 0 ? (
                   <IonListHeader>
@@ -352,7 +352,7 @@ const AppointmentsPage: React.FC = () => {
               </IonList>
               <IonList>
                 <IonListHeader lines="inset">
-                  <IonLabel>Past Appointments</IonLabel>
+                  <IonLabel class="heading">Past Appointments</IonLabel>
                 </IonListHeader>
                 {pastAppointments.length == 0 ? (
                   <IonListHeader>
