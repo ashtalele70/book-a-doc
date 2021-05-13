@@ -9,6 +9,7 @@ import translationEng from "./data/locales/eng/translation.json"
 // import translationFre from "../locales/fre/translation.json";
 import translationHin from "./data/locales/hin/translation.json";
 // import translationJap from "../locales/jap/translation.json";
+import translationEs from "./data/locales/es/translation.json";
 
 i18n
   // load translation using http -> see /public/locales (i.e. https://github.com/i18next/react-i18next/tree/master/example/react/public/locales)
@@ -37,6 +38,9 @@ i18n
       hin: {
         translation: translationHin
       },
+      es: {
+        translation: translationEs
+      }
     }
   });
 

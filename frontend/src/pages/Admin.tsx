@@ -228,6 +228,13 @@ const Admin: React.FC = (): any => {
                         <IonRadio value="hin" />
                     </IonItem>
                   </IonCol>
+
+                  <IonCol>
+                    <IonItem>
+                        <IonLabel>{t('Spanish')}</IonLabel>
+                        <IonRadio value="es" />
+                    </IonItem>
+                  </IonCol>
                   </IonRow>
               </IonRadioGroup>
       </IonHeader>
