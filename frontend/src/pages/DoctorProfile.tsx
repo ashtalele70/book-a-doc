@@ -61,7 +61,7 @@ const DoctorProfile: React.FC = (): any => {
     let ratings = reviews?.map(function (element) {
       return element["rating"];
     });
-
+    console.log(ratings.reduce((a, b) => a + b, 0) / ratings.length);
     return ratings.reduce((a, b) => a + b, 0) / ratings.length;
   }
   return (
@@ -138,7 +138,7 @@ const DoctorProfile: React.FC = (): any => {
               <ReactStars
                 count={5}
                 size={50}
-                value={getRating()}
+                value={Number(getRating()).toFixed(2)}
                 isHalf={true}
                 edit={false}
                 emptyIcon={<i className="far fa-star"></i>}
