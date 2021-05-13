@@ -207,7 +207,10 @@ const Doctors: React.FC<props> = (props: props): any => {
       })
       .then(() => {
         console.log("Document successfully written!");
-        sendEmail("", "You have an appointmnent scheduled on" + newDate + ".");
+        sendEmail(
+          "",
+          "You have an appointment scheduled on" + " " + newDate + "."
+        );
       })
       .catch((error) => {
         console.error("Error writing document: ", error);

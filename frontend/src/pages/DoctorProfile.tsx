@@ -132,7 +132,7 @@ const DoctorProfile: React.FC = (): any => {
               <IonLabel class="heading">Overall Rating</IonLabel>
             </IonRow>
             <IonRow>
-              <IonText id="rating">{getRating()}</IonText>
+              <IonText id="rating">{Number(getRating()).toFixed(2)}</IonText>
             </IonRow>
             <IonRow>
               <ReactStars
