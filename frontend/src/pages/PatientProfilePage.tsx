@@ -17,7 +17,7 @@ import {
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../auth";
-import { firestore } from "../firebase";
+import { auth, firestore } from "../firebase";
 import { User, toUser } from "../models/user";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
@@ -71,7 +71,8 @@ const PatientProfilePage: React.FC = () => {
       .post(rooturl + "/patientDetails", userData)
       .then((res) => {
         if (res.status === 200) {
-          history.push("/home");
+          auth.signOut();
+          history.push("/login");
         }
       })
       .catch((e) => console.log(e));

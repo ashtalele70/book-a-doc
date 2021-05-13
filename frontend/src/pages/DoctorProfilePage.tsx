@@ -22,7 +22,7 @@ import {
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../auth";
-import { firestore } from "../firebase";
+import { auth, firestore } from "../firebase";
 import { User, toUser } from "../models/user";
 import { useHistory } from "react-router-dom";
 import { addCircle } from "ionicons/icons";
@@ -139,7 +139,8 @@ const DoctorProfilePage: React.FC = () => {
 		  axios.post(rooturl + "/doctorDetails", userData).then((res) => {
 			if (res.status === 200) {
 			  console.log("Saved:");
-			  history.push("/doctorHome");
+        auth.signOut();
+			  history.push("/loginDoctor");
 			}
 		  });
 	  
