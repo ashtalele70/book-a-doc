@@ -25,6 +25,8 @@ import {
   IonIcon,
   IonToolbar,
   IonTitle,
+  IonButtons,
+  IonBackButton,
 } from "@ionic/react";
 import "./styleSheet.css";
 interface IState {
@@ -82,6 +84,10 @@ const DoctorProfile: React.FC = (): any => {
       </IonHeader> */}
       <IonHeader>
         <IonToolbar>
+		<IonButtons slot="start">
+            <IonBackButton defaultHref="home" />
+          </IonButtons>
+
           <IonTitle color="success" className="ion-float-left">
             Book-A-Doc
           </IonTitle>
