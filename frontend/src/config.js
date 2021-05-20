@@ -1,4 +1,4 @@
-export const rooturl = "http://localhost:8080";
-export const zoomurl = "https://sjsu.zoom.us/j/8085861668";
-export const zoomMeetingNumber = 8085861668;
-export const frontendurl = "http://localhost:3000";
+export const rooturl = "YOUR_ROOT_URL";
+export const zoomurl = "YOUR_ZOOM_MEETING_LINK";
+export const zoomMeetingNumber = YOUR_ZOOM_MEETING_ID;
+export const frontendurl = "YOUR FRONTEND_URL";
