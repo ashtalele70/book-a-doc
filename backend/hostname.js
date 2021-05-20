@@ -1,1 +1,1 @@
-module.exports.frontendurl = 'http://localhost:3000';
+module.exports.frontendurl = 'YOUR_FRONTEND_URL';
